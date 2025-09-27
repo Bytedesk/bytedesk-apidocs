@@ -9,4 +9,4 @@ npm i -g mint
 mint dev --port 9018
 ```
 
-View your local preview at `http://localhost:3000`.
+View your local preview at `http://localhost:9018`.
