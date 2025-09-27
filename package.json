@@ -1,0 +1,17 @@
+{
+  "name": "bytedesk-apidocs",
+  "version": "1.0.0",
+  "description": "Bytedesk API Documentation",
+  "scripts": {
+    "build": "node build-script.js",
+    "clean": "rm -rf build",
+    "serve": "cd build && python3 -m http.server 8000 || python -m SimpleHTTPServer 8000",
+    "build:serve": "npm run build && npm run serve",
+    "preview": "npm run build:serve"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "fs-extra": "^11.0.0",
+    "glob": "^10.0.0"
+  }
+}
