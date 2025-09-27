@@ -1,0 +1,10 @@
+{
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "fileheader.configObj": {
+    "autoAdd": false, // 关闭
+  }
+}
