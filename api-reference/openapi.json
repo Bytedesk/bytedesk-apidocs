@@ -1,16 +1,52 @@
 {
-  "openapi": "3.1.0",
+  "openapi": "3.0.3",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
+    "title": "Bytedesk API",
+    "description": "Bytedesk（微语）系统 API 文档，基于 AccessToken 免登与 Bearer Token 鉴权。\n\n注意：以下接口按模块划分。免登接口多为网页重定向场景；REST 接口需在请求头携带 `Authorization: Bearer <token>`。",
+    "termsOfService": "https://api.weiyuai.cn/terms.html",
+    "contact": {
+      "email": "270580156@qq.com"
+    },
     "license": {
-      "name": "MIT"
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "version": "1.0.0"
   },
+  "externalDocs": {
+    "description": "官网",
+    "url": "https://api.weiyuai.cn"
+  },
   "servers": [
     {
-      "url": "http://api.weiyuai.cn"
+      "url": "https://api.weiyuai.cn/api/v1",
+      "description": "API server (REST)"
+    },
+    {
+      "url": "https://api.weiyuai.cn",
+      "description": "Web app server (AccessToken 登录)"
+    }
+  ],
+  "tags": [
+    {
+      "name": "auth",
+      "description": "认证与登录"
+    },
+    {
+      "name": "users",
+      "description": "用户相关"
+    },
+    {
+      "name": "threads",
+      "description": "会话（Thread）相关"
+    },
+    {
+      "name": "messages",
+      "description": "消息相关"
+    },
+    {
+      "name": "tickets",
+      "description": "工单（Ticket）相关"
     }
   ],
   "security": [
@@ -19,76 +55,77 @@
     }
   ],
   "paths": {
-    "/plants": {
+    "/auth/login": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
+        "tags": ["auth"],
+        "summary": "使用 AccessToken 登录（管理后台）",
+        "description": "使用 AccessToken 免登管理后台，通常返回 302 跳转。",
+        "operationId": "loginAdminWithAccessToken",
         "parameters": [
           {
-            "name": "limit",
+            "name": "accessToken",
             "in": "query",
-            "description": "The maximum number of results to return",
+            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "string"
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "Plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
-                }
-              }
-            }
+          "302": {
+            "description": "重定向到管理后台"
           },
           "400": {
-            "description": "Unexpected error",
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiError"
                 }
               }
             }
           }
-        }
-      },
+        },
+        "servers": [
+          {
+            "url": "https://api.weiyuai.cn"
+          }
+        ]
+      }
+    },
+    "/auth/token/refresh": {
       "post": {
-        "description": "Creates a new plant in the store",
+        "tags": ["auth"],
+        "summary": "刷新 Bearer Token",
+        "description": "使用有效的刷新令牌获取新的访问令牌。",
+        "operationId": "refreshToken",
         "requestBody": {
-          "description": "Plant to add to the store",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/TokenRefreshRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "成功刷新令牌",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/AuthToken"
                 }
               }
             }
           },
-          "400": {
-            "description": "unexpected error",
+          "401": {
+            "description": "无效的刷新令牌",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ApiError"
                 }
               }
             }
@@ -96,32 +133,399 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/auth/v1/register": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "用户注册",
+        "description": "通过短信/邮箱验证码完成注册，返回用户信息。",
+        "operationId": "register",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "注册成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "https://api.weiyuai.cn"
+          }
+        ]
+      }
+    },
+    "/auth/v1/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "用户名密码登录",
+        "description": "使用用户名与密码登录，返回访问令牌与用户信息。",
+        "operationId": "loginWithUsernamePassword",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "登录成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "认证失败",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "https://api.weiyuai.cn"
+          }
+        ]
+      }
+    },
+    "/user/profile": {
+      "get": {
+        "tags": ["users"],
+        "summary": "获取当前用户信息",
+        "description": "通过 Bearer Token 获取当前登录用户信息。",
+        "operationId": "getCurrentUserProfile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "用户信息",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["users"],
+        "summary": "查询用户列表",
+        "operationId": "listUsers",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
+            "name": "page",
+            "in": "query",
             "schema": {
               "type": "integer",
-              "format": "int64"
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 10
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
+          "200": {
+            "description": "用户列表",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["users"],
+        "summary": "创建用户",
+        "operationId": "createUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/threads": {
+      "get": {
+        "tags": ["threads"],
+        "summary": "查询会话列表",
+        "operationId": "listThreads",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "会话列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "threads": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Thread"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["threads"],
+        "summary": "创建会话",
+        "operationId": "createThread",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ThreadCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Thread"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages": {
+      "post": {
+        "tags": ["messages"],
+        "summary": "发送消息",
+        "operationId": "sendMessage",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageSendRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "发送成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ticket/create": {
+      "post": {
+        "tags": ["tickets"],
+        "summary": "创建工单",
+        "operationId": "createTicket",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ticket/query/org": {
+      "get": {
+        "tags": ["tickets"],
+        "summary": "查询组织工单",
+        "operationId": "queryTicketsByOrg",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orgUid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "工单列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TicketResponse"
+                  }
                 }
               }
             }
@@ -130,71 +534,292 @@
       }
     }
   },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
-          }
-        }
-      }
-    }
-  },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "AuthRequest": {
         "type": "object",
         "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
+          "username": {
+            "type": "string",
+            "description": "用户名"
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
+          "password": {
+            "type": "string",
+            "description": "密码"
+          },
+          "mobile": {
+            "type": "string",
+            "description": "手机号"
+          },
+          "email": {
+            "type": "string",
+            "description": "邮箱"
+          },
+          "code": {
+            "type": "string",
+            "description": "验证码"
+          },
+          "accessToken": {
+            "type": "string",
+            "description": "访问令牌"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "访问令牌"
           },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
+          "user": {
+            "$ref": "#/components/schemas/User"
           }
-        ]
+        },
+        "required": ["accessToken", "user"]
       },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+      "AuthToken": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "访问令牌"
+          },
+          "expiresIn": {
+            "type": "integer",
+            "description": "过期时间（秒）"
+          }
+        },
+        "required": ["accessToken", "expiresIn"]
+      },
+      "TokenRefreshRequest": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "required": ["refreshToken"]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "用户ID"
+          },
+          "username": {
+            "type": "string",
+            "description": "用户名"
+          },
+          "nickname": {
+            "type": "string",
+            "description": "昵称"
+          },
+          "email": {
+            "type": "string",
+            "description": "邮箱"
+          },
+          "mobile": {
+            "type": "string",
+            "description": "手机号"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "头像URL"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "INACTIVE", "BANNED"],
+            "description": "状态"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "创建时间"
+          }
+        },
+        "required": ["id", "username"]
+      },
+      "UserCreateRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "string"
+          }
+        },
+        "required": ["username", "password"]
+      },
+      "Thread": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "会话ID"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["PERSONAL", "GROUP", "SUPPORT"],
+            "description": "会话类型"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "CLOSED", "ARCHIVED"],
+            "description": "会话状态"
+          },
+          "title": {
+            "type": "string",
+            "description": "会话标题"
+          },
+          "description": {
+            "type": "string",
+            "description": "会话描述"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "type", "status"]
+      },
+      "ThreadCreateRequest": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["PERSONAL", "GROUP", "SUPPORT"]
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": ["type"]
+      },
+      "Message": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "消息ID"
+          },
+          "threadId": {
+            "type": "string",
+            "description": "会话ID"
+          },
+          "senderId": {
+            "type": "string",
+            "description": "发送者ID"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["TEXT", "IMAGE", "FILE", "SYSTEM"],
+            "description": "消息类型"
+          },
+          "content": {
+            "type": "string",
+            "description": "消息内容"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "threadId", "senderId", "type", "content"]
+      },
+      "MessageSendRequest": {
+        "type": "object",
+        "properties": {
+          "threadId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["TEXT", "IMAGE", "FILE"]
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": ["threadId", "type", "content"]
+      },
+      "TicketRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "工单标题"
+          },
+          "description": {
+            "type": "string",
+            "description": "工单描述"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["LOW", "MEDIUM", "HIGH", "URGENT"],
+            "description": "优先级"
+          },
+          "category": {
+            "type": "string",
+            "description": "分类"
+          }
+        },
+        "required": ["title", "description"]
+      },
+      "TicketResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "工单ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "工单标题"
+          },
+          "description": {
+            "type": "string",
+            "description": "工单描述"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"],
+            "description": "工单状态"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["LOW", "MEDIUM", "HIGH", "URGENT"],
+            "description": "优先级"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "title", "status"]
+      },
+      "ApiError": {
         "type": "object",
         "properties": {
           "error": {
@@ -204,13 +829,8 @@
           "message": {
             "type": "string"
           }
-        }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+        },
+        "required": ["error", "message"]
       }
     }
   }

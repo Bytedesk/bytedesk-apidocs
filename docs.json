@@ -20,12 +20,53 @@
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Authentication",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/auth/login",
+              "api-reference/auth/register",
+              "api-reference/auth/token-refresh",
+              "api-reference/auth/mobile-login",
+              "api-reference/auth/email-login",
+              "api-reference/auth/scan-login"
+            ]
+          },
+          {
+            "group": "Users",
+            "pages": [
+              "api-reference/users/profile",
+              "api-reference/users/list-users",
+              "api-reference/users/create-user",
+              "api-reference/users/update-user",
+              "api-reference/users/delete-user"
+            ]
+          },
+          {
+            "group": "Threads",
+            "pages": [
+              "api-reference/threads/list-threads",
+              "api-reference/threads/create-thread",
+              "api-reference/threads/get-thread",
+              "api-reference/threads/update-thread",
+              "api-reference/threads/delete-thread"
+            ]
+          },
+          {
+            "group": "Messages",
+            "pages": [
+              "api-reference/messages/send-message",
+              "api-reference/messages/get-message",
+              "api-reference/messages/delete-message",
+              "api-reference/messages/query-by-thread"
+            ]
+          },
+          {
+            "group": "Tickets",
+            "pages": [
+              "api-reference/tickets/create-ticket",
+              "api-reference/tickets/query-tickets",
+              "api-reference/tickets/update-ticket",
+              "api-reference/tickets/claim-ticket",
+              "api-reference/tickets/close-ticket"
             ]
           }
         ]

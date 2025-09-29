@@ -459,12 +459,20 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
     </div>
   )
   
-  // If we're on an API page, render to the right panel
-  if (container) {
-    return createPortal(content, container)
+  // 检查是否在API页面并且容器可用
+  const isApiPage = window.location.pathname.includes('/api-reference/endpoint/')
+  const desktopContainer = document.getElementById('api-examples-container')
+  const mobileContainer = document.getElementById('mobile-api-examples-container')
+  
+  // 优先尝试移动端容器，其次是桌面端容器
+  if (isApiPage && (container || mobileContainer || desktopContainer)) {
+    const targetContainer = container || mobileContainer || desktopContainer
+    if (targetContainer) {
+      return createPortal(content, targetContainer)
+    }
   }
   
-  // Otherwise render normally
+  // 否则正常渲染
   return content
 }
 
@@ -655,12 +663,20 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
     </div>
   )
   
-  // If we're on an API page, render to the right panel
-  if (container) {
-    return createPortal(content, container)
+  // 检查是否在API页面并且容器可用
+  const isApiPage = window.location.pathname.includes('/api-reference/endpoint/')
+  const desktopContainer = document.getElementById('api-examples-container')
+  const mobileContainer = document.getElementById('mobile-api-examples-container')
+  
+  // 优先尝试移动端容器，其次是桌面端容器
+  if (isApiPage && (container || mobileContainer || desktopContainer)) {
+    const targetContainer = container || mobileContainer || desktopContainer
+    if (targetContainer) {
+      return createPortal(content, targetContainer)
+    }
   }
   
-  // Otherwise render normally
+  // 否则正常渲染
   return content
 }
 

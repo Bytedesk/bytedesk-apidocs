@@ -1,0 +1,82 @@
+---
+title: "查询用户列表"
+openapi: "GET /users"
+---
+
+分页查询用户列表，通常用于管理后台或用户管理功能。
+
+## 接口说明
+
+此接口用于分页获取系统中的用户列表，支持分页参数，需要管理员权限。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+```
+
+## 查询参数
+
+- `page` (可选): 页码，默认为 1
+- `size` (可选): 每页数量，默认为 10
+
+## 响应示例
+
+### 成功响应 (200)
+
+```json
+{
+  "users": [
+    {
+      "id": "123456",
+      "username": "testuser1",
+      "nickname": "测试用户1",
+      "email": "user1@example.com",
+      "mobile": "13888888888",
+      "avatar": "https://api.weiyuai.cn/avatar/default.png",
+      "status": "ACTIVE",
+      "createdAt": "2023-01-01T12:00:00Z"
+    },
+    {
+      "id": "123457",
+      "username": "testuser2",
+      "nickname": "测试用户2",
+      "email": "user2@example.com",
+      "mobile": "13999999999",
+      "avatar": "https://api.weiyuai.cn/avatar/default.png",
+      "status": "ACTIVE",
+      "createdAt": "2023-01-02T12:00:00Z"
+    }
+  ],
+  "total": 150
+}
+```
+
+## 字段说明
+
+- `users`: 用户列表数组
+- `total`: 用户总数
+
+### 用户对象字段
+
+- `id`: 用户唯一标识符
+- `username`: 用户名
+- `nickname`: 显示昵称
+- `email`: 邮箱地址
+- `mobile`: 手机号码
+- `avatar`: 头像图片 URL
+- `status`: 用户状态
+- `createdAt`: 账户创建时间
+
+## 使用场景
+
+- 管理后台用户管理
+- 用户列表展示
+- 用户数据分析
+- 批量用户操作
+
+## 注意事项
+
+- 需要管理员权限
+- 支持分页查询以提高性能
+- 可能包含敏感信息，需要权限控制

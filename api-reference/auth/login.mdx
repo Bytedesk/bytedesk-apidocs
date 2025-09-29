@@ -1,0 +1,81 @@
+---
+title: "用户登录"
+openapi: "POST /auth/v1/login"
+---
+
+使用用户名和密码进行登录，返回访问令牌和用户信息。
+
+## 接口说明
+
+用户通过用户名（或手机号、邮箱）和密码进行身份验证，成功后返回访问令牌用于后续 API 调用。
+
+## 请求体
+
+```json
+{
+  "username": "string",
+  "password": "string",
+  "mobile": "string",
+  "email": "string",
+  "code": "string",
+  "accessToken": "string"
+}
+```
+
+### 参数说明
+
+- `username`: 用户名
+- `password`: 密码
+- `mobile`: 手机号（手机登录时使用）
+- `email`: 邮箱地址（邮箱登录时使用）
+- `code`: 验证码（某些场景下需要）
+- `accessToken`: 访问令牌（特殊场景）
+
+## 响应示例
+
+### 成功响应 (200)
+
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "123456",
+    "username": "testuser",
+    "nickname": "测试用户",
+    "email": "user@example.com",
+    "mobile": "13888888888",
+    "avatar": "https://api.weiyuai.cn/avatar/default.png",
+    "status": "ACTIVE",
+    "createdAt": "2023-01-01T12:00:00Z"
+  }
+}
+```
+
+### 错误响应 (401)
+
+```json
+{
+  "error": 401,
+  "message": "Invalid username or password"
+}
+```
+
+## 登录方式
+
+- **用户名密码**: 最常见的登录方式
+- **手机号密码**: 使用手机号作为登录凭据
+- **邮箱密码**: 使用邮箱作为登录凭据
+- **验证码登录**: 特定场景下的免密登录
+
+## 安全建议
+
+- 使用 HTTPS 传输敏感信息
+- 实施登录失败次数限制
+- 建议使用强密码策略
+- 定期更换访问令牌
+
+## 注意事项
+
+- 访问令牌需要妥善保存
+- 令牌过期后需要重新登录或刷新
+- 支持多种登录凭据类型

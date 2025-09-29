@@ -1,0 +1,83 @@
+---
+title: "创建用户"
+openapi: "POST /users"
+---
+
+创建新用户账户，通常用于管理后台或批量用户导入场景。
+
+## 接口说明
+
+此接口用于创建新的用户账户，需要管理员权限，支持批量创建或单个创建。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+```
+
+## 请求体
+
+```json
+{
+  "username": "string",
+  "password": "string",
+  "nickname": "string",
+  "email": "string",
+  "mobile": "string"
+}
+```
+
+### 参数说明
+
+- `username` (必需): 用户名，需要唯一
+- `password` (必需): 密码，需要符合安全规则
+- `nickname` (可选): 显示昵称
+- `email` (可选): 邮箱地址，需要唯一
+- `mobile` (可选): 手机号码，需要唯一
+
+## 响应示例
+
+### 成功响应 (200)
+
+```json
+{
+  "id": "123456",
+  "username": "newuser",
+  "nickname": "新用户",
+  "email": "newuser@example.com",
+  "mobile": "13777777777",
+  "avatar": "https://api.weiyuai.cn/avatar/default.png",
+  "status": "ACTIVE",
+  "createdAt": "2023-01-03T12:00:00Z"
+}
+```
+
+### 错误响应 (400)
+
+```json
+{
+  "error": 400,
+  "message": "Username already exists"
+}
+```
+
+## 创建规则
+
+- 用户名必须唯一且符合命名规范
+- 密码需要满足最小安全要求
+- 邮箱和手机号如果提供则必须唯一
+- 新用户默认状态为 ACTIVE
+
+## 使用场景
+
+- 管理员创建用户账户
+- 批量用户导入
+- 系统初始化用户
+- 企业员工账户创建
+
+## 注意事项
+
+- 需要管理员权限
+- 用户名、邮箱、手机号需要唯一性检查
+- 密码会被加密存储
+- 创建后用户可以正常登录使用

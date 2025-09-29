@@ -47,7 +47,7 @@ function Sidebar() {
   )
 }
 
-function Topbar() {
+function Topbar({ isMobile, onSidebarToggle, onExamplesToggle }: { isMobile: boolean, onSidebarToggle: () => void, onExamplesToggle: () => void }) {
   const [isDark, setIsDark] = React.useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') === 'dark' || 
@@ -55,6 +55,9 @@ function Topbar() {
     }
     return false
   })
+  
+  const location = useLocation()
+  const isApiPage = location.pathname.includes('/api-reference/endpoint/')
 
   const toggleTheme = () => {
     const newTheme = !isDark
@@ -69,9 +72,31 @@ function Topbar() {
 
   return (
     <header className="topbar">
-      <div><Link className="site" to="/index">{docs.name}</Link></div>
-      <div className="center"><input placeholder="Search (placeholder)" /></div>
+      <div className="topbar-left">
+        {isMobile && (
+          <button onClick={onSidebarToggle} className="mobile-menu-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        )}
+        <Link className="site" to="/index">{docs.name}</Link>
+      </div>
+      <div className="center">
+        {/* <input placeholder="Search (placeholder)" /> */}
+      </div>
       <div className="right">
+        {isMobile && isApiPage && (
+          <button onClick={onExamplesToggle} className="mobile-menu-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="9" x2="15" y2="9"></line>
+              <line x1="9" y1="15" x2="15" y2="15"></line>
+            </svg>
+          </button>
+        )}
         <button 
           onClick={toggleTheme}
           className="theme-toggle"
@@ -121,7 +146,7 @@ const mdxModules = import.meta.glob([
   '../../snippets/**/*.mdx',
 ]) as Record<string, () => Promise<any>>
 
-function Page({ path }: { path: string }) {
+function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string, isMobile?: boolean, examplesOpen?: boolean, onCloseExamples?: () => void }) {
   // keys in mdxModules start with ../../
   const key = `../../${path}.mdx`
   const loader = mdxModules[key]
@@ -136,17 +161,37 @@ function Page({ path }: { path: string }) {
         <div className="main-content">
           <Mdx />
         </div>
-        {isApiEndpoint ? (
+        
+        {/* 桌面端右侧栏 */}
+        {!isMobile && isApiEndpoint && (
           <aside className="api-examples">
             <div className="examples-sticky" id="api-examples-container">
               {/* Examples will be populated by RequestExample/ResponseExample components */}
             </div>
           </aside>
-        ) : (
+        )}
+        
+        {!isMobile && !isApiEndpoint && (
           <aside className="otp">
             <div className="title">On this page</div>
             {/* 运行时生成目录较复杂，这里可在后续加 rehype 解析 anchor 列表 */}
           </aside>
+        )}
+        
+        {/* 移动端代码示例 Drawer */}
+        {isMobile && isApiEndpoint && examplesOpen && (
+          <>
+            <div className="drawer-overlay" onClick={onCloseExamples} />
+            <div className="drawer-examples">
+              <div className="drawer-header">
+                <span>代码示例</span>
+                <button onClick={onCloseExamples} className="close-btn">×</button>
+              </div>
+              <div className="examples-sticky" id="mobile-api-examples-container">
+                {/* Mobile examples will be populated here */}
+              </div>
+            </div>
+          </>
         )}
       </div>
     </React.Suspense>
@@ -154,18 +199,60 @@ function Page({ path }: { path: string }) {
 }
 
 export default function App() {
+  const [sidebarOpen, setSidebarOpen] = React.useState(false)
+  const [examplesOpen, setExamplesOpen] = React.useState(false)
+  const [isMobile, setIsMobile] = React.useState(false)
+  
+  // 检测移动端
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+  
+  // 关闭 drawer 当点击背景时
+  const closeSidebar = () => setSidebarOpen(false)
+  const closeExamples = () => setExamplesOpen(false)
+  
   return (
     <div>
-      <Topbar />
+      <Topbar 
+        isMobile={isMobile}
+        onSidebarToggle={() => setSidebarOpen(!sidebarOpen)}
+        onExamplesToggle={() => setExamplesOpen(!examplesOpen)}
+      />
+      
       <div className="container">
-        <Sidebar />
-        <Routes>
-          <Route path="/" element={<Page path="index" />} />
-          <Route path="/index" element={<Page path="index" />} />
-          {docs.navigation.tabs.flatMap((t: any) => t.groups.flatMap((g: any) => g.pages)).map((p: string) => (
-            <Route key={p} path={`/${p}`} element={<Page path={p} />} />
-          ))}
-        </Routes>
+        {/* 桌面端侧边栏 */}
+        {!isMobile && <Sidebar />}
+        
+        {/* 移动端侧边栏 Drawer */}
+        {isMobile && sidebarOpen && (
+          <>
+            <div className="drawer-overlay" onClick={closeSidebar} />
+            <div className="drawer-sidebar">
+              <div className="drawer-header">
+                <span>导航</span>
+                <button onClick={closeSidebar} className="close-btn">×</button>
+              </div>
+              <Sidebar />
+            </div>
+          </>
+        )}
+        
+        {/* 主内容区域 */}
+        <div className="main-wrapper">
+          <Routes>
+            <Route path="/" element={<Page path="index" />} />
+            <Route path="/index" element={<Page path="index" />} />
+            {docs.navigation.tabs.flatMap((t: any) => t.groups.flatMap((g: any) => g.pages)).map((p: string) => (
+              <Route key={p} path={`/${p}`} element={<Page path={p} isMobile={isMobile} examplesOpen={examplesOpen} onCloseExamples={closeExamples} />} />
+            ))}
+          </Routes>
+        </div>
       </div>
     </div>
   )

@@ -1,0 +1,90 @@
+---
+title: "查询会话列表"
+openapi: "GET /threads"
+---
+
+分页查询用户的会话列表，包括个人会话、群组会话和客服会话。
+
+## 接口说明
+
+此接口用于获取当前用户相关的所有会话列表，支持分页查询和会话状态筛选。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+```
+
+## 查询参数
+
+- `page` (可选): 页码，默认为 1
+- `size` (可选): 每页数量，默认为 10
+
+## 响应示例
+
+### 成功响应 (200)
+
+```json
+{
+  "threads": [
+    {
+      "id": "thread_123456",
+      "type": "PERSONAL",
+      "status": "ACTIVE",
+      "title": "与用户A的对话",
+      "description": "个人聊天会话",
+      "createdAt": "2023-01-01T12:00:00Z"
+    },
+    {
+      "id": "thread_123457",
+      "type": "GROUP",
+      "status": "ACTIVE",
+      "title": "项目讨论组",
+      "description": "项目相关讨论",
+      "createdAt": "2023-01-02T12:00:00Z"
+    },
+    {
+      "id": "thread_123458",
+      "type": "SUPPORT",
+      "status": "CLOSED",
+      "title": "技术支持",
+      "description": "用户咨询技术问题",
+      "createdAt": "2023-01-03T12:00:00Z"
+    }
+  ],
+  "total": 25
+}
+```
+
+## 字段说明
+
+- `threads`: 会话列表数组
+- `total`: 会话总数
+
+### 会话对象字段
+
+- `id`: 会话唯一标识符
+- `type`: 会话类型
+  - `PERSONAL`: 个人会话
+  - `GROUP`: 群组会话
+  - `SUPPORT`: 客服会话
+- `status`: 会话状态
+  - `ACTIVE`: 活跃状态
+  - `CLOSED`: 已关闭
+  - `ARCHIVED`: 已归档
+- `title`: 会话标题
+- `description`: 会话描述
+- `createdAt`: 会话创建时间
+
+## 使用场景
+
+- 聊天应用会话列表
+- 客服系统会话管理
+- 群组管理界面
+- 消息中心展示
+
+## 注意事项
+
+- 只返回当前用户相关的会话
+- 支持分页以提高性能
+- 不同类型会话可能有不同的权限规则

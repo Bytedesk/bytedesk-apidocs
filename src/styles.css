@@ -50,6 +50,12 @@ body {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   transition: background-color 0.2s, border-color 0.2s;
 }
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 .topbar .site { 
   text-decoration:none; 
   font-weight:700; 
@@ -68,7 +74,100 @@ body {
 .topbar .right a:hover { color:#374151; }
 .topbar .primary { background:var(--primary); color:#fff; text-decoration:none; padding:8px 16px; border-radius:8px; font-weight:600; transition: all 0.2s; }
 .topbar .primary:hover { background:#15803d; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3); }
+
+/* 移动端菜单按钮 */
+.mobile-menu-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.mobile-menu-btn:hover {
+  background: var(--bg-secondary);
+  border-color: var(--text-muted);
+}
+
+/* Drawer 覆盖层和容器 */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 30;
+  backdrop-filter: blur(2px);
+}
+
+.drawer-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 100vh;
+  background: var(--sidebar-bg);
+  z-index: 40;
+  transform: translateX(0);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.drawer-examples {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 350px;
+  height: 100vh;
+  background: var(--bg-primary);
+  z-index: 40;
+  transform: translateX(0);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: var(--text-primary);
+}
 .container { display:flex; min-height: calc(100vh - 64px); }
+
+.main-wrapper {
+  flex: 1;
+  min-width: 0; /* 防止内容溢出 */
+}
+
+.main-content {
+  padding: 24px 32px; /* 增加内容区域的padding */
+  max-width: none;
+}
 .sidebar { 
   width:300px; 
   background: var(--sidebar-bg); 
@@ -129,6 +228,41 @@ body {
   color: var(--text-secondary);
   font-size: 16px;
   transition: color 0.2s;
+}
+
+.content-api { 
+  flex: 1; 
+  display: flex; 
+  min-height: calc(100vh - 64px); 
+}
+
+.content-api .main-content { 
+  flex: 1; 
+  max-width: calc(100% - 400px); 
+  overflow-y: auto; 
+  line-height: 1.7; 
+}
+
+.api-examples { 
+  width: 400px; 
+  background: #f8fafc; 
+  border-left: 1px solid #e5e7eb; 
+  padding: 0; 
+  overflow-y: auto; 
+}
+
+.otp {
+  width: 300px;
+  padding: 24px 16px;
+  border-left: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.otp .title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
 }
 .content h1 { 
   font-size: 48px; 
@@ -222,9 +356,30 @@ h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .content-api { flex-direction: column; }
-  .main-content { max-width: 100%; }
-  .api-examples { width: 100%; }
+  /* 隐藏桌面端侧边栏 */
+  .sidebar {
+    display: none;
+  }
+  
+  /* 隐藏桌面端右侧栏 */
+  .api-examples,
+  .otp {
+    display: none;
+  }
+  
+  .topbar {
+    padding: 0 16px;
+  }
+  
+  .main-content {
+    padding: 16px 20px; /* 移动端减少padding */
+    max-width: 100%;
+  }
+  
+  .content-api,
+  .content {
+    flex-direction: column;
+  }
   
   .code-example-container,
   .response-example-container {
@@ -235,6 +390,34 @@ h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
     padding: 16px;
     position: static;
     max-height: none;
+  }
+  
+  /* Drawer 动画 */
+  .drawer-sidebar,
+  .drawer-examples {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  .drawer-examples {
+    animation-name: slideInRight;
+  }
+  
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
   }
 }
 
@@ -273,10 +456,10 @@ h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
   border-color: var(--border-color);
 }
 
-/* 隐藏主内容区域中的代码示例，只在右侧面板显示 */
+/* 在API页面隐藏主内容区域中的代码示例，它们会通过Portal渲染到右侧面板 */
 .content-api .main-content .code-example-container,
 .content-api .main-content .response-example-container {
-  display: none !important;
+  display: none;
 }
 
 /* 全局标题链接样式重置 */

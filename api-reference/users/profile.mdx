@@ -1,0 +1,66 @@
+---
+title: "获取当前用户信息"
+openapi: "GET /user/profile"
+---
+
+通过 Bearer Token 获取当前登录用户的详细信息。
+
+## 接口说明
+
+此接口用于获取当前已认证用户的个人资料信息，需要在请求头中携带有效的 Bearer Token。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+```
+
+## 响应示例
+
+### 成功响应 (200)
+
+```json
+{
+  "id": "123456",
+  "username": "testuser",
+  "nickname": "测试用户",
+  "email": "user@example.com",
+  "mobile": "13888888888",
+  "avatar": "https://api.weiyuai.cn/avatar/default.png",
+  "status": "ACTIVE",
+  "createdAt": "2023-01-01T12:00:00Z"
+}
+```
+
+### 错误响应 (401)
+
+```json
+{
+  "error": 401,
+  "message": "Unauthorized"
+}
+```
+
+## 字段说明
+
+- `id`: 用户唯一标识符
+- `username`: 用户名
+- `nickname`: 显示昵称
+- `email`: 邮箱地址
+- `mobile`: 手机号码
+- `avatar`: 头像图片 URL
+- `status`: 用户状态（ACTIVE: 正常, INACTIVE: 未激活, BANNED: 被禁用）
+- `createdAt`: 账户创建时间
+
+## 使用场景
+
+- 用户个人中心展示
+- 获取用户基本信息
+- 验证用户身份状态
+- 个人资料页面渲染
+
+## 注意事项
+
+- 需要有效的 Bearer Token
+- 只能获取当前登录用户的信息
+- 敏感信息可能会被过滤

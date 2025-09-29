@@ -1,0 +1,100 @@
+---
+title: "创建工单"
+openapi: "POST /ticket/create"
+---
+
+创建新的客服工单，用于用户提交问题、反馈或服务请求。
+
+## 接口说明
+
+此接口用于创建客服工单，用户可以通过此接口提交各类问题和服务请求，工单将被分配给相应的客服人员处理。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+```
+
+## 请求体
+
+```json
+{
+  "title": "string",
+  "description": "string",
+  "priority": "string",
+  "category": "string"
+}
+```
+
+### 参数说明
+
+- `title` (必需): 工单标题，简要描述问题
+- `description` (必需): 工单详细描述
+- `priority` (可选): 优先级
+  - `LOW`: 低优先级
+  - `MEDIUM`: 中优先级（默认）
+  - `HIGH`: 高优先级
+  - `URGENT`: 紧急
+- `category` (可选): 工单分类，如"技术支持"、"账务问题"等
+
+## 响应示例
+
+### 成功响应 (200)
+
+```json
+{
+  "id": "ticket_567890",
+  "title": "登录问题咨询",
+  "description": "用户无法正常登录系统，提示密码错误",
+  "status": "OPEN",
+  "priority": "MEDIUM",
+  "createdAt": "2023-01-04T14:00:00Z"
+}
+```
+
+### 错误响应 (400)
+
+```json
+{
+  "error": 400,
+  "message": "Title and description are required"
+}
+```
+
+## 字段说明
+
+- `id`: 工单唯一标识符
+- `title`: 工单标题
+- `description`: 工单详细描述
+- `status`: 工单状态（新建时默认为 OPEN）
+- `priority`: 优先级
+- `createdAt`: 工单创建时间
+
+## 工单状态说明
+
+- `OPEN`: 已开启，等待处理
+- `IN_PROGRESS`: 处理中
+- `RESOLVED`: 已解决
+- `CLOSED`: 已关闭
+
+## 优先级说明
+
+- `LOW`: 一般问题，72小时内响应
+- `MEDIUM`: 常规问题，24小时内响应
+- `HIGH`: 重要问题，8小时内响应
+- `URGENT`: 紧急问题，2小时内响应
+
+## 使用场景
+
+- 用户反馈产品问题
+- 技术支持请求
+- 账务相关咨询
+- 功能建议提交
+- 投诉和建议
+
+## 注意事项
+
+- 工单创建后会自动分配工单号
+- 系统会根据优先级安排处理顺序
+- 用户可以通过其他接口查询工单状态
+- 建议提供详细的问题描述以便快速解决
