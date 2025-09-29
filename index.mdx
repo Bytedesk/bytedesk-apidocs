@@ -1,97 +1,164 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Bytedesk API Documentation"
+description: "Complete API reference for integrating with Bytedesk services"
 ---
 
-## Setting up
+## Welcome to the ByteDesk API documentation. This documentation will help you get started with our powerful API for building customer service and communication solutions.
 
-Get your documentation site up and running in minutes.
+<div style={{ 
+  background: '#f8fafc', 
+  border: '1px solid #e2e8f0', 
+  borderRadius: '8px', 
+  padding: '20px', 
+  marginBottom: '32px' 
+}}>
+  <h3 style={{ margin: '0 0 16px 0', color: '#374151', fontSize: '16px' }}>快速导航</h3>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+    <a href="/api-reference/endpoint/get" style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: '8px', 
+      padding: '8px 12px', 
+      background: 'white', 
+      border: '1px solid #e2e8f0', 
+      borderRadius: '6px', 
+      textDecoration: 'none', 
+      color: '#374151',
+      transition: 'all 0.2s'
+    }}>
+      <Badge variant="success">GET</Badge>
+      <span>获取植物列表</span>
+    </a>
+    <a href="/api-reference/endpoint/create" style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: '8px', 
+      padding: '8px 12px', 
+      background: 'white', 
+      border: '1px solid #e2e8f0', 
+      borderRadius: '6px', 
+      textDecoration: 'none', 
+      color: '#374151',
+      transition: 'all 0.2s'
+    }}>
+      <Badge variant="warning">POST</Badge>
+      <span>创建新植物</span>
+    </a>
+    <a href="/api-reference/endpoint/delete" style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: '8px', 
+      padding: '8px 12px', 
+      background: 'white', 
+      border: '1px solid #e2e8f0', 
+      borderRadius: '6px', 
+      textDecoration: 'none', 
+      color: '#374151',
+      transition: 'all 0.2s'
+    }}>
+      <Badge variant="danger">DELETE</Badge>
+      <span>删除植物</span>
+    </a>
+    <a href="/api-reference/endpoint/webhook" style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: '8px', 
+      padding: '8px 12px', 
+      background: 'white', 
+      border: '1px solid #e2e8f0', 
+      borderRadius: '6px', 
+      textDecoration: 'none', 
+      color: '#374151',
+      transition: 'all 0.2s'
+    }}>
+      <Badge variant="secondary">WEBHOOK</Badge>
+      <span>植物状态更新</span>
+    </a>
+  </div>
+</div>
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+## Overview
 
-## Make it yours
+The Bytedesk API provides a comprehensive set of endpoints for managing customer support, messaging, and communication workflows. Our RESTful API is designed to be developer-friendly with consistent response formats and detailed error messages.
 
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
-  </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
-  </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
-
-## Create beautiful pages
-
-Everything you need to create world-class documentation.
-
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
-
-## Need inspiration?
+## Quick Start
 
 <Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
+  title="Get Plants"
+  icon="leaf"
+  href="/api-reference/endpoint/get"
 >
-  Browse our showcase of exceptional documentation sites.
+  Start with our sample GET endpoint to retrieve all plants from the system.
 </Card>
+
+## Authentication
+
+All API requests require authentication using Bearer tokens. Include your API key in the Authorization header:
+
+```bash
+Authorization: Bearer <token>
+```
+
+## Base URL
+
+All API requests should be made to:
+
+```
+http://sandbox.mintlify.com
+```
+
+## API Endpoints
+
+<CardGroup cols={2}>
+  <Card
+    title="Get Plants"
+    icon="leaf"
+    href="/api-reference/endpoint/get"
+  >
+    Retrieve all plants from the system
+  </Card>
+  <Card
+    title="Create Plant"
+    icon="plus"
+    href="/api-reference/endpoint/create"
+  >
+    Add a new plant to the store
+  </Card>
+  <Card
+    title="Delete Plant"
+    icon="trash"
+    href="/api-reference/endpoint/delete"
+  >
+    Remove a plant from the system
+  </Card>
+  <Card
+    title="Plant Webhook"
+    icon="webhook"
+    href="/api-reference/endpoint/webhook"
+  >
+    Receive notifications about plant events
+  </Card>
+</CardGroup>
+
+## Response Format
+
+All API responses follow a consistent JSON format:
+
+```json
+{
+  "success": true,
+  "data": {},
+  "message": "Operation completed successfully"
+}
+```
+
+## Error Handling
+
+When an error occurs, the API returns an appropriate HTTP status code along with an error response:
+
+```json
+{
+  "error": 400,
+  "message": "Bad Request - Invalid parameters"
+}
+```

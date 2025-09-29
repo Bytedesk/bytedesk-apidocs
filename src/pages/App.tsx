@@ -16,13 +16,13 @@ function Sidebar() {
   const current = loc.pathname.replace(/^\//, '') || 'index'
   return (
     <aside className="sidebar">
-      {docs.navigation?.global?.anchors?.length ? (
+      {/* {docs.navigation?.global?.anchors?.length ? (
         <div>
           {docs.navigation.global.anchors.map((a: any) => (
             <a key={a.href} href={a.href} target="_blank" rel="noreferrer">{a.anchor}</a>
           ))}
         </div>
-      ) : null}
+      ) : null} */}
       {docs.navigation.tabs.map((tab: any) => (
         <div key={tab.tab}>
           <div className="tab">{tab.tab}</div>
@@ -73,15 +73,29 @@ function Page({ path }: { path: string }) {
   const key = `../../${path}.mdx`
   const loader = mdxModules[key]
   const Mdx = React.useMemo(() => React.lazy(loader as any), [path])
+  
+  // Check if it's an API endpoint page
+  const isApiEndpoint = path.startsWith('api-reference/endpoint/')
+  
   return (
     <React.Suspense fallback={<div style={{padding: 24}}>Loading...</div>}>
-      <div className="content">
-        <Mdx />
+      <div className={isApiEndpoint ? "content-api" : "content"}>
+        <div className="main-content">
+          <Mdx />
+        </div>
+        {isApiEndpoint ? (
+          <aside className="api-examples">
+            <div className="examples-sticky" id="api-examples-container">
+              {/* Examples will be populated by RequestExample/ResponseExample components */}
+            </div>
+          </aside>
+        ) : (
+          <aside className="otp">
+            <div className="title">On this page</div>
+            {/* 运行时生成目录较复杂，这里可在后续加 rehype 解析 anchor 列表 */}
+          </aside>
+        )}
       </div>
-      <aside className="otp">
-        <div className="title">On this page</div>
-        {/* 运行时生成目录较复杂，这里可在后续加 rehype 解析 anchor 列表 */}
-      </aside>
     </React.Suspense>
   )
 }

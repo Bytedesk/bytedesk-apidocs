@@ -8,6 +8,8 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 export default defineConfig({
   plugins: [
     mdx({
+      // Enable MDXProvider context so shortcodes like <Card/> resolve via @mdx-js/react
+      providerImportSource: '@mdx-js/react',
       remarkPlugins: [remarkGfm],
       rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]],
     }),

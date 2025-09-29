@@ -1,4 +1,79 @@
 ---
 title: 'Get Plants'
-openapi: 'GET /plants'
+description: 'Returns all plants from the system that the user has access to'
 ---
+
+# Get Plants
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+  <div>
+    <Badge variant="success">GET</Badge> 
+    <code style={{ marginLeft: '8px', padding: '8px 12px', background: '#f1f5f9', borderRadius: '6px', fontWeight: '600' }}>/plants</code>
+  </div>
+  <button className="try-button" style={{ 
+    background: '#16A34A', 
+    color: 'white', 
+    border: 'none', 
+    padding: '8px 16px', 
+    borderRadius: '8px', 
+    fontWeight: '600', 
+    cursor: 'pointer',
+    fontSize: '14px'
+  }}>
+    Try it →
+  </button>
+</div>
+
+Returns all plants from the system that the user has access to.
+
+## Authorization
+
+<ParamField header="Authorization" type="string" required>
+  Bearer authentication header of the form `Bearer <token>`, where `<token>` is your auth token.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="limit" type="integer">
+  The maximum number of results to return
+</ParamField>
+
+## Response
+
+<ResponseField name="name" type="string" required>
+  The name of the plant
+</ResponseField>
+
+<ResponseField name="tag" type="string">
+  Tag to specify the type
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url http://sandbox.mintlify.com/plants \
+  --header 'Authorization: Bearer <token>'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+[
+  {
+    "name": "<string>",
+    "tag": "<string>"
+  }
+]
+```
+
+```json 400
+{
+  "error": 400,
+  "message": "Bad Request"
+}
+```
+
+</ResponseExample>

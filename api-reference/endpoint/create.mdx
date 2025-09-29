@@ -1,4 +1,96 @@
 ---
 title: 'Create Plant'
-openapi: 'POST /plants'
+description: 'Creates a new plant in the store'
 ---
+
+# Create Plant
+
+<div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+  <div>
+    <Badge variant="warning">POST</Badge> 
+    <code style={{ marginLeft: '8px', padding: '8px 12px', background: '#f1f5f9', borderRadius: '6px', fontWeight: '600' }}>/plants</code>
+  </div>
+  <button className="try-button" style={{ 
+    background: '#16A34A', 
+    color: 'white', 
+    border: 'none', 
+    padding: '8px 16px', 
+    borderRadius: '8px', 
+    fontWeight: '600', 
+    cursor: 'pointer',
+    fontSize: '14px'
+  }}>
+    Try it →
+  </button>
+</div>
+
+Creates a new plant in the system. Requires a plant object in the request body.
+
+## Authorization
+
+<ParamField header="Authorization" type="string" required>
+  Bearer authentication header of the form `Bearer <token>`, where `<token>` is your auth token.
+</ParamField>
+
+## Body Parameters
+
+<ParamField body="name" type="string" required>
+  The name of the plant
+</ParamField>
+
+<ParamField body="tag" type="string">
+  Tag to specify the type of plant
+</ParamField>
+
+<ParamField body="id" type="integer" required>
+  Unique identification number of the plant
+</ParamField>
+
+## Response
+
+<ResponseField name="name" type="string" required>
+  The name of the plant
+</ResponseField>
+
+<ResponseField name="tag" type="string">
+  Tag to specify the type
+</ResponseField>
+
+<ResponseField name="id" type="integer" required>
+  Unique identification number of the plant
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url http://sandbox.mintlify.com/plants \
+  --header 'Authorization: Bearer <token>' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "Fiddle Leaf Fig",
+    "tag": "indoor",
+    "id": 123
+  }'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200
+{
+  "name": "Fiddle Leaf Fig",
+  "tag": "indoor",
+  "id": 123
+}
+```
+
+```json 400
+{
+  "error": 400,
+  "message": "Invalid plant data"
+}
+```
+
+</ResponseExample>
