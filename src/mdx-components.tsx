@@ -221,31 +221,61 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
   const [container, setContainer] = useState<HTMLElement | null>(null)
   
   useEffect(() => {
+    let retryCount = 0
+    const maxRetries = 20 // 增加重试次数
+    
     // 等待 DOM 准备好后再获取容器
     const getContainer = () => {
       const elem = document.getElementById('api-examples-container')
       if (elem) {
+        console.log('RequestExample: Found container element')
         setContainer(elem)
+        return true
       } else {
-        // 如果容器还没准备好，稍后重试
-        setTimeout(getContainer, 50)
+        retryCount++
+        if (retryCount < maxRetries) {
+          // 如果容器还没准备好，稍后重试，使用递增延迟
+          setTimeout(getContainer, Math.min(100 * retryCount, 1000))
+        } else {
+          console.warn('RequestExample: Could not find api-examples-container after', maxRetries, 'retries')
+        }
+        return false
       }
     }
     
     // 立即尝试获取容器
-    getContainer()
-    
-    // 添加 DOM 变化监听，确保容器始终可用
-    const observer = new MutationObserver(() => {
-      if (!container) {
-        getContainer()
-      }
-    })
-    
-    observer.observe(document.body, { childList: true, subtree: true })
-    
-    return () => observer.disconnect()
-  }, [container])
+    if (!getContainer()) {
+      // 添加 DOM 变化监听，确保容器始终可用
+      const observer = new MutationObserver((mutations) => {
+        // 检查是否有新增的元素包含我们需要的容器
+        for (const mutation of mutations) {
+          if (mutation.type === 'childList') {
+            for (const node of mutation.addedNodes) {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                const element = node as Element
+                if (element.id === 'api-examples-container' || 
+                    element.querySelector('#api-examples-container')) {
+                  if (getContainer()) {
+                    observer.disconnect()
+                    return
+                  }
+                }
+              }
+            }
+          }
+        }
+      })
+      
+      observer.observe(document.body, { 
+        childList: true, 
+        subtree: true,
+        attributes: false,
+        characterData: false
+      })
+      
+      return () => observer.disconnect()
+    }
+  }, [])
   
   const [selectedLang, setSelectedLang] = useState('cURL')
   const [showDropdown, setShowDropdown] = useState(false)
@@ -442,31 +472,61 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
   const [container, setContainer] = useState<HTMLElement | null>(null)
   
   useEffect(() => {
+    let retryCount = 0
+    const maxRetries = 20 // 增加重试次数
+    
     // 等待 DOM 准备好后再获取容器
     const getContainer = () => {
       const elem = document.getElementById('api-examples-container')
       if (elem) {
+        console.log('ResponseExample: Found container element')
         setContainer(elem)
+        return true
       } else {
-        // 如果容器还没准备好，稍后重试
-        setTimeout(getContainer, 50)
+        retryCount++
+        if (retryCount < maxRetries) {
+          // 如果容器还没准备好，稍后重试，使用递增延迟
+          setTimeout(getContainer, Math.min(100 * retryCount, 1000))
+        } else {
+          console.warn('ResponseExample: Could not find api-examples-container after', maxRetries, 'retries')
+        }
+        return false
       }
     }
     
     // 立即尝试获取容器
-    getContainer()
-    
-    // 添加 DOM 变化监听，确保容器始终可用
-    const observer = new MutationObserver(() => {
-      if (!container) {
-        getContainer()
-      }
-    })
-    
-    observer.observe(document.body, { childList: true, subtree: true })
-    
-    return () => observer.disconnect()
-  }, [container])
+    if (!getContainer()) {
+      // 添加 DOM 变化监听，确保容器始终可用
+      const observer = new MutationObserver((mutations) => {
+        // 检查是否有新增的元素包含我们需要的容器
+        for (const mutation of mutations) {
+          if (mutation.type === 'childList') {
+            for (const node of mutation.addedNodes) {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                const element = node as Element
+                if (element.id === 'api-examples-container' || 
+                    element.querySelector('#api-examples-container')) {
+                  if (getContainer()) {
+                    observer.disconnect()
+                    return
+                  }
+                }
+              }
+            }
+          }
+        }
+      })
+      
+      observer.observe(document.body, { 
+        childList: true, 
+        subtree: true,
+        attributes: false,
+        characterData: false
+      })
+      
+      return () => observer.disconnect()
+    }
+  }, [])
   
   const [selectedStatus, setSelectedStatus] = useState('200')
   
