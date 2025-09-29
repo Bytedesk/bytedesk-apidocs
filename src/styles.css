@@ -29,6 +29,20 @@ body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Ro
 .otp { width:240px; border-left:1px solid #e5e7eb; padding:16px; color:#6b7280; }
 .otp .title { font-size:12px; text-transform:uppercase; margin-bottom:8px; }
 
+/* columns grid spacing */
+.columns .ant-card { height: 100%; }
+
+/* steps */
+.steps { display: flex; flex-direction: column; gap: 16px; }
+.step { display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: flex-start; }
+.step-index { width:32px; height:32px; border-radius:999px; background:#eef2f7; display:flex; align-items:center; justify-content:center; font-weight:600; color:#374151; margin-top: 4px; }
+
+/* code group tabs spacing */
+.ant-tabs { margin: 12px 0; }
+.ant-tabs .ant-tabs-tab { padding: 8px 12px; }
+.ant-tabs .ant-tabs-content { padding: 8px 0; }
+.ant-tabs-content pre { margin: 0; }
+
 @media (max-width: 960px) {
   .container { flex-direction: column; }
   .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e5e7eb; }
