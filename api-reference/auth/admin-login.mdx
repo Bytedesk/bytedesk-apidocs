@@ -1,5 +1,5 @@
 ---
-title: "管理后台登录"
+title: "GET 管理后台登录"
 openapi: "GET /auth/login"
 ---
 
@@ -29,3 +29,32 @@ openapi: "GET /auth/login"
 - 此接口通常返回 HTTP 302 重定向
 - AccessToken 需要预先通过其他方式获取
 - 适用于网页端跳转场景
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.weiyuai.cn/auth/login?accessToken=your_access_token_here" \
+  -H "Accept: application/json"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.weiyuai.cn/auth/login?accessToken=your_access_token_here', {
+  method: 'GET',
+  headers: {
+    'Accept': 'application/json'
+  }
+});
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/auth/login"
+params = {
+    "accessToken": "your_access_token_here"
+}
+
+response = requests.get(url, params=params)
+```
+
+</RequestExample>

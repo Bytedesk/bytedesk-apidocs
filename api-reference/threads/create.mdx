@@ -1,5 +1,5 @@
 ---
-title: "创建会话"
+title: "POST 创建会话"
 openapi: "POST /threads"
 ---
 
@@ -94,3 +94,53 @@ Authorization: Bearer <access_token>
 - 不同类型会话可能有不同的权限要求
 - 群组会话可能需要邀请其他成员
 - 客服会话可能会自动分配客服人员
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.weiyuai.cn/api/v1/threads" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "PERSONAL",
+    "title": "新建个人会话",
+    "description": "用户创建的个人会话"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.weiyuai.cn/api/v1/threads', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer your_access_token_here',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    type: 'PERSONAL',
+    title: '新建个人会话',
+    description: '用户创建的个人会话'
+  })
+});
+
+const newThread = await response.json();
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/threads"
+headers = {
+    "Authorization": "Bearer your_access_token_here",
+    "Content-Type": "application/json"
+}
+data = {
+    "type": "PERSONAL",
+    "title": "新建个人会话",
+    "description": "用户创建的个人会话"
+}
+
+response = requests.post(url, headers=headers, json=data)
+new_thread = response.json()
+```
+
+</RequestExample>

@@ -1,5 +1,5 @@
 ---
-title: "查询会话列表"
+title: "GET 查询会话列表"
 openapi: "GET /threads"
 ---
 
@@ -88,3 +88,44 @@ Authorization: Bearer <access_token>
 - 只返回当前用户相关的会话
 - 支持分页以提高性能
 - 不同类型会话可能有不同的权限规则
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.weiyuai.cn/api/v1/threads?page=1&size=10" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Accept: application/json"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.weiyuai.cn/api/v1/threads?page=1&size=10', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer your_access_token_here',
+    'Accept': 'application/json'
+  }
+});
+
+const data = await response.json();
+const threads = data.threads;
+const total = data.total;
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/threads"
+headers = {
+    "Authorization": "Bearer your_access_token_here",
+    "Accept": "application/json"
+}
+params = {
+    "page": 1,
+    "size": 10
+}
+
+response = requests.get(url, headers=headers, params=params)
+data = response.json()
+```
+
+</RequestExample>

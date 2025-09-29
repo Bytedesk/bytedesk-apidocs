@@ -1,5 +1,5 @@
 ---
-title: "用户登录"
+title: "POST 用户登录"
 openapi: "POST /auth/v1/login"
 ---
 
@@ -79,3 +79,46 @@ openapi: "POST /auth/v1/login"
 - 访问令牌需要妥善保存
 - 令牌过期后需要重新登录或刷新
 - 支持多种登录凭据类型
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.weiyuai.cn/auth/v1/login" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "testuser",
+    "password": "your_password"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.weiyuai.cn/auth/v1/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    username: 'testuser',
+    password: 'your_password'
+  })
+});
+
+const data = await response.json();
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/auth/v1/login"
+headers = {
+    "Content-Type": "application/json"
+}
+data = {
+    "username": "testuser",
+    "password": "your_password"
+}
+
+response = requests.post(url, headers=headers, json=data)
+```
+
+</RequestExample>

@@ -13,23 +13,8 @@ Welcome to the ByteDesk API documentation. This documentation will help you get 
   marginBottom: '32px' 
 }}>
   <h3 style={{ margin: '0 0 16px 0', color: '#374151', fontSize: '16px' }}>快速导航</h3>
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
-    <a href="/api-reference/endpoint/get" style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      gap: '8px', 
-      padding: '8px 12px', 
-      background: 'white', 
-      border: '1px solid #e2e8f0', 
-      borderRadius: '6px', 
-      textDecoration: 'none', 
-      color: '#374151',
-      transition: 'all 0.2s'
-    }}>
-      <Badge variant="success">GET</Badge>
-      <span>获取植物列表</span>
-    </a>
-    <a href="/api-reference/endpoint/create" style={{ 
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+    <a href="/api-reference/auth/login" style={{ 
       display: 'flex', 
       alignItems: 'center', 
       gap: '8px', 
@@ -42,9 +27,9 @@ Welcome to the ByteDesk API documentation. This documentation will help you get 
       transition: 'all 0.2s'
     }}>
       <Badge variant="warning">POST</Badge>
-      <span>创建新植物</span>
+      <span>用户登录</span>
     </a>
-    <a href="/api-reference/endpoint/delete" style={{ 
+    <a href="/api-reference/users/profile" style={{ 
       display: 'flex', 
       alignItems: 'center', 
       gap: '8px', 
@@ -56,10 +41,10 @@ Welcome to the ByteDesk API documentation. This documentation will help you get 
       color: '#374151',
       transition: 'all 0.2s'
     }}>
-      <Badge variant="danger">DELETE</Badge>
-      <span>删除植物</span>
+      <Badge variant="success">GET</Badge>
+      <span>获取用户信息</span>
     </a>
-    <a href="/api-reference/endpoint/webhook" style={{ 
+    <a href="/api-reference/messages/send" style={{ 
       display: 'flex', 
       alignItems: 'center', 
       gap: '8px', 
@@ -71,8 +56,23 @@ Welcome to the ByteDesk API documentation. This documentation will help you get 
       color: '#374151',
       transition: 'all 0.2s'
     }}>
-      <Badge variant="secondary">WEBHOOK</Badge>
-      <span>植物状态更新</span>
+      <Badge variant="warning">POST</Badge>
+      <span>发送消息</span>
+    </a>
+    <a href="/api-reference/tickets/create" style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      gap: '8px', 
+      padding: '8px 12px', 
+      background: 'white', 
+      border: '1px solid #e2e8f0', 
+      borderRadius: '6px', 
+      textDecoration: 'none', 
+      color: '#374151',
+      transition: 'all 0.2s'
+    }}>
+      <Badge variant="warning">POST</Badge>
+      <span>创建工单</span>
     </a>
   </div>
 </div>
@@ -84,59 +84,80 @@ The Bytedesk API provides a comprehensive set of endpoints for managing customer
 ## Quick Start
 
 <Card
-  title="Get Plants"
-  icon="leaf"
-  href="/api-reference/endpoint/get"
+  title="用户登录"
+  icon="user"
+  href="/api-reference/auth/login"
 >
-  Start with our sample GET endpoint to retrieve all plants from the system.
+  开始使用我们的登录接口进行用户身份验证。
 </Card>
 
 ## Authentication
 
-All API requests require authentication using Bearer tokens. Include your API key in the Authorization header:
+### Bearer Token 认证
+
+REST API 请求需要在请求头中携带 Bearer Token：
 
 ```bash
-Authorization: Bearer <token>
+Authorization: Bearer <access_token>
+```
+
+### AccessToken 免登
+
+部分接口支持 AccessToken 免登，用于网页重定向场景：
+
+```bash
+GET /auth/login?accessToken=<access_token>
 ```
 
 ## Base URL
 
-All API requests should be made to:
-
+### REST API
 ```
-http://api.weiyuai.cn
+https://api.weiyuai.cn/api/v1
 ```
 
-## API Endpoints
+### Web App (AccessToken 登录)
+```
+https://api.weiyuai.cn
+```
+
+## API 模块
 
 <CardGroup cols={2}>
   <Card
-    title="Get Plants"
-    icon="leaf"
-    href="/api-reference/endpoint/get"
+    title="认证模块"
+    icon="key"
+    href="/api-reference/auth/login"
   >
-    Retrieve all plants from the system
+    用户登录、注册、令牌刷新等认证功能
   </Card>
   <Card
-    title="Create Plant"
-    icon="plus"
-    href="/api-reference/endpoint/create"
+    title="用户管理"
+    icon="user"
+    href="/api-reference/users/profile"
   >
-    Add a new plant to the store
+    用户信息查询、创建和管理功能
   </Card>
   <Card
-    title="Delete Plant"
-    icon="trash"
-    href="/api-reference/endpoint/delete"
+    title="会话管理"
+    icon="message-circle"
+    href="/api-reference/threads/list"
   >
-    Remove a plant from the system
+    创建和管理聊天会话
   </Card>
   <Card
-    title="Plant Webhook"
-    icon="webhook"
-    href="/api-reference/endpoint/webhook"
+    title="消息功能"
+    icon="send"
+    href="/api-reference/messages/send"
   >
-    Receive notifications about plant events
+    发送文本、图片、文件等各类消息
+  </Card>
+  <Card
+    title="工单系统"
+    icon="ticket"
+    href="/api-reference/tickets/create"
+  >
+    创建和查询客服工单
   </Card>
 </CardGroup>
 

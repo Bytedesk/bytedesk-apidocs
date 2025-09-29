@@ -1,5 +1,5 @@
 ---
-title: "刷新令牌"
+title: "POST 刷新令牌"
 openapi: "POST /auth/token/refresh"
 ---
 
@@ -48,3 +48,44 @@ openapi: "POST /auth/token/refresh"
 - 刷新令牌通常有更长的有效期
 - 建议在访问令牌过期前主动刷新
 - 刷新令牌失效时需要重新登录
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.weiyuai.cn/api/v1/auth/token/refresh" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "refreshToken": "your_refresh_token_here"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.weiyuai.cn/api/v1/auth/token/refresh', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    refreshToken: 'your_refresh_token_here'
+  })
+});
+
+const data = await response.json();
+```
+
+```python Python
+import requests
+import json
+
+url = "https://api.weiyuai.cn/api/v1/auth/token/refresh"
+headers = {
+    "Content-Type": "application/json"
+}
+data = {
+    "refreshToken": "your_refresh_token_here"
+}
+
+response = requests.post(url, headers=headers, json=data)
+```
+
+</RequestExample>

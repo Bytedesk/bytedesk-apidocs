@@ -1,5 +1,5 @@
 ---
-title: "查询组织工单"
+title: "GET 查询组织工单"
 openapi: "GET /ticket/query/org"
 ---
 
@@ -97,3 +97,41 @@ Authorization: Bearer <access_token>
 - 如果组织下工单较多，建议前端实现分页显示
 - 工单信息可能包含敏感数据，需要权限控制
 - 建议配合筛选和排序功能使用
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.weiyuai.cn/api/v1/ticket/query/org?orgUid=org_123456" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Accept: application/json"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.weiyuai.cn/api/v1/ticket/query/org?orgUid=org_123456', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer your_access_token_here',
+    'Accept': 'application/json'
+  }
+});
+
+const tickets = await response.json();
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/ticket/query/org"
+headers = {
+    "Authorization": "Bearer your_access_token_here",
+    "Accept": "application/json"
+}
+params = {
+    "orgUid": "org_123456"
+}
+
+response = requests.get(url, headers=headers, params=params)
+tickets = response.json()
+```
+
+</RequestExample>

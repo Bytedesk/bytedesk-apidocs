@@ -1,5 +1,5 @@
 ---
-title: "发送消息"
+title: "POST 发送消息"
 openapi: "POST /messages"
 ---
 
@@ -112,3 +112,53 @@ Authorization: Bearer <access_token>
 - 图片和文件需要先上传获得 URL
 - 消息发送后不可修改
 - 系统可能对消息内容进行审核
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.weiyuai.cn/api/v1/messages" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "threadId": "thread_123456",
+    "type": "TEXT",
+    "content": "你好，这是一条测试消息"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.weiyuai.cn/api/v1/messages', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer your_access_token_here',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    threadId: 'thread_123456',
+    type: 'TEXT',
+    content: '你好，这是一条测试消息'
+  })
+});
+
+const message = await response.json();
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/messages"
+headers = {
+    "Authorization": "Bearer your_access_token_here",
+    "Content-Type": "application/json"
+}
+data = {
+    "threadId": "thread_123456",
+    "type": "TEXT",
+    "content": "你好，这是一条测试消息"
+}
+
+response = requests.post(url, headers=headers, json=data)
+message = response.json()
+```
+
+</RequestExample>

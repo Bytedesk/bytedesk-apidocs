@@ -1,5 +1,5 @@
 ---
-title: "用户注册"
+title: "POST 用户注册"
 openapi: "POST /auth/v1/register"
 ---
 
@@ -73,3 +73,55 @@ openapi: "POST /auth/v1/register"
 - 验证码通常有时效限制（如5分钟）
 - 手机号和邮箱需要唯一性验证
 - 密码需要符合安全规则
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.weiyuai.cn/auth/v1/register" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "newuser",
+    "password": "SecurePassword123!",
+    "mobile": "13888888888",
+    "email": "user@example.com",
+    "code": "123456"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.weiyuai.cn/auth/v1/register', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    username: 'newuser',
+    password: 'SecurePassword123!',
+    mobile: '13888888888',
+    email: 'user@example.com',
+    code: '123456'
+  })
+});
+
+const data = await response.json();
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/auth/v1/register"
+headers = {
+    "Content-Type": "application/json"
+}
+data = {
+    "username": "newuser",
+    "password": "SecurePassword123!",
+    "mobile": "13888888888",
+    "email": "user@example.com",
+    "code": "123456"
+}
+
+response = requests.post(url, headers=headers, json=data)
+```
+
+</RequestExample>
