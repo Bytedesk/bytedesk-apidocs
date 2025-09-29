@@ -19,9 +19,11 @@ if ! command -v npm &> /dev/null; then
     exit 1
 fi
 
-# 安装依赖（如果需要）
-if [ ! -d "node_modules" ]; then
-    echo "📦 安装依赖..."
+# 安装依赖（保证一致性）
+echo "📦 安装依赖..."
+if [ -f "package-lock.json" ]; then
+    npm ci || npm install
+else
     npm install
 fi
 

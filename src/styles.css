@@ -1,0 +1,36 @@
+/* 站点样式，参考 Mint 主题 */
+:root {
+  --primary: #16A34A;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; }
+.topbar { position: sticky; top:0; z-index:20; background:#fff; border-bottom:1px solid #e5e7eb; height:56px; display:grid; grid-template-columns:1fr 2fr 1fr; align-items:center; padding:0 16px; }
+.topbar .site { text-decoration:none; font-weight:600; color:#111827; }
+.topbar .center { display:flex; justify-content:center; }
+.topbar input { width:60%; max-width:520px; padding:8px 12px; border:1px solid #e5e7eb; border-radius:8px; background:#fafafa; }
+.topbar .right { display:flex; gap:12px; justify-content:flex-end; }
+.topbar .primary { background:var(--primary); color:#fff; text-decoration:none; padding:6px 12px; border-radius:8px; }
+.container { display:flex; min-height: calc(100vh - 56px); }
+.sidebar { width:280px; background:#f8fafc; border-right:1px solid #e5e7eb; padding:16px; }
+.sidebar .tab { font-size:12px; color:#6b7280; text-transform:uppercase; margin:12px 0 8px; }
+.sidebar .group-title { font-size:13px; font-weight:600; color:#374151; margin:8px 0; }
+.sidebar ul { list-style:none; margin:0; padding:0; }
+.sidebar a { display:flex; gap:8px; align-items:center; padding:6px 8px; color:#4b5563; text-decoration:none; border-radius:8px; }
+.sidebar a:hover { background:#eef2f7; }
+.sidebar a.active { background:#16A34A20; color:var(--primary); }
+.badge { font-size:10px; font-weight:700; padding:2px 6px; border-radius:6px; }
+.badge.get { background:#10b98120; color:#047857; }
+.badge.post { background:#3b82f620; color:#1d4ed8; }
+.badge.del { background:#f8717120; color:#b91c1c; }
+.badge.hook { background:#f59e0b20; color:#b45309; }
+.content { flex:1; padding:32px; max-width: 900px; }
+.content h1 { font-size: 42px; margin: 0 0 8px; }
+.content h2 { margin: 28px 0 12px; font-size: 22px; border-top: 1px solid #e5e7eb; padding-top: 16px; }
+.otp { width:240px; border-left:1px solid #e5e7eb; padding:16px; color:#6b7280; }
+.otp .title { font-size:12px; text-transform:uppercase; margin-bottom:8px; }
+
+@media (max-width: 960px) {
+  .container { flex-direction: column; }
+  .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e5e7eb; }
+  .otp { display: none; }
+}

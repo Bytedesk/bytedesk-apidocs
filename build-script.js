@@ -210,7 +210,6 @@ async function generateCSS(docsConfig, buildDir) {
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   line-height: 1.6;
@@ -376,7 +375,17 @@ body {
   await fs.writeFile(path.join(buildDir, 'styles.css'), css);
 }
 
-async function generateIndexPage(docsConfig, buildDir, navigation) {
+function generateTOC(headings) {
+  if (!headings.length) return '<div class="otp-empty">—</div>';
+  let html = '<ul>';
+  for (const h of headings) {
+    html += `<li class="level-${h.level}"><a href="#${h.id}">${h.text}</a></li>`;
+  }
+  html += '</ul>';
+  return html;
+}
+
+async function generateIndexPage(docsConfig, buildDir, navigationFactory) {
   const indexHtml = `
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -388,24 +397,38 @@ async function generateIndexPage(docsConfig, buildDir, navigation) {
     <link rel="icon" href="favicon.svg">
 </head>
 <body>
+    <header class="topbar">
+      <div class="left">
+        <a class="site" href="index.html">${docsConfig.name}</a>
+      </div>
+      <div class="center"><input class="search" placeholder="Search (stub)" /></div>
+      <div class="right">
+        <a class="support" href="${docsConfig.navbar?.links?.[0]?.href || '#'}">Support</a>
+        <a class="primary" href="${docsConfig.navbar?.primary?.href || '#'}">${docsConfig.navbar?.primary?.label || 'Dashboard'}</a>
+      </div>
+    </header>
     <div class="container">
-        ${navigation}
+        ${navigationFactory('index')}
         <main class="content">
             <h1>欢迎使用 ${docsConfig.name}</h1>
-            <p>这是使用 Mintlify 构建的 API 文档，已成功编译为静态网站。</p>
-            <p>请使用左侧导航菜单浏览文档内容。</p>
+            <p>这是使用 Mintlify 配置的文档，已编译为静态网站以便离线预览。</p>
+            <p>左侧为导航，右侧为当前页面目录，顶部提供 Support/Dashboard 入口（静态占位）。</p>
             
             <h2>功能特性</h2>
             <ul>
-                <li>📝 基于 Mintlify 配置的文档结构</li>
-                <li>🎨 响应式设计，支持移动设备</li>
-                <li>🔍 清晰的导航和页面结构</li>
-                <li>⚡ 静态 HTML，加载速度快</li>
+                <li>🧭 Mint 风格的三列布局（左侧导航 / 正文 / 右侧目录）</li>
+                <li>🎨 接近 dev 的配色与导航样式</li>
+                <li>🧩 Markdown 渲染与代码块样式</li>
+                <li>🔗 自动为标题生成锚点，右侧 TOC 同步</li>
             </ul>
             
             <h2>开始使用</h2>
             <p>选择左侧导航菜单中的任意页面开始阅读文档。</p>
         </main>
+        <aside class="on-this-page">
+          <div class="otp-title">On this page</div>
+          <div class="otp-empty">—</div>
+        </aside>
     </div>
 </body>
 </html>
