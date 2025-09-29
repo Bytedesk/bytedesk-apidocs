@@ -7,6 +7,7 @@ import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 import rehypeSlug from 'rehype-slug'
 
 export default defineConfig({
+  base: '/apidocs/',
   plugins: [
     mdx({
       // Enable MDXProvider context so shortcodes like <Card/> resolve via @mdx-js/react

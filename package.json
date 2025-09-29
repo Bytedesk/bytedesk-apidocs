@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --port 8000",
-    "build:static": "node build-script.js",
+    "release": "sh cicd/scripts/build-upload.sh",
     "clean": "rimraf dist build",
     "prepare": "node scripts/sync-public.cjs"
   },
