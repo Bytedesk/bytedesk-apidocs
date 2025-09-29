@@ -2,10 +2,17 @@ const fs = require('fs-extra');
 const path = require('path');
 const { glob } = require('glob');
 const matter = require('gray-matter');
-const { exec } = require('child_process');
-const { promisify } = require('util');
+const { marked } = require('marked');
 
-const execAsync = promisify(exec);
+// 辅助：中文/英文标题转 id
+function slugify(text) {
+  return String(text)
+    .toLowerCase()
+    .replace(/[^a-z0-9\u4e00-\u9fa5\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
 
 async function buildDocs() {
   console.log('🚀 开始构建 Mintlify 文档...');
@@ -21,20 +28,20 @@ async function buildDocs() {
     await fs.remove(buildDir);
     await fs.ensureDir(buildDir);
     
-    // 2. 创建简单的 HTML 结构
-    console.log('� 生成静态网站...');
+  // 2. 创建简单的 HTML 结构
+  console.log('🌿 生成静态网站...');
     
     // 获取所有 MDX 文件
     const mdxFiles = await glob('**/*.mdx', { 
       ignore: ['node_modules/**', 'build/**'] 
     });
     
-    // 创建导航
-    const navigation = generateNavigation(docsConfig);
+  // 创建导航工厂（根据当前页面标记激活项）
+  const navigationFactory = (currentPage) => generateNavigationExpanded(docsConfig, currentPage);
     
     // 为每个 MDX 文件生成 HTML
     for (const mdxFile of mdxFiles) {
-      await generateHtmlFromMdx(mdxFile, docsConfig, navigation, buildDir);
+      await generateHtmlFromMdx(mdxFile, docsConfig, navigationFactory, buildDir);
     }
     
     // 3. 复制静态资源
@@ -44,8 +51,8 @@ async function buildDocs() {
     // 4. 创建 CSS 文件
     await generateCSS(docsConfig, buildDir);
     
-    // 5. 创建首页
-    await generateIndexPage(docsConfig, buildDir, navigation);
+  // 5. 创建首页
+  await generateIndexPage(docsConfig, buildDir, navigationFactory);
     
     console.log('✅ 构建完成！文件已生成到 build 文件夹');
     
@@ -55,23 +62,35 @@ async function buildDocs() {
   }
 }
 
-function generateNavigation(docsConfig) {
+function generateNavigationExpanded(docsConfig, currentPage) {
   let navHtml = '<nav class="sidebar">';
-  navHtml += `<h1>${docsConfig.name}</h1>`;
-  
+
+  const logoLight = docsConfig.logo?.light ? `<img class="logo" src="${docsConfig.logo.light}" alt="logo" />` : '';
+  navHtml += `<div class="brand">${logoLight}<span>${docsConfig.name}</span></div>`;
+
+  if (docsConfig.navigation?.global?.anchors?.length) {
+    navHtml += '<div class="global-anchors">';
+    for (const a of docsConfig.navigation.global.anchors) {
+      navHtml += `<a class="anchor" href="${a.href}" target="_blank" rel="noreferrer">${a.anchor}</a>`;
+    }
+    navHtml += '</div>';
+  }
+
   if (docsConfig.navigation?.tabs) {
     for (const tab of docsConfig.navigation.tabs) {
       navHtml += `<div class="tab-section">`;
-      navHtml += `<h2>${tab.tab}</h2>`;
+      navHtml += `<div class="tab-title">${tab.tab}</div>`;
       
       for (const group of tab.groups) {
         navHtml += `<div class="group">`;
-        navHtml += `<h3>${group.group}</h3>`;
-        navHtml += `<ul>`;
+        navHtml += `<div class="group-title">${group.group}</div>`;
+        navHtml += `<ul class="links">`;
         
         for (const page of group.pages) {
           const pageName = page.split('/').pop();
-          navHtml += `<li><a href="${page}.html">${pageName}</a></li>`;
+          const isActive = currentPage === page;
+          const badge = badgeForEndpoint(pageName);
+          navHtml += `<li><a class="link ${isActive ? 'active' : ''}" href="${page}.html">${badge ? `<span class=\"badge ${badge.type}\">${badge.text}</span>` : ''}<span>${pageName}</span></a></li>`;
         }
         
         navHtml += `</ul></div>`;
@@ -84,7 +103,15 @@ function generateNavigation(docsConfig) {
   return navHtml;
 }
 
-async function generateHtmlFromMdx(mdxFile, docsConfig, navigation, buildDir) {
+function badgeForEndpoint(pageName) {
+  if (/^get$/i.test(pageName)) return { type: 'get', text: 'GET' };
+  if (/^create$/i.test(pageName)) return { type: 'post', text: 'POST' };
+  if (/^delete$/i.test(pageName)) return { type: 'del', text: 'DEL' };
+  if (/^webhook$/i.test(pageName)) return { type: 'hook', text: 'HOOK' };
+  return null;
+}
+
+async function generateHtmlFromMdx(mdxFile, docsConfig, navigationFactory, buildDir) {
   const content = await fs.readFile(mdxFile, 'utf8');
   const { data: frontmatter, content: mdxContent } = matter(content);
   
@@ -92,22 +119,25 @@ async function generateHtmlFromMdx(mdxFile, docsConfig, navigation, buildDir) {
   const depth = mdxFile.split('/').length - 1;
   const relativePath = '../'.repeat(depth);
   
-  // 简单的 MDX 到 HTML 转换（基础版本）
-  let htmlContent = mdxContent
-    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/`(.+?)`/g, '<code>$1</code>')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/^(.+)$/gm, (match) => {
-      if (!match.startsWith('<h') && !match.includes('<p>')) {
-        return `<p>${match}</p>`;
-      }
-      return match;
-    });
+  // 使用 marked 渲染 Markdown（忽略简单的 MDX 扩展）
+  const sanitizedMdx = mdxContent
+    .replace(/^import .+$/gm, '')
+    .replace(/^export .+$/gm, '')
+    .replace(/<[^>]+\/>/g, '');
+
+  let htmlContent = marked.parse(sanitizedMdx);
+
+  // 为 h2/h3 添加 id，生成 TOC
+  const headings = [];
+  htmlContent = htmlContent.replace(/<h([23])>(.*?)<\/h\1>/g, (m, level, text) => {
+    const id = slugify(text.replace(/<[^>]+>/g, ''));
+    headings.push({ level: Number(level), text, id });
+    return `<h${level} id="${id}">${text}</h${level}>`;
+  });
+
+  const tocHtml = generateTOC(headings);
   
+  const navHtml = navigationFactory(mdxFile.replace(/\.mdx$/, ''));
   const html = `
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -119,11 +149,25 @@ async function generateHtmlFromMdx(mdxFile, docsConfig, navigation, buildDir) {
     <link rel="icon" href="${relativePath}favicon.svg">
 </head>
 <body>
+    <header class="topbar">
+      <div class="left">
+        <a class="site" href="${relativePath}index.html">${docsConfig.name}</a>
+      </div>
+      <div class="center"><input class="search" placeholder="Search (stub)" /></div>
+      <div class="right">
+        <a class="support" href="${docsConfig.navbar?.links?.[0]?.href || '#'}">Support</a>
+        <a class="primary" href="${docsConfig.navbar?.primary?.href || '#'}">${docsConfig.navbar?.primary?.label || 'Dashboard'}</a>
+      </div>
+    </header>
     <div class="container">
-        ${navigation.replace(/href="([^"]+)"/g, `href="${relativePath}$1"`)}
+        ${navHtml.replace(/href=\"([^\"]+)\"/g, `href=\"${relativePath}$1\"`)}
         <main class="content">
             ${htmlContent}
         </main>
+        <aside class="on-this-page">
+          <div class="otp-title">On this page</div>
+          ${tocHtml}
+        </aside>
     </div>
 </body>
 </html>
@@ -171,6 +215,35 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   line-height: 1.6;
   color: #333;
+  background-color: #ffffff;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 56px;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0 16px;
+}
+.topbar .site { font-weight: 600; color: #111827; text-decoration: none; }
+.topbar .center { display: flex; justify-content: center; }
+.topbar .search {
+  width: 60%;
+  max-width: 520px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #fafafa;
+}
+.topbar .right { display: flex; gap: 12px; justify-content: flex-end; }
+.topbar .support { color: #4b5563; text-decoration: none; }
+.topbar .primary {
+  color: #fff; text-decoration: none; background: ${docsConfig.colors?.primary || '#16A34A'}; padding: 6px 12px; border-radius: 8px;
 }
 
 .container {
@@ -179,53 +252,31 @@ body {
 }
 
 .sidebar {
-  width: 300px;
+  width: 280px;
   background-color: #f8fafc;
-  padding: 2rem;
+  padding: 1.5rem;
   border-right: 1px solid #e2e8f0;
   overflow-y: auto;
 }
 
-.sidebar h1 {
-  color: ${docsConfig.colors?.primary || '#16A34A'};
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.sidebar h2 {
-  font-size: 1.2rem;
-  margin: 1.5rem 0 0.5rem 0;
-  color: #64748b;
-}
-
-.sidebar h3 {
-  font-size: 1rem;
-  margin: 1rem 0 0.5rem 0;
-  color: #475569;
-}
-
-.sidebar ul {
-  list-style: none;
-  margin-bottom: 1rem;
-}
-
-.sidebar li {
-  margin-bottom: 0.5rem;
-}
-
-.sidebar a {
-  text-decoration: none;
-  color: #64748b;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  display: block;
-  transition: background-color 0.2s;
-}
-
-.sidebar a:hover {
-  background-color: ${docsConfig.colors?.primary || '#16A34A'}20;
-  color: ${docsConfig.colors?.primary || '#16A34A'};
-}
+.sidebar .brand { display:flex; align-items:center; gap: 10px; margin-bottom: 16px; }
+.sidebar .brand .logo { height: 24px; }
+.sidebar .brand span { color: #111827; font-weight: 600; }
+.sidebar .global-anchors { display:flex; flex-direction:column; gap:8px; margin-bottom: 20px; }
+.sidebar .anchor { color:#4b5563; text-decoration:none; padding:6px 8px; border-radius:6px; }
+.sidebar .anchor:hover { background:#eef2f7; }
+.sidebar .tab-title { font-size: 12px; color:#6b7280; text-transform:uppercase; letter-spacing:.04em; margin: 16px 0 8px; }
+.sidebar .group { margin-bottom: 10px; }
+.sidebar .group-title { font-size: 13px; color:#374151; margin: 8px 0; font-weight: 600; }
+.sidebar .links { list-style:none; margin-left: 0; }
+.sidebar .link { display:flex; align-items:center; gap:8px; color:#4b5563; text-decoration:none; padding:6px 8px; border-radius:8px; }
+.sidebar .link:hover { background:#eef2f7; color:#111827; }
+.sidebar .link.active { background:${docsConfig.colors?.primary || '#16A34A'}15; color:${docsConfig.colors?.primary || '#16A34A'}; }
+.badge { font-size: 10px; border-radius: 6px; padding: 2px 6px; font-weight: 700; }
+.badge.get { background:#10b98120; color:#047857; }
+.badge.post { background:#3b82f620; color:#1d4ed8; }
+.badge.del { background:#f8717120; color:#b91c1c; }
+.badge.hook { background:#f59e0b20; color:#b45309; }
 
 .content {
   flex: 1;
@@ -290,6 +341,18 @@ body {
   text-decoration: underline;
 }
 
+.on-this-page {
+  width: 240px;
+  padding: 1rem 1rem 1rem 0.5rem;
+  border-left: 1px solid #e2e8f0;
+  color: #6b7280;
+}
+.on-this-page .otp-title { font-size: 12px; text-transform: uppercase; margin-bottom: 8px; }
+.on-this-page ul { list-style: none; }
+.on-this-page li { margin: 6px 0; }
+.on-this-page a { color:#6b7280; text-decoration: none; }
+.on-this-page a:hover { color:#111827; }
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .container {
@@ -305,6 +368,8 @@ body {
   .content {
     padding: 1rem;
   }
+
+  .on-this-page { display: none; }
 }
 `;
   
