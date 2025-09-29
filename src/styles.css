@@ -367,6 +367,74 @@ h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
   position: relative;
 }
 
+/* Splitter 自定义样式 */
+.ant-splitter {
+  background: var(--bg-primary) !important;
+}
+
+.ant-splitter-bar {
+  background: var(--border-color) !important;
+  transition: all 0.2s;
+  border: none !important;
+}
+
+.ant-splitter-bar:hover {
+  background: var(--primary) !important;
+}
+
+.ant-splitter-bar-dragger {
+  background: var(--text-muted) !important;
+  border-radius: 2px;
+}
+
+.ant-splitter-bar:hover .ant-splitter-bar-dragger {
+  background: white !important;
+}
+
+/* 暗色主题下的 Splitter 样式 */
+[data-theme="dark"] .ant-splitter-bar-dragger {
+  background: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .ant-splitter-bar:hover .ant-splitter-bar-dragger {
+  background: white !important;
+}
+
+/* 页面容器样式 */
+.page-container {
+  background: var(--bg-primary);
+}
+
+/* Splitter 面板过渡效果 */
+.ant-splitter-panel {
+  transition: width 0.2s ease-out, height 0.2s ease-out;
+}
+
+/* Splitter 内的侧边栏样式 */
+.page-container .sidebar {
+  width: 100%;
+  height: 100%;
+  border-right: none;
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+
+/* Splitter 内的内容区域样式 */
+.page-container .main-content {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.page-container .api-examples {
+  height: 100%;
+  overflow: hidden;
+}
+
+.page-container .otp {
+  height: 100%;
+  overflow-y: auto;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   /* 隐藏桌面端侧边栏 */

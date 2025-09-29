@@ -178,44 +178,134 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
   // Check if it's an API endpoint page
   const isApiEndpoint = path.startsWith('api-reference/')
   
+  if (isMobile) {
+    // 移动端保持原有布局
+    return (
+      <React.Suspense fallback={<div style={{padding: 24}}>Loading...</div>}>
+        <div className={isApiEndpoint ? "content-api" : "content"}>
+          <div className="main-content">
+            <Mdx />
+          </div>
+          
+          {/* 移动端代码示例 Drawer */}
+          {isApiEndpoint && examplesOpen && (
+            <>
+              <div className="drawer-overlay" onClick={onCloseExamples} />
+              <div className="drawer-examples">
+                <div className="drawer-header">
+                  <span>代码示例</span>
+                  <button onClick={onCloseExamples} className="close-btn">×</button>
+                </div>
+                <div className="examples-sticky" id="mobile-api-examples-container">
+                  {/* Mobile examples will be populated here */}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </React.Suspense>
+    )
+  }
+
+  // 桌面端使用 Splitter 布局
   return (
     <React.Suspense fallback={<div style={{padding: 24}}>Loading...</div>}>
-      <div className={isApiEndpoint ? "content-api" : "content"}>
-        <div className="main-content">
-          <Mdx />
-        </div>
-        
-        {/* 桌面端右侧栏 */}
-        {!isMobile && isApiEndpoint && (
-          <aside className="api-examples">
-            <div className="examples-sticky" id="api-examples-container">
-              {/* Examples will be populated by RequestExample/ResponseExample components */}
-            </div>
-          </aside>
-        )}
-        
-        {!isMobile && !isApiEndpoint && (
-          <aside className="otp">
-            <div className="title">On this page</div>
-            {/* 运行时生成目录较复杂，这里可在后续加 rehype 解析 anchor 列表 */}
-          </aside>
-        )}
-        
-        {/* 移动端代码示例 Drawer */}
-        {isMobile && isApiEndpoint && examplesOpen && (
-          <>
-            <div className="drawer-overlay" onClick={onCloseExamples} />
-            <div className="drawer-examples">
-              <div className="drawer-header">
-                <span>代码示例</span>
-                <button onClick={onCloseExamples} className="close-btn">×</button>
-              </div>
-              <div className="examples-sticky" id="mobile-api-examples-container">
-                {/* Mobile examples will be populated here */}
-              </div>
-            </div>
-          </>
-        )}
+      <div className="page-container" style={{ height: 'calc(100vh - 64px)' }}>
+        <Splitter
+          style={{ height: '100%' }}
+        >
+          {/* 左侧栏 - 侧边导航 */}
+          <Splitter.Panel 
+            defaultSize="300px" 
+            min="250px" 
+            max="450px"
+            style={{ 
+              background: 'var(--sidebar-bg)', 
+              borderRight: '1px solid var(--border-color)',
+              overflow: 'hidden'
+            }}
+          >
+            <Sidebar />
+          </Splitter.Panel>
+
+          {/* 中间和右侧 */}
+          <Splitter.Panel style={{ display: 'flex', flexDirection: 'column' }}>
+            {isApiEndpoint ? (
+              // API 页面：主内容 + 代码示例
+              <Splitter
+                style={{ height: '100%' }}
+              >
+                {/* 主内容区域 */}
+                <Splitter.Panel 
+                  style={{ 
+                    background: 'var(--bg-primary)',
+                    overflow: 'auto',
+                    padding: 0
+                  }}
+                >
+                  <div className="main-content" style={{ padding: '32px 40px' }}>
+                    <Mdx />
+                  </div>
+                </Splitter.Panel>
+
+                {/* 右侧代码示例栏 */}
+                <Splitter.Panel 
+                  defaultSize="420px" 
+                  min="320px" 
+                  max="600px"
+                  style={{ 
+                    background: 'var(--bg-secondary)', 
+                    borderLeft: '1px solid var(--border-color)',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <div className="api-examples" style={{ height: '100%', padding: 0 }}>
+                    <div className="examples-sticky" id="api-examples-container" style={{ height: '100%', overflow: 'auto' }}>
+                      {/* Examples will be populated by RequestExample/ResponseExample components */}
+                    </div>
+                  </div>
+                </Splitter.Panel>
+              </Splitter>
+            ) : (
+              // 非 API 页面：主内容 + 目录
+              <Splitter
+                style={{ height: '100%' }}
+              >
+                {/* 主内容区域 */}
+                <Splitter.Panel 
+                  style={{ 
+                    background: 'var(--bg-primary)',
+                    overflow: 'auto',
+                    padding: 0
+                  }}
+                >
+                  <div className="content" style={{ padding: '40px 48px', maxWidth: '1000px', lineHeight: 1.7 }}>
+                    <Mdx />
+                  </div>
+                </Splitter.Panel>
+
+                {/* 右侧目录栏 */}
+                <Splitter.Panel 
+                  defaultSize="280px" 
+                  min="200px" 
+                  max="400px"
+                  style={{ 
+                    background: 'var(--bg-secondary)', 
+                    borderLeft: '1px solid var(--border-color)',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <div className="otp" style={{ padding: '24px 16px' }}>
+                    <div className="title" style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-primary)', marginBottom: '16px' }}>
+                      On this page
+                    </div>
+                    {/* 运行时生成目录较复杂，这里可在后续加 rehype 解析 anchor 列表 */}
+                  </div>
+                </Splitter.Panel>
+              </Splitter>
+            )}
+          </Splitter.Panel>
+        </Splitter>
       </div>
     </React.Suspense>
   )
@@ -248,35 +338,44 @@ export default function App() {
         onExamplesToggle={() => setExamplesOpen(!examplesOpen)}
       />
       
-      <div className="container">
-        {/* 桌面端侧边栏 */}
-        {!isMobile && <Sidebar />}
-        
-        {/* 移动端侧边栏 Drawer */}
-        {isMobile && sidebarOpen && (
-          <>
-            <div className="drawer-overlay" onClick={closeSidebar} />
-            <div className="drawer-sidebar">
-              <div className="drawer-header">
-                <span>导航</span>
-                <button onClick={closeSidebar} className="close-btn">×</button>
+      {isMobile ? (
+        // 移动端布局
+        <div className="container">
+          {/* 移动端侧边栏 Drawer */}
+          {sidebarOpen && (
+            <>
+              <div className="drawer-overlay" onClick={closeSidebar} />
+              <div className="drawer-sidebar">
+                <div className="drawer-header">
+                  <span>导航</span>
+                  <button onClick={closeSidebar} className="close-btn">×</button>
+                </div>
+                <Sidebar />
               </div>
-              <Sidebar />
-            </div>
-          </>
-        )}
-        
-        {/* 主内容区域 */}
-        <div className="main-wrapper">
-          <Routes>
-            <Route path="/" element={<Page path="index" />} />
-            <Route path="/index" element={<Page path="index" />} />
-            {docs.navigation.tabs.flatMap((t: any) => t.groups.flatMap((g: any) => g.pages)).map((p: string) => (
-              <Route key={p} path={`/${p}`} element={<Page path={p} isMobile={isMobile} examplesOpen={examplesOpen} onCloseExamples={closeExamples} />} />
-            ))}
-          </Routes>
+            </>
+          )}
+          
+          {/* 主内容区域 */}
+          <div className="main-wrapper">
+            <Routes>
+              <Route path="/" element={<Page path="index" isMobile={isMobile} examplesOpen={examplesOpen} onCloseExamples={closeExamples} />} />
+              <Route path="/index" element={<Page path="index" isMobile={isMobile} examplesOpen={examplesOpen} onCloseExamples={closeExamples} />} />
+              {docs.navigation.tabs.flatMap((t: any) => t.groups.flatMap((g: any) => g.pages)).map((p: string) => (
+                <Route key={p} path={`/${p}`} element={<Page path={p} isMobile={isMobile} examplesOpen={examplesOpen} onCloseExamples={closeExamples} />} />
+              ))}
+            </Routes>
+          </div>
         </div>
-      </div>
+      ) : (
+        // 桌面端 Splitter 布局
+        <Routes>
+          <Route path="/" element={<Page path="index" isMobile={isMobile} />} />
+          <Route path="/index" element={<Page path="index" isMobile={isMobile} />} />
+          {docs.navigation.tabs.flatMap((t: any) => t.groups.flatMap((g: any) => g.pages)).map((p: string) => (
+            <Route key={p} path={`/${p}`} element={<Page path={p} isMobile={isMobile} />} />
+          ))}
+        </Routes>
+      )}
     </div>
   )
 }
