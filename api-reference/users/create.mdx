@@ -3,7 +3,110 @@ title: "POST 创建用户"
 openapi: "POST /users"
 ---
 
-创建新用户账户，通常用于管理后台或批量用户导入场景。
+<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+  <div>
+    <h1 style={{ margin: 0 }}>创建用户</h1>
+    <p style={{ margin: '8px 0 0 0', color: '#6B7280' }}>创建新用户账户，通常用于管理后台或批量用户导入场景</p>
+  </div>
+  <button 
+    onClick={() => {
+      const modal = document.createElement('div');
+      modal.innerHTML = `
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; justify-content: center; align-items: center;">
+          <div style="background: white; padding: 20px; border-radius: 8px; width: 80%; max-width: 1000px; height: 80%; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h2>Try API - 创建用户</h2>
+              <button onclick="this.closest('.modal-overlay').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; height: calc(100% - 60px);">
+              <div>
+                <h3>Request</h3>
+                <div style="margin-bottom: 15px;">
+                  <label style="display: block; margin-bottom: 5px; font-weight: bold;">Bearer Token (required)</label>
+                  <input type="text" placeholder="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" id="create-user-token">
+                </div>
+                <div style="margin-bottom: 15px;">
+                  <label style="display: block; margin-bottom: 5px; font-weight: bold;">username (required)</label>
+                  <input type="text" placeholder="newuser123" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" id="create-username">
+                </div>
+                <div style="margin-bottom: 15px;">
+                  <label style="display: block; margin-bottom: 5px; font-weight: bold;">email</label>
+                  <input type="email" placeholder="user@example.com" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" id="create-email">
+                </div>
+                <div style="margin-bottom: 15px;">
+                  <label style="display: block; margin-bottom: 5px; font-weight: bold;">mobile</label>
+                  <input type="text" placeholder="13888888888" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" id="create-mobile">
+                </div>
+                <div style="margin-bottom: 15px;">
+                  <label style="display: block; margin-bottom: 5px; font-weight: bold;">nickname</label>
+                  <input type="text" placeholder="用户昵称" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" id="create-nickname">
+                </div>
+                <button onclick="sendCreateUserRequest()" style="background: #16A34A; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">Send Request</button>
+              </div>
+              <div>
+                <h3>Response</h3>
+                <div style="background: #f8f9fa; border: 1px solid #ddd; border-radius: 4px; padding: 15px; height: 400px; overflow-y: auto;" id="create-user-response-area">
+                  点击 "Send Request" 查看响应结果
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      modal.className = 'modal-overlay';
+      document.body.appendChild(modal);
+      
+      window.sendCreateUserRequest = async function() {
+        const token = document.getElementById('create-user-token').value;
+        const username = document.getElementById('create-username').value;
+        const email = document.getElementById('create-email').value;
+        const mobile = document.getElementById('create-mobile').value;
+        const nickname = document.getElementById('create-nickname').value;
+        const responseArea = document.getElementById('create-user-response-area');
+        
+        if (!token || !username) {
+          responseArea.innerHTML = '<div style="color: red;">请填写 Bearer Token 和用户名</div>';
+          return;
+        }
+        
+        responseArea.innerHTML = '<div>发送请求中...</div>';
+        
+        try {
+          const response = await fetch('https://api.weiyuai.cn/users', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+              username: username,
+              email: email,
+              mobile: mobile,
+              nickname: nickname
+            })
+          });
+          
+          const data = await response.json();
+          responseArea.innerHTML = '<pre style="margin: 0; white-space: pre-wrap;">' + JSON.stringify(data, null, 2) + '</pre>';
+        } catch (error) {
+          responseArea.innerHTML = '<div style="color: red;">请求失败: ' + error.message + '</div>';
+        }
+      };
+    }}
+    style={{
+      background: '#16A34A',
+      color: 'white',
+      border: 'none',
+      padding: '8px 16px',
+      borderRadius: '6px',
+      cursor: 'pointer',
+      fontSize: '14px',
+      fontWeight: '500'
+    }}
+  >
+    Try it →
+  </button>
+</div>
 
 ## 接口说明
 
