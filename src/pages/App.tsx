@@ -1,13 +1,35 @@
 import React from 'react'
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
+import { Splitter } from 'antd'
 import docs from '../../docs.json'
 
 function Badge({ page }: { page: string }) {
   const base = page.split('/').pop()!.toLowerCase()
-  const map: Record<string, string> = { get: 'get', create: 'post', delete: 'del', webhook: 'hook' }
+  // 更加详细的方法映射规则
+  const map: Record<string, string> = { 
+    get: 'get', 
+    list: 'get',
+    profile: 'get',
+    'query-org': 'get',
+    create: 'post', 
+    send: 'post',
+    login: 'post',
+    'admin-login': 'post',
+    register: 'post',
+    'refresh-token': 'post',
+    delete: 'del', 
+    webhook: 'hook' 
+  }
   const type = map[base]
-  if (!type) return null
-  const text: Record<string, string> = { get: 'GET', post: 'POST', del: 'DEL', hook: 'HOOK' }
+  if (!type) {
+    // 如果没有映射，尝试从路径推断
+    if (base.includes('get') || base.includes('list') || base.includes('query')) return <span className="badge get">GET</span>
+    if (base.includes('create') || base.includes('send') || base.includes('login') || base.includes('register')) return <span className="badge post">POST</span>
+    if (base.includes('update') || base.includes('edit')) return <span className="badge put">PUT</span>
+    if (base.includes('delete') || base.includes('remove')) return <span className="badge del">DEL</span>
+    return null
+  }
+  const text: Record<string, string> = { get: 'GET', post: 'POST', put: 'PUT', del: 'DEL', hook: 'HOOK' }
   return <span className={`badge ${type}`}>{text[type]}</span>
 }
 
@@ -58,7 +80,7 @@ function Topbar({ isMobile, onSidebarToggle, onExamplesToggle }: { isMobile: boo
   })
   
   const location = useLocation()
-  const isApiPage = location.pathname.includes('/api-reference/endpoint/')
+  const isApiPage = location.pathname.includes('/api-reference/')
 
   const toggleTheme = () => {
     const newTheme = !isDark
@@ -154,7 +176,7 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
   const Mdx = React.useMemo(() => React.lazy(loader as any), [path])
   
   // Check if it's an API endpoint page
-  const isApiEndpoint = path.startsWith('api-reference/endpoint/')
+  const isApiEndpoint = path.startsWith('api-reference/')
   
   return (
     <React.Suspense fallback={<div style={{padding: 24}}>Loading...</div>}>

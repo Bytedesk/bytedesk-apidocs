@@ -307,17 +307,17 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
   
   const content = (
     <div className="code-example-container" style={{ 
-      marginBottom: '20px',
-      background: 'white',
-      borderRadius: '12px',
-      border: '1px solid #e5e7eb',
-      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+      marginBottom: '16px',
+      background: 'var(--bg-primary)',
+      borderRadius: '8px',
+      border: '1px solid var(--border-color)',
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
       overflow: 'hidden'
     }}>
       <div className="example-header" style={{ 
-        background: '#f8fafc', 
-        padding: '12px 16px', 
-        borderBottom: '1px solid #e5e7eb',
+        background: 'var(--bg-secondary)', 
+        padding: '10px 14px', 
+        borderBottom: '1px solid var(--border-color)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -438,14 +438,14 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
       </div>
       
       <div className="code-content" style={{ 
-        padding: '20px', 
+        padding: '16px', 
         fontFamily: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace', 
-        fontSize: '13px', 
+        fontSize: '12px', 
         background: selectedLang === 'cURL' ? '#0f172a' : '#1e293b', 
         color: '#e2e8f0', 
         overflowX: 'auto',
-        lineHeight: 1.7,
-        minHeight: '100px',
+        lineHeight: 1.6,
+        minHeight: '80px',
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-all'
       }}>
@@ -460,7 +460,7 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
   )
   
   // 检查是否在API页面并且容器可用
-  const isApiPage = window.location.pathname.includes('/api-reference/endpoint/')
+  const isApiPage = window.location.pathname.includes('/api-reference/')
   const desktopContainer = document.getElementById('api-examples-container')
   const mobileContainer = document.getElementById('mobile-api-examples-container')
   
@@ -547,17 +547,17 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
   
   const content = (
     <div className="response-example-container" style={{ 
-      marginBottom: '20px',
-      background: 'white',
-      borderRadius: '12px',
-      border: '1px solid #e5e7eb',
-      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+      marginBottom: '16px',
+      background: 'var(--bg-primary)',
+      borderRadius: '8px',
+      border: '1px solid var(--border-color)',
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
       overflow: 'hidden'
     }}>
       <div className="response-header" style={{ 
-        background: '#f8fafc', 
-        padding: '12px 16px', 
-        borderBottom: '1px solid #e5e7eb',
+        background: 'var(--bg-secondary)', 
+        padding: '10px 14px', 
+        borderBottom: '1px solid var(--border-color)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -643,14 +643,14 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
       </div>
       
       <div className="response-content" style={{ 
-        padding: '20px', 
+        padding: '16px', 
         fontFamily: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace', 
-        fontSize: '13px', 
+        fontSize: '12px', 
         background: '#0f172a', 
         color: '#e2e8f0', 
         overflowX: 'auto',
-        lineHeight: 1.7,
-        minHeight: '100px',
+        lineHeight: 1.6,
+        minHeight: '80px',
         whiteSpace: 'pre-wrap'
       }}>
         <div style={{ 
@@ -664,7 +664,7 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
   )
   
   // 检查是否在API页面并且容器可用
-  const isApiPage = window.location.pathname.includes('/api-reference/endpoint/')
+  const isApiPage = window.location.pathname.includes('/api-reference/')
   const desktopContainer = document.getElementById('api-examples-container')
   const mobileContainer = document.getElementById('mobile-api-examples-container')
   
