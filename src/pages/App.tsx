@@ -13,7 +13,8 @@ function Badge({ page }: { page: string }) {
 
 function Sidebar() {
   const loc = useLocation()
-  const current = loc.pathname.replace(/^\//, '') || 'index'
+  // Remove optional basename '/apidocs' prefix to compute active page
+  const current = loc.pathname.replace(/^\/apidocs\//, '').replace(/^\//, '') || 'index'
   return (
     <aside className="sidebar">
       {/* {docs.navigation?.global?.anchors?.length ? (
@@ -82,7 +83,7 @@ function Topbar({ isMobile, onSidebarToggle, onExamplesToggle }: { isMobile: boo
             </svg>
           </button>
         )}
-        <Link className="site" to="/index">{docs.name}</Link>
+  <Link className="site" to="/index">{docs.name}</Link>
       </div>
       <div className="center">
         {/* <input placeholder="Search (placeholder)" /> */}

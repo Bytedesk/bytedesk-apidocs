@@ -22,7 +22,7 @@ export function Card(props: WithChildren<{ title?: string; href?: string; icon?:
     </AntCard>
   )
   if (props.href) {
-    const isExternal = /^https?:\/\//.test(props.href)
+  const isExternal = /^https?:\/\//.test(props.href)
     if (isExternal) {
       return (
         <a href={props.href} target="_blank" rel="noreferrer" style={{ textDecoration: 'none' }}>
@@ -726,9 +726,20 @@ export function MDXContent({ frontmatter, children, ...props }: any) {
   )
 }
 
+// MDX <a> tag mapping: internal links become Router Links so basename (/apidocs) applies
+export function A(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+  const href = props.href || ''
+  const isExternal = /^https?:\/\//.test(href) || href.startsWith('mailto:') || href.startsWith('tel:')
+  if (!href || isExternal) {
+    return <a {...props} />
+  }
+  return <Link to={href} style={{ textDecoration: 'none' }}>{props.children as any}</Link>
+}
+
 // Export mapping for MDXProvider
 export const mdxComponents = {
   wrapper: MDXContent,
+  a: A,
   Card,
   Columns,
   CardGroup,

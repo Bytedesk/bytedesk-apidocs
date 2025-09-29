@@ -9,7 +9,7 @@ import 'antd/dist/reset.css'
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/apidocs">
       <MDXProvider components={mdxComponents as any}>
         <App />
       </MDXProvider>

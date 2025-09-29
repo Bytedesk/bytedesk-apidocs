@@ -23,5 +23,6 @@ export default defineConfig({
   ],
   server: {
     port: 9018,
+    open: '/apidocs/',
   },
 })
