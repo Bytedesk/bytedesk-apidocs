@@ -1,9 +1,7 @@
 ---
 title: 'Delete Plant'
-description: 'Deletes a single plant based on the ID supplied'
+description: 'Remove a plant from the system'
 ---
-
-# Delete Plant
 
 <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
   <div>
@@ -46,7 +44,7 @@ Returns `204 No Content` on successful deletion.
 
 ```bash cURL
 curl --request DELETE \
-  --url http://sandbox.mintlify.com/plants/123 \
+  --url http://api.weiyuai.cn/plants/123 \
   --header 'Authorization: Bearer <token>'
 ```
 

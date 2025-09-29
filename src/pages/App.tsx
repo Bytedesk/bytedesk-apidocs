@@ -48,13 +48,66 @@ function Sidebar() {
 }
 
 function Topbar() {
+  const [isDark, setIsDark] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') === 'dark' || 
+             (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    }
+    return false
+  })
+
+  const toggleTheme = () => {
+    const newTheme = !isDark
+    setIsDark(newTheme)
+    localStorage.setItem('theme', newTheme ? 'dark' : 'light')
+    document.documentElement.setAttribute('data-theme', newTheme ? 'dark' : 'light')
+  }
+
+  React.useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
+  }, [isDark])
+
   return (
     <header className="topbar">
       <div><Link className="site" to="/index">{docs.name}</Link></div>
       <div className="center"><input placeholder="Search (placeholder)" /></div>
       <div className="right">
-        {docs.navbar?.links?.[0]?.href && <a href={docs.navbar.links[0].href}>Support</a>}
-        {docs.navbar?.primary?.href && <a className="primary" href={docs.navbar.primary.href}>{docs.navbar.primary.label || 'Dashboard'}</a>}
+        <button 
+          onClick={toggleTheme}
+          className="theme-toggle"
+          title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          style={{
+            background: 'transparent',
+            border: '1px solid #e5e7eb',
+            borderRadius: '8px',
+            padding: '8px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#6b7280',
+            transition: 'all 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#f3f4f6'
+            e.currentTarget.style.borderColor = '#d1d5db'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent'
+            e.currentTarget.style.borderColor = '#e5e7eb'
+          }}
+        >
+          {isDark ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="5"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          )}
+        </button>
       </div>
     </header>
   )

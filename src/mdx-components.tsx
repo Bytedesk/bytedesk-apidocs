@@ -250,6 +250,21 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
   const [selectedLang, setSelectedLang] = useState('cURL')
   const [showDropdown, setShowDropdown] = useState(false)
   
+  // 点击外部关闭下拉菜单
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element
+      if (!target.closest('.language-selector')) {
+        setShowDropdown(false)
+      }
+    }
+    
+    if (showDropdown) {
+      document.addEventListener('click', handleClickOutside)
+      return () => document.removeEventListener('click', handleClickOutside)
+    }
+  }, [showDropdown])
+  
   const languages = [
     { name: 'cURL', icon: '▶️' },
     { name: 'Python', icon: '🐍' },
@@ -393,16 +408,23 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
       </div>
       
       <div className="code-content" style={{ 
-        padding: '16px', 
+        padding: '20px', 
         fontFamily: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace', 
         fontSize: '13px', 
-        background: '#0f172a', 
+        background: selectedLang === 'cURL' ? '#0f172a' : '#1e293b', 
         color: '#e2e8f0', 
         overflowX: 'auto',
-        lineHeight: 1.6,
-        minHeight: '80px'
+        lineHeight: 1.7,
+        minHeight: '100px',
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-all'
       }}>
-        {children}
+        <div style={{ 
+          color: selectedLang === 'cURL' ? '#94a3b8' : '#cbd5e1',
+          fontWeight: 400 
+        }}>
+          {children}
+        </div>
       </div>
     </div>
   )
@@ -553,16 +575,22 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
       </div>
       
       <div className="response-content" style={{ 
-        padding: '16px', 
+        padding: '20px', 
         fontFamily: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace', 
         fontSize: '13px', 
         background: '#0f172a', 
         color: '#e2e8f0', 
         overflowX: 'auto',
-        lineHeight: 1.6,
-        minHeight: '80px'
+        lineHeight: 1.7,
+        minHeight: '100px',
+        whiteSpace: 'pre-wrap'
       }}>
-        {children}
+        <div style={{ 
+          color: '#cbd5e1',
+          fontWeight: 400 
+        }}>
+          {children}
+        </div>
       </div>
     </div>
   )
@@ -588,8 +616,43 @@ export function SnippetIntro() {
   return <Alert type="info" message="Snippet introduction" showIcon />
 }
 
+// Wrapper component to handle frontmatter and page metadata
+export function MDXContent({ frontmatter, children, ...props }: any) {
+  return (
+    <div className="mdx-content">
+      {frontmatter && (
+        <div className="page-header" style={{ marginBottom: '32px' }}>
+          {frontmatter.title && (
+            <h1 style={{ 
+              fontSize: '2.25rem', 
+              fontWeight: 700, 
+              lineHeight: 1.2, 
+              margin: '0 0 16px 0',
+              color: 'var(--text-primary)'
+            }}>
+              {frontmatter.title}
+            </h1>
+          )}
+          {frontmatter.description && (
+            <p style={{ 
+              fontSize: '1.125rem', 
+              color: 'var(--text-secondary)', 
+              margin: '0 0 24px 0',
+              lineHeight: 1.6
+            }}>
+              {frontmatter.description}
+            </p>
+          )}
+        </div>
+      )}
+      <div {...props}>{children}</div>
+    </div>
+  )
+}
+
 // Export mapping for MDXProvider
 export const mdxComponents = {
+  wrapper: MDXContent,
   Card,
   Columns,
   CardGroup,
