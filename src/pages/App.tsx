@@ -3,6 +3,7 @@ import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import { Splitter } from 'antd'
 import { useIntl } from 'react-intl'
 import { LanguageSelector } from '../components/LanguageSelector'
+import { Footer } from '../components'
 import docs from '../../docs.json'
 
 function Badge({ page }: { page: string }) {
@@ -395,51 +396,55 @@ export default function App() {
   const closeExamples = () => setExamplesOpen(false)
   
   return (
-    <div>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Topbar 
         isMobile={isMobile}
         onSidebarToggle={() => setSidebarOpen(!sidebarOpen)}
         onExamplesToggle={() => setExamplesOpen(!examplesOpen)}
       />
       
-      {isMobile ? (
-        // 移动端布局
-        <div className="container">
-          {/* 移动端侧边栏 Drawer */}
-          {sidebarOpen && (
-            <>
-              <div className="drawer-overlay" onClick={closeSidebar} />
-              <div className="drawer-sidebar">
-                <div className="drawer-header">
-                  <span>{useIntl().formatMessage({ id: 'common.navigation' })}</span>
-                  <button onClick={closeSidebar} className="close-btn">×</button>
+      <div style={{ flex: 1 }}>
+        {isMobile ? (
+          // 移动端布局
+          <div className="container">
+            {/* 移动端侧边栏 Drawer */}
+            {sidebarOpen && (
+              <>
+                <div className="drawer-overlay" onClick={closeSidebar} />
+                <div className="drawer-sidebar">
+                  <div className="drawer-header">
+                    <span>{useIntl().formatMessage({ id: 'common.navigation' })}</span>
+                    <button onClick={closeSidebar} className="close-btn">×</button>
+                  </div>
+                  <Sidebar />
                 </div>
-                <Sidebar />
-              </div>
-            </>
-          )}
-          
-          {/* 主内容区域 */}
-          <div className="main-wrapper">
-            <Routes>
-              <Route path="/" element={<Page path="index" isMobile={isMobile} examplesOpen={examplesOpen} onCloseExamples={closeExamples} />} />
-              <Route path="/index" element={<Page path="index" isMobile={isMobile} examplesOpen={examplesOpen} onCloseExamples={closeExamples} />} />
-              {docs.navigation.tabs.flatMap((t: any) => t.groups.flatMap((g: any) => g.pages)).map((p: string) => (
-                <Route key={p} path={`/${p}`} element={<Page path={p} isMobile={isMobile} examplesOpen={examplesOpen} onCloseExamples={closeExamples} />} />
-              ))}
-            </Routes>
+              </>
+            )}
+            
+            {/* 主内容区域 */}
+            <div className="main-wrapper">
+              <Routes>
+                <Route path="/" element={<Page path="index" isMobile={isMobile} examplesOpen={examplesOpen} onCloseExamples={closeExamples} />} />
+                <Route path="/index" element={<Page path="index" isMobile={isMobile} examplesOpen={examplesOpen} onCloseExamples={closeExamples} />} />
+                {docs.navigation.tabs.flatMap((t: any) => t.groups.flatMap((g: any) => g.pages)).map((p: string) => (
+                  <Route key={p} path={`/${p}`} element={<Page path={p} isMobile={isMobile} examplesOpen={examplesOpen} onCloseExamples={closeExamples} />} />
+                ))}
+              </Routes>
+            </div>
           </div>
-        </div>
-      ) : (
-        // 桌面端 Splitter 布局
-        <Routes>
-          <Route path="/" element={<Page path="index" isMobile={isMobile} />} />
-          <Route path="/index" element={<Page path="index" isMobile={isMobile} />} />
-          {docs.navigation.tabs.flatMap((t: any) => t.groups.flatMap((g: any) => g.pages)).map((p: string) => (
-            <Route key={p} path={`/${p}`} element={<Page path={p} isMobile={isMobile} />} />
-          ))}
-        </Routes>
-      )}
+        ) : (
+          // 桌面端 Splitter 布局
+          <Routes>
+            <Route path="/" element={<Page path="index" isMobile={isMobile} />} />
+            <Route path="/index" element={<Page path="index" isMobile={isMobile} />} />
+            {docs.navigation.tabs.flatMap((t: any) => t.groups.flatMap((g: any) => g.pages)).map((p: string) => (
+              <Route key={p} path={`/${p}`} element={<Page path={p} isMobile={isMobile} />} />
+            ))}
+          </Routes>
+        )}
+      </div>
+      
+      <Footer />
     </div>
   )
 }
