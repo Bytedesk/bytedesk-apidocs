@@ -13,7 +13,7 @@ async function run() {
       await fse.copy(src, path.join(pub, dir))
     }
   }
-  for (const f of ['favicon.svg']) {
+  for (const f of ['favicon.ico']) {
     const src = path.join(root, f)
     if (fs.existsSync(src)) await fse.copy(src, path.join(pub, f))
   }

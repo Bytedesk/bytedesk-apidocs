@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import { Splitter } from 'antd'
+import { useIntl } from 'react-intl'
+import { LanguageSelector } from '../components/LanguageSelector'
 import docs from '../../docs.json'
 
 function Badge({ page }: { page: string }) {
@@ -34,18 +36,13 @@ function Badge({ page }: { page: string }) {
 }
 
 function Sidebar() {
+  const intl = useIntl()
   const loc = useLocation()
   // Remove optional basename '/apidocs' prefix to compute active page
   const current = loc.pathname.replace(/^\/apidocs\//, '').replace(/^\//, '') || 'index'
+  
   return (
     <aside className="sidebar" style={{ height: '100%', overflow: 'auto' }}>
-      {/* {docs.navigation?.global?.anchors?.length ? (
-        <div>
-          {docs.navigation.global.anchors.map((a: any) => (
-            <a key={a.href} href={a.href} target="_blank" rel="noreferrer">{a.anchor}</a>
-          ))}
-        </div>
-      ) : null} */}
       {docs.navigation.tabs.map((tab: any) => (
         <div key={tab.tab}>
           <div className="tab">{tab.tab}</div>
@@ -71,6 +68,7 @@ function Sidebar() {
 }
 
 function Topbar({ isMobile, onSidebarToggle, onExamplesToggle }: { isMobile: boolean, onSidebarToggle: () => void, onExamplesToggle: () => void }) {
+  const intl = useIntl()
   const [isDark, setIsDark] = React.useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') === 'dark' || 
@@ -105,10 +103,10 @@ function Topbar({ isMobile, onSidebarToggle, onExamplesToggle }: { isMobile: boo
             </svg>
           </button>
         )}
-  <Link className="site" to="/index">{docs.name}</Link>
+        <Link className="site" to="/index">{docs.name}</Link>
       </div>
       <div className="center">
-        {/* <input placeholder="Search (placeholder)" /> */}
+        {/* <input placeholder={intl.formatMessage({ id: 'common.search' })} /> */}
       </div>
       <div className="right">
         {isMobile && isApiPage && (
@@ -120,12 +118,16 @@ function Topbar({ isMobile, onSidebarToggle, onExamplesToggle }: { isMobile: boo
             </svg>
           </button>
         )}
+        
+        {/* 语言选择器 */}
+        <LanguageSelector style={{ marginRight: '8px' }} />
+        
         <a 
           href="https://github.com/Bytedesk/bytedesk-apidocs"
           target="_blank"
           rel="noopener noreferrer"
           className="github-link"
-          title="View on GitHub"
+          title={intl.formatMessage({ id: 'common.viewOnGitHub' })}
           style={{
             background: 'transparent',
             border: '1px solid #e5e7eb',
@@ -156,7 +158,7 @@ function Topbar({ isMobile, onSidebarToggle, onExamplesToggle }: { isMobile: boo
         <button 
           onClick={toggleTheme}
           className="theme-toggle"
-          title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          title={isDark ? intl.formatMessage({ id: 'common.lightMode' }) : intl.formatMessage({ id: 'common.darkMode' })}
           style={{
             background: 'transparent',
             border: '1px solid #e5e7eb',
@@ -216,10 +218,12 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
   const [examplesSize, setExamplesSize] = React.useState(580)
   const [tocSize, setTocSize] = React.useState(320)
   
+  const intl = useIntl()
+  
   if (isMobile) {
     // 移动端保持原有布局
     return (
-      <React.Suspense fallback={<div style={{padding: 24}}>Loading...</div>}>
+      <React.Suspense fallback={<div style={{padding: 24}}>{intl.formatMessage({ id: 'common.loading' })}</div>}>
         <div className={isApiEndpoint ? "content-api" : "content"}>
           <div className="main-content">
             <Mdx />
@@ -231,7 +235,7 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
               <div className="drawer-overlay" onClick={onCloseExamples} />
               <div className="drawer-examples">
                 <div className="drawer-header">
-                  <span>代码示例</span>
+                  <span>{intl.formatMessage({ id: 'common.codeExamples' })}</span>
                   <button onClick={onCloseExamples} className="close-btn">×</button>
                 </div>
                 <div className="examples-sticky" id="mobile-api-examples-container">
@@ -247,7 +251,7 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
 
   // 桌面端使用 Splitter 布局
   return (
-    <React.Suspense fallback={<div style={{padding: 24}}>Loading...</div>}>
+    <React.Suspense fallback={<div style={{padding: 24}}>{intl.formatMessage({ id: 'common.loading' })}</div>}>
       <div className="page-container" style={{ height: 'calc(100vh - 64px)' }}>
         <Splitter
           style={{ height: '100%' }}
