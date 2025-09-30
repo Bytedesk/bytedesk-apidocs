@@ -1,0 +1,42 @@
+import { useIntl } from 'react-intl'
+
+export function LocalizedContent() {
+  const intl = useIntl()
+  
+  return (
+    <div style={{ 
+      padding: '20px', 
+      border: '1px solid #e5e7eb', 
+      borderRadius: '8px', 
+      margin: '20px 0',
+      background: 'var(--bg-secondary)'
+    }}>
+      <h3>{intl.formatMessage({ id: 'common.loading' })}</h3>
+      <p>{intl.formatMessage({ id: 'common.codeExamples' })}</p>
+      <p>{intl.formatMessage({ id: 'common.onThisPage' })}</p>
+    </div>
+  )
+}
+
+# API 文档国际化演示
+
+这是一个展示国际化功能的示例页面。
+
+<LocalizedContent />
+
+## HTTP 方法
+
+- GET: {intl.formatMessage({ id: 'methods.get' })}
+- POST: {intl.formatMessage({ id: 'methods.post' })}
+- PUT: {intl.formatMessage({ id: 'methods.put' })}
+- DELETE: {intl.formatMessage({ id: 'methods.delete' })}
+
+## 导航分组
+
+- {intl.formatMessage({ id: 'nav.authentication' })}
+- {intl.formatMessage({ id: 'nav.messages' })}
+- {intl.formatMessage({ id: 'nav.threads' })}
+- {intl.formatMessage({ id: 'nav.tickets' })}
+- {intl.formatMessage({ id: 'nav.users' })}
+
+你可以在页面顶部的语言选择器中切换语言来查看翻译效果。

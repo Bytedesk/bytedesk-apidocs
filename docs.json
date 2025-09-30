@@ -16,7 +16,8 @@
           {
             "group": "Introduction",
             "pages": [
-              "index"
+              "index",
+              "i18n-demo"
             ]
           },
           {

@@ -28,7 +28,9 @@ import {
   ResponseExample,
   TryButton,
   MDXContent,
-  A
+  A,
+  I18nTest,
+  LanguageSelector
 } from './components'
 
 // Export mapping for MDXProvider
@@ -61,7 +63,9 @@ export const mdxComponents = {
   SnippetIntro,
   Expandable,
   Tabs,
-  Tab
+  Tab,
+  I18nTest,
+  LanguageSelector
 }
 
 // Re-export all components for backward compatibility
@@ -94,5 +98,7 @@ export {
   ResponseExample,
   TryButton,
   MDXContent,
-  A
+  A,
+  I18nTest,
+  LanguageSelector
 }

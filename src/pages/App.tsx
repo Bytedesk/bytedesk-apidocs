@@ -363,7 +363,7 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
                 >
                   <div className="otp" style={{ padding: '24px 16px' }}>
                     <div className="title" style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-primary)', marginBottom: '16px' }}>
-                      On this page
+                      {intl.formatMessage({ id: 'common.onThisPage' })}
                     </div>
                     {/* 运行时生成目录较复杂，这里可在后续加 rehype 解析 anchor 列表 */}
                   </div>
@@ -413,7 +413,7 @@ export default function App() {
               <div className="drawer-overlay" onClick={closeSidebar} />
               <div className="drawer-sidebar">
                 <div className="drawer-header">
-                  <span>导航</span>
+                  <span>{useIntl().formatMessage({ id: 'common.navigation' })}</span>
                   <button onClick={closeSidebar} className="close-btn">×</button>
                 </div>
                 <Sidebar />
