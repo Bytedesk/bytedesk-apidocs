@@ -261,7 +261,6 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
           <Splitter.Panel 
             size={sidebarSize}
             min={250} 
-            max={400}
             style={{ 
               background: 'var(--sidebar-bg)', 
               borderRight: '1px solid var(--border-color)',
@@ -301,7 +300,6 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
                 <Splitter.Panel 
                   size={examplesSize}
                   min={320} 
-                  max={600}
                   style={{ 
                     background: 'var(--bg-secondary)', 
                     borderLeft: '1px solid var(--border-color)',

@@ -746,26 +746,32 @@ export function SnippetIntro() {
   return <Alert type="info" message="Snippet introduction" showIcon />
 }
 
-export function TryButton({ title = "Try it", endpoint, method = "POST" }: { title?: string; endpoint?: string; method?: string }) {
+export function TryButton({ 
+  title = "Try it", 
+  endpoint, 
+  method = "POST",
+  apiTitle
+}: { 
+  title?: string; 
+  endpoint?: string; 
+  method?: string;
+  apiTitle?: string;
+}) {
   const handleTryIt = () => {
     const modal = document.createElement('div');
     modal.innerHTML = `
       <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; justify-content: center; align-items: center;">
         <div style="background: white; padding: 20px; border-radius: 8px; width: 80%; max-width: 1000px; height: 80%; overflow-y: auto;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2>Try API - ${title}</h2>
+            <h2>Try API - ${apiTitle || title}</h2>
             <button onclick="this.closest('.modal-overlay').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; height: calc(100% - 60px);">
             <div>
               <h3>Request</h3>
               <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: bold;">username (required)</label>
-                <input type="text" placeholder="testuser" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" id="username">
-              </div>
-              <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: bold;">password (required)</label>
-                <input type="password" placeholder="your_password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" id="password">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">参数</label>
+                <textarea placeholder="请输入JSON格式的请求参数" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; height: 120px;" id="requestParams">{}</textarea>
               </div>
               <button onclick="sendRequest()" style="background: #16A34A; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">Send Request</button>
             </div>
@@ -782,34 +788,49 @@ export function TryButton({ title = "Try it", endpoint, method = "POST" }: { tit
     modal.className = 'modal-overlay';
     document.body.appendChild(modal);
     
+    // 创建发送请求的函数，传递当前的 endpoint 和 method
     (window as any).sendRequest = async function() {
-      const username = (document.getElementById('username') as HTMLInputElement)?.value;
-      const password = (document.getElementById('password') as HTMLInputElement)?.value;
       const responseArea = document.getElementById('response-area');
+      const paramsTextarea = document.getElementById('requestParams') as HTMLTextAreaElement;
       
-      if (!responseArea) return;
+      if (!responseArea || !paramsTextarea) return;
       
-      if (!username || !password) {
-        responseArea.innerHTML = '<div style="color: red;">请填写用户名和密码</div>';
-        return;
+      let params = paramsTextarea.value.trim();
+      
+      // 验证JSON格式
+      if (params && params !== '{}') {
+        try {
+          JSON.parse(params);
+        } catch (e) {
+          responseArea.innerHTML = '<div style="color: red;">请输入有效的JSON格式</div>';
+          return;
+        }
       }
       
       responseArea.innerHTML = '<div>发送请求中...</div>';
       
       try {
-        const response = await fetch(endpoint || 'https://api.weiyuai.cn/auth/v1/login', {
+        const fetchOptions: RequestInit = {
           method: method,
           headers: {
             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            username: username,
-            password: password
-          })
-        });
+          }
+        };
         
-        const data = await response.json();
-        responseArea.innerHTML = '<pre style="margin: 0; white-space: pre-wrap;">' + JSON.stringify(data, null, 2) + '</pre>';
+        if (method === 'GET') {
+          // GET 请求
+          const response = await fetch(endpoint || '');
+          const data = await response.json();
+          responseArea.innerHTML = '<pre style="margin: 0; white-space: pre-wrap;">' + JSON.stringify(data, null, 2) + '</pre>';
+        } else {
+          // POST/PUT/DELETE 请求
+          if (params && params !== '{}') {
+            fetchOptions.body = params;
+          }
+          const response = await fetch(endpoint || '', fetchOptions);
+          const data = await response.json();
+          responseArea.innerHTML = '<pre style="margin: 0; white-space: pre-wrap;">' + JSON.stringify(data, null, 2) + '</pre>';
+        }
       } catch (error: any) {
         responseArea.innerHTML = '<div style="color: red;">请求失败: ' + error.message + '</div>';
       }
