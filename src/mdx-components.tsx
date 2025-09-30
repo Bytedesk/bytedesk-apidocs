@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Card as AntCard, Alert, Collapse, Tabs as AntTabs, Tag, Tooltip as AntTooltip } from 'antd'
+import { Card as AntCard, Alert, Collapse, Tabs as AntTabs, Tag, Tooltip as AntTooltip, Button } from 'antd'
 import { Link } from 'react-router-dom'
 
 type WithChildren<T = {}> = T & { children?: React.ReactNode }
@@ -219,6 +219,7 @@ export function Expandable({ title, children }: WithChildren<{ title?: string }>
 
 export function RequestExample({ children, title }: WithChildren<{ title?: string }>) {
   const [container, setContainer] = useState<HTMLElement | null>(null)
+  const [containerWidth, setContainerWidth] = useState<number | null>(null)
   
   useEffect(() => {
     let retryCount = 0
@@ -276,6 +277,20 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
       return () => observer.disconnect()
     }
   }, [])
+
+  // 监听容器大小变化
+  useEffect(() => {
+    if (!container) return
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContainerWidth(entry.contentRect.width)
+      }
+    })
+
+    resizeObserver.observe(container)
+    return () => resizeObserver.disconnect()
+  }, [container])
   
   const [selectedLang, setSelectedLang] = useState('cURL')
   const [showDropdown, setShowDropdown] = useState(false)
@@ -309,10 +324,14 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
     <div className="code-example-container" style={{ 
       marginBottom: '16px',
       background: 'var(--bg-primary)',
-      borderRadius: '8px',
+      borderRadius: '12px',
       border: '1px solid var(--border-color)',
-      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-      overflow: 'hidden'
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+      overflow: 'hidden',
+      width: '100%',
+      minWidth: 0,
+      position: 'relative',
+      maxWidth: containerWidth ? `${containerWidth - 40}px` : '100%'
     }}>
       <div className="example-header" style={{ 
         background: 'var(--bg-secondary)', 
@@ -329,18 +348,25 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              background: 'white', 
-              border: '1px solid #d1d5db', 
-              padding: '6px 12px', 
-              borderRadius: '6px', 
+              background: 'var(--bg-primary)', 
+              border: '1px solid var(--border-color)', 
+              padding: '8px 12px', 
+              borderRadius: '8px', 
               fontSize: '13px',
               fontWeight: 500,
-              color: '#374151',
+              color: 'var(--text-primary)',
               cursor: 'pointer',
-              transition: 'all 0.2s'
+              transition: 'all 0.2s',
+              boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
             }}
-            onMouseEnter={(e) => e.currentTarget.style.borderColor = '#9ca3af'}
-            onMouseLeave={(e) => e.currentTarget.style.borderColor = '#d1d5db'}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--primary)'
+              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(22, 163, 74, 0.1)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-color)'
+              e.currentTarget.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.05)'
+            }}
           >
             <span>{languages.find(l => l.name === selectedLang)?.icon}</span>
             <span>{selectedLang}</span>
@@ -352,13 +378,14 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
               position: 'absolute',
               top: '100%',
               left: 0,
-              marginTop: '4px',
-              background: 'white',
-              border: '1px solid #d1d5db',
-              borderRadius: '6px',
+              marginTop: '8px',
+              background: 'var(--bg-primary)',
+              border: '1px solid var(--border-color)',
+              borderRadius: '8px',
               boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
               zIndex: 50,
-              minWidth: '120px'
+              minWidth: '140px',
+              backdropFilter: 'blur(8px)'
             }}>
               {languages.map(lang => (
                 <button
@@ -372,16 +399,19 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    padding: '8px 12px',
+                    padding: '10px 12px',
                     border: 'none',
-                    background: selectedLang === lang.name ? '#f3f4f6' : 'transparent',
-                    color: '#374151',
+                    background: selectedLang === lang.name ? 'var(--bg-secondary)' : 'transparent',
+                    color: 'var(--text-primary)',
                     fontSize: '13px',
                     cursor: 'pointer',
-                    textAlign: 'left'
+                    textAlign: 'left',
+                    borderRadius: '6px',
+                    margin: '2px',
+                    transition: 'all 0.2s'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#f3f4f6'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = selectedLang === lang.name ? '#f3f4f6' : 'transparent'}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-secondary)'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = selectedLang === lang.name ? 'var(--bg-secondary)' : 'transparent'}
                 >
                   <span>{lang.icon}</span>
                   <span>{lang.name}</span>
@@ -438,16 +468,18 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
       </div>
       
       <div className="code-content" style={{ 
-        padding: '16px', 
+        padding: '20px', 
         fontFamily: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace', 
-        fontSize: '12px', 
+        fontSize: '13px', 
         background: selectedLang === 'cURL' ? '#0f172a' : '#1e293b', 
         color: '#e2e8f0', 
         overflowX: 'auto',
-        lineHeight: 1.6,
-        minHeight: '80px',
+        lineHeight: 1.7,
+        minHeight: '120px',
         whiteSpace: 'pre-wrap',
-        wordBreak: 'break-all'
+        wordBreak: 'break-word',
+        width: '100%',
+        boxSizing: 'border-box'
       }}>
         <div style={{ 
           color: selectedLang === 'cURL' ? '#94a3b8' : '#cbd5e1',
@@ -478,6 +510,7 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
 
 export function ResponseExample({ children, title }: WithChildren<{ title?: string }>) {
   const [container, setContainer] = useState<HTMLElement | null>(null)
+  const [containerWidth, setContainerWidth] = useState<number | null>(null)
   
   useEffect(() => {
     let retryCount = 0
@@ -535,6 +568,20 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
       return () => observer.disconnect()
     }
   }, [])
+
+  // 监听容器大小变化
+  useEffect(() => {
+    if (!container) return
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContainerWidth(entry.contentRect.width)
+      }
+    })
+
+    resizeObserver.observe(container)
+    return () => resizeObserver.disconnect()
+  }, [container])
   
   const [selectedStatus, setSelectedStatus] = useState('200')
   
@@ -549,10 +596,14 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
     <div className="response-example-container" style={{ 
       marginBottom: '16px',
       background: 'var(--bg-primary)',
-      borderRadius: '8px',
+      borderRadius: '12px',
       border: '1px solid var(--border-color)',
-      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-      overflow: 'hidden'
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+      overflow: 'hidden',
+      width: '100%',
+      minWidth: 0,
+      position: 'relative',
+      maxWidth: containerWidth ? `${containerWidth - 40}px` : '100%'
     }}>
       <div className="response-header" style={{ 
         background: 'var(--bg-secondary)', 
@@ -643,15 +694,18 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
       </div>
       
       <div className="response-content" style={{ 
-        padding: '16px', 
+        padding: '20px', 
         fontFamily: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace', 
-        fontSize: '12px', 
+        fontSize: '13px', 
         background: '#0f172a', 
         color: '#e2e8f0', 
         overflowX: 'auto',
-        lineHeight: 1.6,
-        minHeight: '80px',
-        whiteSpace: 'pre-wrap'
+        lineHeight: 1.7,
+        minHeight: '120px',
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-word',
+        width: '100%',
+        boxSizing: 'border-box'
       }}>
         <div style={{ 
           color: '#cbd5e1',
@@ -690,6 +744,96 @@ export function Update({ label, description, children }: WithChildren<{ label?: 
 
 export function SnippetIntro() {
   return <Alert type="info" message="Snippet introduction" showIcon />
+}
+
+export function TryButton({ title = "Try it", endpoint, method = "POST" }: { title?: string; endpoint?: string; method?: string }) {
+  const handleTryIt = () => {
+    const modal = document.createElement('div');
+    modal.innerHTML = `
+      <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 20px; border-radius: 8px; width: 80%; max-width: 1000px; height: 80%; overflow-y: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>Try API - ${title}</h2>
+            <button onclick="this.closest('.modal-overlay').remove()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; height: calc(100% - 60px);">
+            <div>
+              <h3>Request</h3>
+              <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">username (required)</label>
+                <input type="text" placeholder="testuser" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" id="username">
+              </div>
+              <div style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: bold;">password (required)</label>
+                <input type="password" placeholder="your_password" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" id="password">
+              </div>
+              <button onclick="sendRequest()" style="background: #16A34A; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">Send Request</button>
+            </div>
+            <div>
+              <h3>Response</h3>
+              <div style="background: #f8f9fa; border: 1px solid #ddd; border-radius: 4px; padding: 15px; height: 400px; overflow-y: auto;" id="response-area">
+                点击 "Send Request" 查看响应结果
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    modal.className = 'modal-overlay';
+    document.body.appendChild(modal);
+    
+    (window as any).sendRequest = async function() {
+      const username = (document.getElementById('username') as HTMLInputElement)?.value;
+      const password = (document.getElementById('password') as HTMLInputElement)?.value;
+      const responseArea = document.getElementById('response-area');
+      
+      if (!responseArea) return;
+      
+      if (!username || !password) {
+        responseArea.innerHTML = '<div style="color: red;">请填写用户名和密码</div>';
+        return;
+      }
+      
+      responseArea.innerHTML = '<div>发送请求中...</div>';
+      
+      try {
+        const response = await fetch(endpoint || 'https://api.weiyuai.cn/auth/v1/login', {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+        });
+        
+        const data = await response.json();
+        responseArea.innerHTML = '<pre style="margin: 0; white-space: pre-wrap;">' + JSON.stringify(data, null, 2) + '</pre>';
+      } catch (error: any) {
+        responseArea.innerHTML = '<div style="color: red;">请求失败: ' + error.message + '</div>';
+      }
+    };
+  };
+
+  return (
+    <Button
+      type="primary"
+      size="middle"
+      onClick={handleTryIt}
+      style={{
+        background: 'var(--primary)',
+        borderColor: 'var(--primary)',
+        borderRadius: '6px',
+        fontWeight: 500,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px'
+      }}
+    >
+      {title} →
+    </Button>
+  );
 }
 
 // Wrapper component to handle frontmatter and page metadata
@@ -766,6 +910,7 @@ export const mdxComponents = {
   Update,
   SnippetIntro,
   Badge,
+  TryButton,
 }
 
 export default mdxComponents

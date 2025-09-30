@@ -195,15 +195,43 @@ body {
 .sidebar li { margin:2px 0; }
 .sidebar a { 
   display:flex; 
-  gap:10px; 
+  gap:8px; 
   align-items:center; 
-  padding:8px 12px; 
+  padding:10px 12px; 
   color: var(--text-secondary); 
   text-decoration:none; 
   border-radius:8px; 
   font-size:14px; 
   font-weight:500; 
-  transition: all 0.2s; 
+  transition: all 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.sidebar a span {
+  flex: 1 1 auto;
+  min-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar .badge {
+  flex-shrink: 0;
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  font-size: 9px;
+  height: 16px;
+  line-height: 16px;
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  display: inline-block;
+  box-sizing: border-box;
 }
 .sidebar a:hover { 
   background: var(--bg-secondary); 
@@ -256,12 +284,20 @@ body {
 }
 
 .api-examples { 
-  width: 420px; 
+  width: 100%; 
   background: var(--bg-secondary); 
   border-left: 1px solid var(--border-color); 
   padding: 0; 
-  overflow-y: auto;
+  overflow: hidden;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.page-container .api-examples {
+  width: 100% !important;
+  height: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .otp {
@@ -367,72 +403,17 @@ h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
   position: relative;
 }
 
-/* Splitter 自定义样式 */
-.ant-splitter {
-  background: var(--bg-primary) !important;
-}
-
-.ant-splitter-bar {
-  background: var(--border-color) !important;
-  transition: all 0.2s;
-  border: none !important;
-}
-
-.ant-splitter-bar:hover {
-  background: var(--primary) !important;
-}
-
-.ant-splitter-bar-dragger {
-  background: var(--text-muted) !important;
-  border-radius: 2px;
-}
-
-.ant-splitter-bar:hover .ant-splitter-bar-dragger {
-  background: white !important;
-}
-
-/* 暗色主题下的 Splitter 样式 */
-[data-theme="dark"] .ant-splitter-bar-dragger {
-  background: var(--text-muted) !important;
-}
-
-[data-theme="dark"] .ant-splitter-bar:hover .ant-splitter-bar-dragger {
-  background: white !important;
-}
-
 /* 页面容器样式 */
 .page-container {
   background: var(--bg-primary);
 }
 
-/* Splitter 面板过渡效果 */
-.ant-splitter-panel {
-  transition: width 0.2s ease-out, height 0.2s ease-out;
-}
-
-/* Splitter 内的侧边栏样式 */
+/* 确保Splitter中的侧边栏能正确滚动 */
 .page-container .sidebar {
+  height: 100%;
+  overflow-y: auto;
   width: 100%;
-  height: 100%;
   border-right: none;
-  padding: 24px 16px;
-  overflow-y: auto;
-}
-
-/* Splitter 内的内容区域样式 */
-.page-container .main-content {
-  height: 100%;
-  overflow-y: auto;
-}
-
-.page-container .api-examples {
-  height: 100%;
-  overflow: hidden;
-}
-
-.page-container .otp {
-  height: 100%;
-  overflow-y: auto;
 }
 
 /* 响应式设计 */
@@ -652,6 +633,8 @@ h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
   padding: 20px; 
   max-height: calc(100vh - 100px);
   overflow-y: auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* 右侧栏标题样式 */
@@ -666,6 +649,14 @@ h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
   margin-bottom: 16px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border-color);
+}
+
+.page-container .examples-sticky {
+  position: static;
+  height: 100%;
+  max-height: none;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 /* 自定义滚动条样式 */
@@ -687,6 +678,24 @@ h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
 .code-example-container,
 .response-example-container {
   animation: fadeInUp 0.3s ease-out;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.code-example-container *,
+.response-example-container * {
+  box-sizing: border-box;
+}
+
+/* 确保代码内容区域宽度自适应 */
+.code-content,
+.response-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  resize: none;
 }
 
 @keyframes fadeInUp {

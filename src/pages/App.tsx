@@ -38,7 +38,7 @@ function Sidebar() {
   // Remove optional basename '/apidocs' prefix to compute active page
   const current = loc.pathname.replace(/^\/apidocs\//, '').replace(/^\//, '') || 'index'
   return (
-    <aside className="sidebar">
+    <aside className="sidebar" style={{ height: '100%', overflow: 'auto' }}>
       {/* {docs.navigation?.global?.anchors?.length ? (
         <div>
           {docs.navigation.global.anchors.map((a: any) => (
@@ -120,6 +120,39 @@ function Topbar({ isMobile, onSidebarToggle, onExamplesToggle }: { isMobile: boo
             </svg>
           </button>
         )}
+        <a 
+          href="https://github.com/Bytedesk/bytedesk-apidocs"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="github-link"
+          title="View on GitHub"
+          style={{
+            background: 'transparent',
+            border: '1px solid #e5e7eb',
+            borderRadius: '8px',
+            padding: '8px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#6b7280',
+            transition: 'all 0.2s',
+            textDecoration: 'none',
+            marginRight: '8px'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#f3f4f6'
+            e.currentTarget.style.borderColor = '#d1d5db'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent'
+            e.currentTarget.style.borderColor = '#e5e7eb'
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+        </a>
         <button 
           onClick={toggleTheme}
           className="theme-toggle"
@@ -178,6 +211,11 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
   // Check if it's an API endpoint page
   const isApiEndpoint = path.startsWith('api-reference/')
   
+  // Splitter size state to prevent drift
+  const [sidebarSize, setSidebarSize] = React.useState(260)
+  const [examplesSize, setExamplesSize] = React.useState(580)
+  const [tocSize, setTocSize] = React.useState(320)
+  
   if (isMobile) {
     // 移动端保持原有布局
     return (
@@ -213,16 +251,22 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
       <div className="page-container" style={{ height: 'calc(100vh - 64px)' }}>
         <Splitter
           style={{ height: '100%' }}
+          onResize={(sizes) => {
+            if (sizes && sizes.length >= 1) {
+              setSidebarSize(sizes[0])
+            }
+          }}
         >
           {/* 左侧栏 - 侧边导航 */}
           <Splitter.Panel 
-            defaultSize="300px" 
-            min="250px" 
-            max="450px"
+            size={sidebarSize}
+            min={250} 
+            max={400}
             style={{ 
               background: 'var(--sidebar-bg)', 
               borderRight: '1px solid var(--border-color)',
-              overflow: 'hidden'
+              overflow: 'auto',
+              height: '100%'
             }}
           >
             <Sidebar />
@@ -234,6 +278,11 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
               // API 页面：主内容 + 代码示例
               <Splitter
                 style={{ height: '100%' }}
+                onResize={(sizes) => {
+                  if (sizes && sizes.length >= 2) {
+                    setExamplesSize(sizes[1])
+                  }
+                }}
               >
                 {/* 主内容区域 */}
                 <Splitter.Panel 
@@ -250,17 +299,27 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
 
                 {/* 右侧代码示例栏 */}
                 <Splitter.Panel 
-                  defaultSize="420px" 
-                  min="320px" 
-                  max="600px"
+                  size={examplesSize}
+                  min={320} 
+                  max={600}
                   style={{ 
                     background: 'var(--bg-secondary)', 
                     borderLeft: '1px solid var(--border-color)',
                     overflow: 'hidden'
                   }}
                 >
-                  <div className="api-examples" style={{ height: '100%', padding: 0 }}>
-                    <div className="examples-sticky" id="api-examples-container" style={{ height: '100%', overflow: 'auto' }}>
+                  <div className="api-examples" style={{ height: '100%', padding: 0, width: '100%', overflow: 'hidden' }}>
+                    <div 
+                      className="examples-sticky" 
+                      id="api-examples-container" 
+                      style={{ 
+                        height: '100%', 
+                        overflow: 'auto',
+                        width: '100%',
+                        padding: '20px',
+                        boxSizing: 'border-box'
+                      }}
+                    >
                       {/* Examples will be populated by RequestExample/ResponseExample components */}
                     </div>
                   </div>
@@ -270,6 +329,11 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
               // 非 API 页面：主内容 + 目录
               <Splitter
                 style={{ height: '100%' }}
+                onResize={(sizes) => {
+                  if (sizes && sizes.length >= 2) {
+                    setTocSize(sizes[1])
+                  }
+                }}
               >
                 {/* 主内容区域 */}
                 <Splitter.Panel 
@@ -286,9 +350,9 @@ function Page({ path, isMobile, examplesOpen, onCloseExamples }: { path: string,
 
                 {/* 右侧目录栏 */}
                 <Splitter.Panel 
-                  defaultSize="280px" 
-                  min="200px" 
-                  max="400px"
+                  size={tocSize}
+                  min={200} 
+                  max={400}
                   style={{ 
                     background: 'var(--bg-secondary)', 
                     borderLeft: '1px solid var(--border-color)',
