@@ -176,7 +176,7 @@ export const I18nHome: React.FC = () => {
             <Card
                 title={intl.formatMessage({ id: 'auth.userLogin' })}
                 icon="user"
-                href="api-reference/auth/login"
+                href="/api-reference/auth/login"
             >
                 {intl.formatMessage({ id: 'auth.loginDescription' })}
             </Card>
@@ -205,7 +205,7 @@ export const I18nHome: React.FC = () => {
                 <Card
                     title={intl.formatMessage({ id: 'home.modules.aiTitle' })}
                     icon="bot"
-                    href="ai-features"
+                    href="/ai-features"
                 >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {intl.formatMessage({ id: 'home.modules.aiDesc' })}
@@ -225,35 +225,35 @@ export const I18nHome: React.FC = () => {
                 <Card
                     title={intl.formatMessage({ id: 'home.modules.authTitle' })}
                     icon="key"
-                    href="api-reference/auth/login"
+                    href="/api-reference/auth/login"
                 >
                     {intl.formatMessage({ id: 'home.modules.authDesc' })}
                 </Card>
                 <Card
                     title={intl.formatMessage({ id: 'home.modules.userTitle' })}
                     icon="user"
-                    href="api-reference/users/profile"
+                    href="/api-reference/users/profile"
                 >
                     {intl.formatMessage({ id: 'home.modules.userDesc' })}
                 </Card>
                 <Card
                     title={intl.formatMessage({ id: 'home.modules.threadTitle' })}
                     icon="message-circle"
-                    href="api-reference/threads/list"
+                    href="/api-reference/threads/list"
                 >
                     {intl.formatMessage({ id: 'home.modules.threadDesc' })}
                 </Card>
                 <Card
                     title={intl.formatMessage({ id: 'home.modules.messageTitle' })}
                     icon="send"
-                    href="api-reference/messages/send"
+                    href="/api-reference/messages/send"
                 >
                     {intl.formatMessage({ id: 'home.modules.messageDesc' })}
                 </Card>
                 <Card
                     title={intl.formatMessage({ id: 'home.modules.ticketTitle' })}
                     icon="ticket"
-                    href="api-reference/tickets/create"
+                    href="/api-reference/tickets/create"
                 >
                     {intl.formatMessage({ id: 'home.modules.ticketDesc' })}
                 </Card>
