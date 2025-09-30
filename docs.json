@@ -20,6 +20,12 @@
             ]
           },
           {
+            "group": "AI Features",
+            "pages": [
+              "ai-features"
+            ]
+          },
+          {
             "group": "Authentication",
             "pages": [
               "api-reference/auth/register",

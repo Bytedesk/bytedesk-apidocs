@@ -16,9 +16,7 @@ function Badge({ page }: { page: string }) {
     create: 'post', 
     send: 'post',
     login: 'post',
-    'admin-login': 'post',
     register: 'post',
-    'refresh-token': 'post',
     delete: 'del', 
     webhook: 'hook' 
   }
@@ -103,7 +101,7 @@ function Topbar({ isMobile, onSidebarToggle, onExamplesToggle }: { isMobile: boo
             </svg>
           </button>
         )}
-        <Link className="site" to="/index">{docs.name}</Link>
+        <Link className="site" to="/index">{intl.formatMessage({ id: 'app.title' })}</Link>
       </div>
       <div className="center">
         {/* <input placeholder={intl.formatMessage({ id: 'common.search' })} /> */}

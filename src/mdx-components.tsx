@@ -40,7 +40,12 @@ import {
   ApiLoginMethods,
   ApiUserStatus,
   I18nText,
-  I18nHeading
+  I18nHeading,
+  AiFeatures,
+  AiOverview,
+  MultimodalSupport,
+  AiProviders,
+  KnowledgeBaseIntegration
 } from './components'
 
 // Export mapping for MDXProvider
@@ -85,7 +90,12 @@ export const mdxComponents = {
   ApiLoginMethods,
   ApiUserStatus,
   I18nText,
-  I18nHeading
+  I18nHeading,
+  AiFeatures,
+  AiOverview,
+  MultimodalSupport,
+  AiProviders,
+  KnowledgeBaseIntegration
 }
 
 // Re-export all components for backward compatibility
@@ -130,5 +140,10 @@ export {
   ApiLoginMethods,
   ApiUserStatus,
   I18nText,
-  I18nHeading
+  I18nHeading,
+  AiFeatures,
+  AiOverview,
+  MultimodalSupport,
+  AiProviders,
+  KnowledgeBaseIntegration
 }

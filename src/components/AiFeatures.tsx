@@ -110,6 +110,13 @@ export const AiProviders: React.FC = () => {
       flag: '🤖'
     },
     {
+      key: 'zhipu',
+      name: intl.formatMessage({ id: 'ai.providers.zhipu' }),
+      description: intl.formatMessage({ id: 'ai.providers.zhipuDesc' }),
+      color: '#13c2c2',
+      flag: '🧠'
+    },
+    {
       key: 'qwen',
       name: intl.formatMessage({ id: 'ai.providers.qwen' }),
       description: intl.formatMessage({ id: 'ai.providers.qwenDesc' }),
