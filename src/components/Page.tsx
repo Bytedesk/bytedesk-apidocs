@@ -2,6 +2,7 @@ import React from 'react'
 import { Splitter } from 'antd'
 import { useIntl } from 'react-intl'
 import { Sidebar } from './Sidebar'
+import { TableOfContents } from './TableOfContents'
 
 const mdxModules = import.meta.glob([
   '../../*.mdx',
@@ -176,10 +177,7 @@ export function Page({ path, isMobile, examplesOpen, onCloseExamples }: PageProp
                   }}
                 >
                   <div className="otp" style={{ padding: '24px 16px' }}>
-                    <div className="title" style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-primary)', marginBottom: '16px' }}>
-                      {intl.formatMessage({ id: 'common.onThisPage' })}
-                    </div>
-                    {/* 运行时生成目录较复杂，这里可在后续加 rehype 解析 anchor 列表 */}
+                    <TableOfContents contentSelector=".content" />
                   </div>
                 </Splitter.Panel>
               </Splitter>

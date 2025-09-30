@@ -919,6 +919,58 @@ tr:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
+/* 目录组件样式 */
+.table-of-contents {
+  position: sticky;
+  top: 20px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.table-of-contents::-webkit-scrollbar {
+  width: 4px;
+}
+
+.table-of-contents::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-of-contents::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+
+.table-of-contents::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+.toc-nav ul {
+  border-left: 1px solid var(--border-color);
+  margin-left: 8px;
+}
+
+.toc-nav a {
+  position: relative;
+}
+
+.toc-nav a::before {
+  content: '';
+  position: absolute;
+  left: -9px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.toc-nav a:hover::before {
+  opacity: 1;
+}
+
 @media (max-width: 960px) {
   .container { flex-direction: column; }
   .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e5e7eb; }
