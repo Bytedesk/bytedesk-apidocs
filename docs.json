@@ -22,8 +22,6 @@
           {
             "group": "Authentication",
             "pages": [
-              "api-reference/auth/admin-login",
-              "api-reference/auth/refresh-token",
               "api-reference/auth/register",
               "api-reference/auth/login"
             ]
