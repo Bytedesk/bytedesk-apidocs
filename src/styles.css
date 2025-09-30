@@ -865,6 +865,60 @@ tr:hover {
   background: #f9fafb;
 }
 
+/* 语言选择器样式 */
+.ant-select {
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  background: var(--bg-primary) !important;
+}
+
+.ant-select:hover {
+  border-color: var(--primary) !important;
+}
+
+.ant-select-selector {
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-primary) !important;
+}
+
+.ant-select-selection-item {
+  color: var(--text-primary) !important;
+}
+
+.ant-select-arrow {
+  color: var(--text-secondary) !important;
+}
+
+.ant-select-dropdown {
+  background: var(--bg-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ant-select-item {
+  color: var(--text-primary) !important;
+}
+
+.ant-select-item:hover {
+  background: var(--bg-secondary) !important;
+}
+
+.ant-select-item-option-selected {
+  background: var(--primary) !important;
+  color: white !important;
+}
+
+.ant-select-item-option-selected .ant-select-item-option-content {
+  color: white !important;
+}
+
+/* 深色主题下的语言选择器调整 */
+[data-theme="dark"] .ant-select-dropdown {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
 @media (max-width: 960px) {
   .container { flex-direction: column; }
   .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e5e7eb; }
@@ -872,4 +926,9 @@ tr:hover {
   .content-api { flex-direction: column; }
   .main-content { max-width: 100%; }
   .api-examples { width: 100%; }
+  
+  /* 移动端语言选择器 */
+  .ant-select {
+    min-width: 100px !important;
+  }
 }

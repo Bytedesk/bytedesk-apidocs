@@ -30,7 +30,17 @@ import {
   MDXContent,
   A,
   I18nTest,
-  LanguageSelector
+  LanguageSelector,
+  I18nHome,
+  ApiDocHeader,
+  ApiSection,
+  ApiField,
+  ApiUsageList,
+  ApiSecurityList,
+  ApiLoginMethods,
+  ApiUserStatus,
+  I18nText,
+  I18nHeading
 } from './components'
 
 // Export mapping for MDXProvider
@@ -65,7 +75,17 @@ export const mdxComponents = {
   Tabs,
   Tab,
   I18nTest,
-  LanguageSelector
+  LanguageSelector,
+  I18nHome,
+  ApiDocHeader,
+  ApiSection,
+  ApiField,
+  ApiUsageList,
+  ApiSecurityList,
+  ApiLoginMethods,
+  ApiUserStatus,
+  I18nText,
+  I18nHeading
 }
 
 // Re-export all components for backward compatibility
@@ -100,5 +120,15 @@ export {
   MDXContent,
   A,
   I18nTest,
-  LanguageSelector
+  LanguageSelector,
+  I18nHome,
+  ApiDocHeader,
+  ApiSection,
+  ApiField,
+  ApiUsageList,
+  ApiSecurityList,
+  ApiLoginMethods,
+  ApiUserStatus,
+  I18nText,
+  I18nHeading
 }

@@ -22,3 +22,4 @@ export {
   ApiLoginMethods,
   ApiUserStatus 
 } from './ApiI18n'
+export { I18nText, I18nHeading } from './I18nHelpers'
