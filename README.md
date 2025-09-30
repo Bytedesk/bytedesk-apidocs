@@ -3,10 +3,12 @@
 ## Development
 
 ```bash
-# install mint cli
-npm i -g mint
-# run mintlify dev server
-mint dev --port 9018
+# Install dependencies
+pnpm install
+# Run development server
+pnpm dev
+# Build static files
+pnpm build
 ```
 
 View your local preview at `http://localhost:9018`.

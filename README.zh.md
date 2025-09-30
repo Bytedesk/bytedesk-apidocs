@@ -1,10 +1,12 @@
 # 微语 API 文档
 
 ```bash
-# 安装 Mintlify CLI
-npm i -g mint
-# 运行 Mintlify 开发服务器
-mint dev --port 9018
+# 安装依赖
+pnpm install
+# 运行开发服务器
+pnpm dev
+# 构建静态文件
+pnpm build
 ```
 
 ## 查看本地预览

@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { MDXProvider } from '@mdx-js/react'
 import App from './pages/App'
-import mdxComponents from './mdx-components'
+import { mdxComponents } from './mdx-components'
 import './styles.css'
 import 'antd/dist/reset.css'
 
