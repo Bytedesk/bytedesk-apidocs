@@ -31,3 +31,7 @@ export {
   KnowledgeBaseIntegration
 } from './AiFeatures'
 export { Footer } from './Footer'
+export { Badge as ApiBadge } from './Badge'
+export { Page } from './Page'
+export { Sidebar } from './Sidebar'
+export { Topbar } from './Topbar'

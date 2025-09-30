@@ -15,31 +15,7 @@ export const Footer: React.FC = () => {
       }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px' }}>
-        {/* 官网链接 */}
-        <div style={{ marginBottom: '16px' }}>
-          <a 
-            href="https://www.weiyuai.cn/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              color: 'var(--text-primary)',
-              textDecoration: 'none',
-              fontSize: '16px',
-              fontWeight: '500',
-              transition: 'color 0.2s'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = 'var(--primary-color)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'var(--text-primary)'
-            }}
-          >
-            🌐 {intl.formatMessage({ id: 'footer.officialWebsite' })}
-          </a>
-        </div>
-
-        {/* 链接列表 */}
+        {/* 链接列表 - 包含官网链接 */}
         <ul 
           style={{
             listStyle: 'none',
@@ -51,6 +27,28 @@ export const Footer: React.FC = () => {
             gap: '0 24px'
           }}
         >
+          <li>
+            <a 
+              href="https://www.weiyuai.cn/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: 'var(--text-primary)',
+                textDecoration: 'none',
+                fontSize: '14px',
+                fontWeight: '500',
+                transition: 'color 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = 'var(--primary-color)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'var(--text-primary)'
+              }}
+            >
+              🌐 {intl.formatMessage({ id: 'footer.officialWebsite' })}
+            </a>
+          </li>
           <li>
             <a 
               href="https://www.weiyuai.cn/protocal.html"
