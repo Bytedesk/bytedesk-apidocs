@@ -1,13 +1,13 @@
 ---
 title: "AI 大模型对话功能"
-description: "ByteDesk 强大的AI对话能力，支持多模态交互和多厂商对接"
+description: "微语强大的AI对话能力，支持多模态交互和多厂商对接"
 ---
 
 <AiFeatures />
 
 ## 快速开始
 
-要开始使用ByteDesk的AI对话功能，您需要：
+要开始使用微语的AI对话功能，您需要：
 
 1. **配置AI模型提供商** - 选择并配置您偏好的AI模型提供商
 2. **设置多模态支持** - 启用文本、图片、视频、文件处理能力  
@@ -43,18 +43,40 @@ curl -X POST https://api.weiyuai.cn/api/v1/ai/chat \
   }'
 ```
 
-## 支持的AI提供商
+## 集成指南
 
-<AiProviders />
+### 配置AI提供商
 
-## 多模态能力详情
+您可以通过管理后台配置多个AI提供商，系统会根据负载和可用性自动选择最优的提供商：
 
-<MultimodalSupport />
+```javascript
+// 客户端配置示例
+const aiConfig = {
+  providers: ['qwen', 'openai', 'deepseek'],
+  defaultProvider: 'qwen',
+  fallbackEnabled: true
+}
+```
 
-## 知识库集成
+### 多模态处理
 
-<KnowledgeBaseIntegration />
+系统自动识别输入类型并调用相应的AI模型：
+
+```javascript
+// 自动类型识别
+const response = await fetch('/api/v1/ai/chat', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_TOKEN',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    input: file, // 可以是文本、图片、视频或文档
+    autoDetectType: true
+  })
+})
+```
 
 ---
 
-> 🚀 **提示**: ByteDesk的AI功能正在持续更新中，更多强大功能即将上线！
+> 🚀 **提示**: 微语的AI功能正在持续更新中，更多强大功能即将上线！

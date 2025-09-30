@@ -177,5 +177,10 @@
   "notes.multipleCredentials": "支持多種登入憑據類型",
   "notes.requireBearerToken": "需要有效的 Bearer Token",
   "notes.currentUserOnly": "只能獲取當前登入用戶的資訊",
-  "notes.sensitiveInfoFiltered": "敏感資訊可能會被過濾"
+  "notes.sensitiveInfoFiltered": "敏感資訊可能會被過濾",
+  
+  "footer.officialWebsite": "微語官網",
+  "footer.userAgreement": "用戶協議",
+  "footer.privacyPolicy": "隱私條款",
+  "footer.copyright": "微語科技 版權所有"
 }

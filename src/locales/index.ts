@@ -20,27 +20,48 @@ export const defaultLocale = 'zh-CN'
 export const getBrowserLocale = (): string => {
   if (typeof window === 'undefined') return defaultLocale
   
-  const language = navigator.language || navigator.languages?.[0] || defaultLocale
-  
-  // 映射浏览器语言代码到我们支持的语言
-  if (language.startsWith('zh')) {
-    if (language.includes('TW') || language.includes('HK') || language.includes('MO')) {
-      return 'zh-TW'
+  try {
+    // 获取浏览器语言列表，优先使用第一个
+    const languages = navigator.languages || [navigator.language] || [defaultLocale]
+    
+    for (const lang of languages) {
+      const language = lang.toLowerCase()
+      
+      // 映射浏览器语言代码到我们支持的语言
+      if (language.startsWith('zh')) {
+        if (language.includes('tw') || language.includes('hk') || language.includes('mo')) {
+          return 'zh-TW'
+        }
+        return 'zh-CN'
+      }
+      
+      if (language.startsWith('en')) {
+        return 'en'
+      }
     }
-    return 'zh-CN'
+    
+    return defaultLocale
+  } catch (error) {
+    console.warn('Failed to detect browser locale, using default:', error)
+    return defaultLocale
   }
-  
-  if (language.startsWith('en')) {
-    return 'en'
-  }
-  
-  return defaultLocale
 }
 
 // 从本地存储获取用户选择的语言
 export const getStoredLocale = (): string => {
   if (typeof window === 'undefined') return defaultLocale
-  return localStorage.getItem('locale') || getBrowserLocale()
+  
+  try {
+    const stored = localStorage.getItem('locale')
+    if (stored && Object.keys(messages).includes(stored)) {
+      return stored
+    }
+    // 如果没有存储的语言或存储的语言不支持，使用浏览器语言
+    return getBrowserLocale()
+  } catch (error) {
+    console.warn('Failed to get stored locale, using browser locale:', error)
+    return getBrowserLocale()
+  }
 }
 
 // 保存用户选择的语言到本地存储

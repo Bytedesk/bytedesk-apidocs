@@ -177,5 +177,10 @@
   "notes.multipleCredentials": "Support multiple login credential types",
   "notes.requireBearerToken": "Requires valid Bearer Token",
   "notes.currentUserOnly": "Can only get information of currently logged-in user",
-  "notes.sensitiveInfoFiltered": "Sensitive information may be filtered"
+  "notes.sensitiveInfoFiltered": "Sensitive information may be filtered",
+  
+  "footer.officialWebsite": "Weiyu Official Website",
+  "footer.userAgreement": "User Agreement",
+  "footer.privacyPolicy": "Privacy Policy",
+  "footer.copyright": "Weiyu Technology. All rights reserved."
 }

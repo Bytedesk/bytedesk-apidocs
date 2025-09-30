@@ -30,3 +30,4 @@ export {
   AiProviders,
   KnowledgeBaseIntegration
 } from './AiFeatures'
+export { Footer } from './Footer'

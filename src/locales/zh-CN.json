@@ -177,5 +177,10 @@
   "notes.multipleCredentials": "支持多种登录凭据类型",
   "notes.requireBearerToken": "需要有效的 Bearer Token",
   "notes.currentUserOnly": "只能获取当前登录用户的信息",
-  "notes.sensitiveInfoFiltered": "敏感信息可能会被过滤"
+  "notes.sensitiveInfoFiltered": "敏感信息可能会被过滤",
+  
+  "footer.officialWebsite": "微语官网",
+  "footer.userAgreement": "用户协议",
+  "footer.privacyPolicy": "隐私条款",
+  "footer.copyright": "微语科技 版权所有"
 }

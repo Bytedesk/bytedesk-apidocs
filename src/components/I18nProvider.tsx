@@ -23,26 +23,68 @@ interface I18nProviderProps {
 }
 
 export const I18nProvider: React.FC<I18nProviderProps> = ({ children }) => {
-  const [locale, setLocaleState] = useState<string>(defaultLocale)
+  // 初始化时就使用正确的locale，避免显示国际化ID
+  const [locale, setLocaleState] = useState<string>(() => {
+    // 在客户端时立即获取正确的locale
+    if (typeof window !== 'undefined') {
+      return getStoredLocale()
+    }
+    return defaultLocale
+  })
 
   useEffect(() => {
+    // 确保在客户端hydration后再次检查locale
     const storedLocale = getStoredLocale()
-    setLocaleState(storedLocale)
-  }, [])
+    if (storedLocale !== locale) {
+      setLocaleState(storedLocale)
+    }
+  }, [locale])
 
   const setLocale = (newLocale: string) => {
-    setLocaleState(newLocale)
-    setStoredLocale(newLocale)
+    if (Object.keys(messages).includes(newLocale)) {
+      setLocaleState(newLocale)
+      setStoredLocale(newLocale)
+    } else {
+      console.warn(`Unsupported locale: ${newLocale}`)
+    }
   }
 
   const availableLocales = Object.keys(messages)
+  
+  // 确保messages存在，避免在生产环境中出现undefined
+  const currentMessages = messages[locale as keyof typeof messages] || messages[defaultLocale as keyof typeof messages]
+
+  // 动态更新页面标题
+  useEffect(() => {
+    if (typeof document !== 'undefined' && currentMessages) {
+      // 使用国际化的app.title更新页面标题
+      const titleKey = 'app.title'
+      const title = currentMessages[titleKey as keyof typeof currentMessages] || 'API Docs'
+      document.title = title as string
+      
+      // 同时更新html的lang属性
+      const htmlElement = document.documentElement
+      if (htmlElement) {
+        // 设置正确的语言代码
+        const langCode = locale === 'zh-CN' ? 'zh-CN' : 
+                        locale === 'zh-TW' ? 'zh-TW' : 'en'
+        htmlElement.setAttribute('lang', langCode)
+      }
+    }
+  }, [locale, currentMessages])
 
   return (
     <I18nContext.Provider value={{ locale, setLocale, availableLocales }}>
       <IntlProvider
-        messages={messages[locale as keyof typeof messages]}
+        messages={currentMessages}
         locale={locale}
         defaultLocale={defaultLocale}
+        onError={(error) => {
+          // 在生产环境中不显示错误，避免控制台污染
+          if (import.meta.env.DEV) {
+            console.warn('IntlProvider error:', error)
+          }
+        }}
       >
         {children}
       </IntlProvider>
