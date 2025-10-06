@@ -33,19 +33,20 @@ export const CurlDisplay: React.FC<CurlDisplayProps> = ({
     <div
       style={{
         marginBottom: '20px',
-        background: '#ffffff',
+        background: theme === 'dark' ? '#1a1b26' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         borderRadius: '16px',
-        border: '1px solid #e5e7eb',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        border: 'none',
+        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2), 0 6px 10px rgba(0, 0, 0, 0.15)',
         overflow: 'hidden'
       }}
     >
       {/* Header */}
       <div
         style={{
-          background: '#f9fafb',
+          background: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
           padding: '14px 20px',
-          borderBottom: '1px solid #e5e7eb',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
@@ -55,11 +56,12 @@ export const CurlDisplay: React.FC<CurlDisplayProps> = ({
           <span
             style={{
               fontSize: '16px',
-              fontWeight: 500,
-              color: '#374151',
+              fontWeight: 600,
+              color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '8px',
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
             }}
           >
             <span style={{ fontSize: '18px' }}>▶</span>
@@ -73,28 +75,30 @@ export const CurlDisplay: React.FC<CurlDisplayProps> = ({
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            background: '#ffffff',
-            border: '1px solid #d1d5db',
-            padding: '7px 12px',
-            borderRadius: '6px',
+            background: 'rgba(255, 255, 255, 0.25)',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            padding: '7px 14px',
+            borderRadius: '8px',
             fontSize: '13px',
-            color: copied ? '#059669' : '#6b7280',
+            color: '#ffffff',
             cursor: 'pointer',
-            transition: 'all 0.15s ease',
-            fontWeight: 500
+            transition: 'all 0.2s ease',
+            fontWeight: 600,
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
           }}
           onMouseEnter={(e) => {
             if (!copied) {
-              e.currentTarget.style.background = '#f9fafb'
-              e.currentTarget.style.borderColor = '#9ca3af'
-              e.currentTarget.style.color = '#374151'
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.35)'
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)'
+              e.currentTarget.style.transform = 'translateY(-1px)'
             }
           }}
           onMouseLeave={(e) => {
             if (!copied) {
-              e.currentTarget.style.background = '#ffffff'
-              e.currentTarget.style.borderColor = '#d1d5db'
-              e.currentTarget.style.color = '#6b7280'
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)'
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)'
+              e.currentTarget.style.transform = 'translateY(0)'
             }
           }}
         >
@@ -132,23 +136,26 @@ export const CurlDisplay: React.FC<CurlDisplayProps> = ({
       </div>
 
       {/* Code Content with Syntax Highlighting */}
-      <div style={{ background: theme === 'dark' ? '#1e1e1e' : '#f8f9fa' }}>
+      <div style={{ 
+        background: theme === 'dark' ? '#16161e' : 'rgba(0, 0, 0, 0.75)',
+        backdropFilter: 'blur(10px)'
+      }}>
         <SyntaxHighlighter
           language="bash"
-          style={codeStyle}
+          style={theme === 'dark' ? vscDarkPlus : vscDarkPlus}
           showLineNumbers={showLineNumbers}
           customStyle={{
             margin: 0,
-            padding: '20px',
+            padding: '24px',
             background: 'transparent',
-            fontSize: '13.5px',
-            lineHeight: '1.65',
+            fontSize: '14px',
+            lineHeight: '1.7',
             borderRadius: '0 0 16px 16px'
           }}
           codeTagProps={{
             style: {
-              fontFamily:
-                '"SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro", monospace'
+              fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", "Monaco", "Cascadia Code", monospace',
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)'
             }
           }}
         >
