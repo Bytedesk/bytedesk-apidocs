@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal, Button, Input, Select, Tabs, message, Spin } from 'antd'
+import { Modal, Button, Input, Select, Tabs, message, Spin, Space } from 'antd'
 import { PlayCircleOutlined, CopyOutlined, CodeOutlined } from '@ant-design/icons'
 
 const { TextArea } = Input
@@ -311,7 +311,7 @@ export const ApiPlayground: React.FC<ApiPlaygroundProps> = ({
                         >
                           请求 URL
                         </label>
-                        <Input.Group compact style={{ display: 'flex' }}>
+                        <Space.Compact style={{ display: 'flex', width: '100%' }}>
                           <Select
                             value={method}
                             disabled
@@ -329,7 +329,7 @@ export const ApiPlayground: React.FC<ApiPlaygroundProps> = ({
                             size="large"
                             style={{ flex: 1 }}
                           />
-                        </Input.Group>
+                        </Space.Compact>
                       </div>
 
                       {/* Headers */}

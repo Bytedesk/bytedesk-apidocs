@@ -94,11 +94,11 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
   }, [showDropdown])
   
   const languages = [
-    { name: 'cURL', icon: '▶️' },
+    { name: 'cURL', icon: '▶' },
     { name: 'Python', icon: '🐍' },
-    { name: 'JavaScript', icon: '🔶' },
-    { name: 'PHP', icon: '🐘' },
-    { name: 'Go', icon: '🔗' },
+    { name: 'JavaScript', icon: 'JS' },
+    { name: 'PHP', icon: 'PHP' },
+    { name: 'Go', icon: 'Go' },
     { name: 'Java', icon: '☕' },
     { name: 'Ruby', icon: '💎' }
   ]
@@ -179,31 +179,37 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
                   }}
                   style={{
                     width: '100%',
-                    padding: '8px 12px',
+                    padding: '10px 16px',
                     border: 'none',
-                    background: selectedLang === lang.name ? 'var(--bg-secondary)' : 'transparent',
-                    color: 'var(--text-primary)',
+                    background: selectedLang === lang.name ? '#f3f4f6' : 'transparent',
+                    color: selectedLang === lang.name ? '#111827' : '#6b7280',
                     textAlign: 'left',
                     cursor: 'pointer',
-                    fontSize: '13px',
+                    fontSize: '14px',
+                    fontWeight: selectedLang === lang.name ? 500 : 400,
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
-                    transition: 'background 0.2s'
+                    gap: '10px',
+                    transition: 'all 0.15s ease'
                   }}
                   onMouseEnter={(e) => {
                     if (selectedLang !== lang.name) {
-                      e.currentTarget.style.background = 'var(--bg-secondary)'
+                      e.currentTarget.style.background = '#f9fafb'
+                      e.currentTarget.style.color = '#111827'
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (selectedLang !== lang.name) {
                       e.currentTarget.style.background = 'transparent'
+                      e.currentTarget.style.color = '#6b7280'
                     }
                   }}
                 >
-                  <span>{lang.icon}</span>
+                  <span style={{ fontSize: '16px' }}>{lang.icon}</span>
                   <span>{lang.name}</span>
+                  {selectedLang === lang.name && (
+                    <span style={{ marginLeft: 'auto', color: '#3b82f6', fontSize: '18px' }}>✓</span>
+                  )}
                 </button>
               ))}
             </div>
@@ -232,51 +238,53 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            background: 'rgba(255, 255, 255, 0.2)', 
-            border: '1px solid rgba(255, 255, 255, 0.3)', 
-            padding: '6px 12px', 
+            background: '#ffffff', 
+            border: '1px solid #d1d5db', 
+            padding: '7px 12px', 
             borderRadius: '6px', 
-            fontSize: '12px',
-            color: '#ffffff',
+            fontSize: '13px',
+            color: '#6b7280',
             cursor: 'pointer',
-            transition: 'all 0.2s',
+            transition: 'all 0.15s ease',
             fontWeight: 500
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)'
+            e.currentTarget.style.background = '#f9fafb'
+            e.currentTarget.style.borderColor = '#9ca3af'
+            e.currentTarget.style.color = '#374151'
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)'
+            e.currentTarget.style.background = '#ffffff'
+            e.currentTarget.style.borderColor = '#d1d5db'
+            e.currentTarget.style.color = '#6b7280'
           }}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
           </svg>
           <span>Copy</span>
         </button>
       </div>
       
       <div className="code-content" style={{ 
-        padding: '24px', 
-        fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace', 
-        fontSize: '13px', 
-        background: '#0a0e27', 
-        color: '#e2e8f0', 
+        padding: '20px', 
+        fontFamily: '"SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro", monospace', 
+        fontSize: '13.5px', 
+        background: '#f8f9fa', 
+        color: '#1f2937', 
         overflowX: 'auto',
-        lineHeight: 1.8,
-        minHeight: '160px',
+        lineHeight: 1.65,
+        minHeight: '140px',
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
         width: '100%',
         boxSizing: 'border-box',
-        borderRadius: '0 0 12px 12px'
+        borderRadius: '0 0 16px 16px'
       }}>
         <div style={{ 
-          color: '#f1f5f9',
-          fontWeight: 400,
-          textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)' 
+          color: '#374151',
+          fontWeight: 400
         }}>
           {children}
         </div>
@@ -384,11 +392,11 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
   
   const content = (
     <div className="response-example-container" style={{ 
-      marginBottom: '16px',
-      background: 'var(--bg-primary)',
-      borderRadius: '12px',
-      border: '1px solid var(--border-color)',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+      marginBottom: '20px',
+      background: '#ffffff',
+      borderRadius: '16px',
+      border: '1px solid #e5e7eb',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
       overflow: 'hidden',
       width: '100%',
       minWidth: 0,
@@ -396,9 +404,9 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
       maxWidth: containerWidth ? `${containerWidth - 40}px` : '100%'
     }}>
       <div className="response-header" style={{ 
-        background: 'var(--bg-secondary)', 
-        padding: '10px 14px', 
-        borderBottom: '1px solid var(--border-color)',
+        background: '#f9fafb', 
+        padding: '14px 20px', 
+        borderBottom: '1px solid #e5e7eb',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -409,24 +417,28 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
               key={status.code}
               onClick={() => setSelectedStatus(status.code)}
               style={{
-                background: selectedStatus === status.code ? status.color : 'transparent',
-                color: selectedStatus === status.code ? 'white' : status.color,
-                border: `1px solid ${status.color}`,
-                padding: '4px 8px',
-                borderRadius: '4px',
-                fontSize: '12px',
+                background: selectedStatus === status.code ? '#111827' : 'transparent',
+                color: selectedStatus === status.code ? '#ffffff' : '#6b7280',
+                border: selectedStatus === status.code ? '1px solid #111827' : '1px solid #e5e7eb',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                fontSize: '13px',
                 fontWeight: 600,
                 cursor: 'pointer',
-                transition: 'all 0.2s'
+                transition: 'all 0.15s ease'
               }}
               onMouseEnter={(e) => {
                 if (selectedStatus !== status.code) {
-                  e.currentTarget.style.background = status.color + '20'
+                  e.currentTarget.style.background = '#f3f4f6'
+                  e.currentTarget.style.color = '#111827'
+                  e.currentTarget.style.borderColor = '#d1d5db'
                 }
               }}
               onMouseLeave={(e) => {
                 if (selectedStatus !== status.code) {
                   e.currentTarget.style.background = 'transparent'
+                  e.currentTarget.style.color = '#6b7280'
+                  e.currentTarget.style.borderColor = '#e5e7eb'
                 }
               }}
             >
@@ -436,7 +448,7 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
         </div>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '12px', color: '#6b7280' }}>Response</span>
+          <span style={{ fontSize: '13px', color: '#9ca3af', fontWeight: 500 }}>Response</span>
           <button className="copy-response-button" 
             onClick={() => {
               const textContent = typeof children === 'string' ? children : 
@@ -459,26 +471,30 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              background: 'transparent', 
+              background: '#ffffff', 
               border: '1px solid #d1d5db', 
-              padding: '6px 10px', 
+              padding: '7px 12px', 
               borderRadius: '6px', 
-              fontSize: '12px',
+              fontSize: '13px',
               color: '#6b7280',
               cursor: 'pointer',
-              transition: 'all 0.2s'
+              transition: 'all 0.15s ease',
+              fontWeight: 500
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#f3f4f6'
+              e.currentTarget.style.background = '#f9fafb'
               e.currentTarget.style.borderColor = '#9ca3af'
+              e.currentTarget.style.color = '#374151'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent'
+              e.currentTarget.style.background = '#ffffff'
               e.currentTarget.style.borderColor = '#d1d5db'
+              e.currentTarget.style.color = '#6b7280'
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
             </svg>
             <span>Copy</span>
           </button>
@@ -487,20 +503,21 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
       
       <div className="response-content" style={{ 
         padding: '20px', 
-        fontFamily: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace', 
-        fontSize: '13px', 
-        background: '#0f172a', 
-        color: '#e2e8f0', 
+        fontFamily: '"SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro", monospace', 
+        fontSize: '13.5px', 
+        background: '#f8f9fa', 
+        color: '#1f2937', 
         overflowX: 'auto',
-        lineHeight: 1.7,
+        lineHeight: 1.65,
         minHeight: '120px',
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
         width: '100%',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        borderRadius: '0 0 16px 16px'
       }}>
         <div style={{ 
-          color: '#cbd5e1',
+          color: '#374151',
           fontWeight: 400 
         }}>
           {children}
