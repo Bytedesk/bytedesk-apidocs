@@ -106,9 +106,9 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
   const content = (
     <div className="code-example-container" style={{ 
       marginBottom: '20px',
-      background: '#ffffff',
+      background: 'var(--vocs-color_background, #ffffff)',
       borderRadius: '16px',
-      border: '1px solid #e5e7eb',
+      border: '1px solid var(--vocs-color_border, #e5e7eb)',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
       overflow: 'hidden',
       width: '100%',
@@ -117,9 +117,9 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
       maxWidth: containerWidth ? `${containerWidth - 40}px` : '100%'
     }}>
       <div className="example-header" style={{ 
-        background: '#f9fafb', 
+        background: 'var(--vocs-color_backgroundDark, #f9fafb)', 
         padding: '14px 20px', 
-        borderBottom: '1px solid #e5e7eb',
+        borderBottom: '1px solid var(--vocs-color_border, #e5e7eb)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -131,13 +131,13 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
-              background: '#ffffff', 
-              border: '1px solid #d1d5db', 
+              background: 'var(--vocs-color_background, #ffffff)', 
+              border: '1px solid var(--vocs-color_border, #d1d5db)', 
               padding: '8px 16px', 
               borderRadius: '8px', 
               fontSize: '14px',
               fontWeight: 500,
-              color: '#374151',
+              color: 'var(--vocs-color_text, #374151)',
               cursor: 'pointer',
               transition: 'all 0.15s ease',
               boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
@@ -162,8 +162,8 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
               top: '100%',
               left: 0,
               minWidth: '180px',
-              background: '#ffffff',
-              border: '1px solid #e5e7eb',
+              background: 'var(--vocs-color_background, #ffffff)',
+              border: '1px solid var(--vocs-color_border, #e5e7eb)',
               borderRadius: '10px',
               marginTop: '8px',
               boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -181,8 +181,8 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
                     width: '100%',
                     padding: '10px 16px',
                     border: 'none',
-                    background: selectedLang === lang.name ? '#f3f4f6' : 'transparent',
-                    color: selectedLang === lang.name ? '#111827' : '#6b7280',
+                    background: selectedLang === lang.name ? 'var(--vocs-color_backgroundDark, #f3f4f6)' : 'transparent',
+                    color: selectedLang === lang.name ? 'var(--vocs-color_text, #111827)' : 'var(--vocs-color_textSecondary, #6b7280)',
                     textAlign: 'left',
                     cursor: 'pointer',
                     fontSize: '14px',
@@ -238,12 +238,12 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            background: '#ffffff', 
-            border: '1px solid #d1d5db', 
+            background: 'var(--vocs-color_background, #ffffff)', 
+            border: '1px solid var(--vocs-color_border, #d1d5db)', 
             padding: '7px 12px', 
             borderRadius: '6px', 
             fontSize: '13px',
-            color: '#6b7280',
+            color: 'var(--vocs-color_textSecondary, #6b7280)',
             cursor: 'pointer',
             transition: 'all 0.15s ease',
             fontWeight: 500
@@ -271,8 +271,8 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
         padding: '20px', 
         fontFamily: '"SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro", monospace', 
         fontSize: '13.5px', 
-        background: '#f8f9fa', 
-        color: '#1f2937', 
+        background: 'var(--vocs-color_codeBackground, #f8f9fa)', 
+        color: 'var(--vocs-color_codeText, #1f2937)', 
         overflowX: 'auto',
         lineHeight: 1.65,
         minHeight: '140px',
@@ -282,12 +282,7 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
         boxSizing: 'border-box',
         borderRadius: '0 0 16px 16px'
       }}>
-        <div style={{ 
-          color: '#374151',
-          fontWeight: 400
-        }}>
-          {children}
-        </div>
+        {children}
       </div>
     </div>
   )
@@ -393,9 +388,9 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
   const content = (
     <div className="response-example-container" style={{ 
       marginBottom: '20px',
-      background: '#ffffff',
+      background: 'var(--vocs-color_background, #ffffff)',
       borderRadius: '16px',
-      border: '1px solid #e5e7eb',
+      border: '1px solid var(--vocs-color_border, #e5e7eb)',
       boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
       overflow: 'hidden',
       width: '100%',
@@ -404,9 +399,9 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
       maxWidth: containerWidth ? `${containerWidth - 40}px` : '100%'
     }}>
       <div className="response-header" style={{ 
-        background: '#f9fafb', 
+        background: 'var(--vocs-color_backgroundDark, #f9fafb)', 
         padding: '14px 20px', 
-        borderBottom: '1px solid #e5e7eb',
+        borderBottom: '1px solid var(--vocs-color_border, #e5e7eb)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -417,9 +412,9 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
               key={status.code}
               onClick={() => setSelectedStatus(status.code)}
               style={{
-                background: selectedStatus === status.code ? '#111827' : 'transparent',
-                color: selectedStatus === status.code ? '#ffffff' : '#6b7280',
-                border: selectedStatus === status.code ? '1px solid #111827' : '1px solid #e5e7eb',
+                background: selectedStatus === status.code ? 'var(--vocs-color_text, #111827)' : 'transparent',
+                color: selectedStatus === status.code ? 'var(--vocs-color_background, #ffffff)' : 'var(--vocs-color_textSecondary, #6b7280)',
+                border: selectedStatus === status.code ? '1px solid var(--vocs-color_text, #111827)' : '1px solid var(--vocs-color_border, #e5e7eb)',
                 padding: '6px 12px',
                 borderRadius: '6px',
                 fontSize: '13px',
@@ -448,7 +443,7 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
         </div>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '13px', color: '#9ca3af', fontWeight: 500 }}>Response</span>
+          <span style={{ fontSize: '13px', color: 'var(--vocs-color_textSecondary, #9ca3af)', fontWeight: 500 }}>Response</span>
           <button className="copy-response-button" 
             onClick={() => {
               const textContent = typeof children === 'string' ? children : 
@@ -505,8 +500,8 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
         padding: '20px', 
         fontFamily: '"SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Source Code Pro", monospace', 
         fontSize: '13.5px', 
-        background: '#f8f9fa', 
-        color: '#1f2937', 
+        background: 'var(--vocs-color_codeBackground, #f8f9fa)', 
+        color: 'var(--vocs-color_codeText, #1f2937)', 
         overflowX: 'auto',
         lineHeight: 1.65,
         minHeight: '120px',
@@ -516,12 +511,7 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
         boxSizing: 'border-box',
         borderRadius: '0 0 16px 16px'
       }}>
-        <div style={{ 
-          color: '#374151',
-          fontWeight: 400 
-        }}>
-          {children}
-        </div>
+        {children}
       </div>
     </div>
   )

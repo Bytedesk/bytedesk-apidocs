@@ -1,0 +1,67 @@
+/* 主题变量定义 - 支持深色和浅色模式 */
+
+:root {
+  /* 浅色主题（默认） */
+  --vocs-color_background: #ffffff;
+  --vocs-color_backgroundDark: #f9fafb;
+  --vocs-color_border: #e5e7eb;
+  --vocs-color_text: #374151;
+  --vocs-color_textSecondary: #6b7280;
+  --vocs-color_textTertiary: #9ca3af;
+  --vocs-color_codeBackground: #f8f9fa;
+  --vocs-color_codeText: #1f2937;
+  --vocs-color_success: #d1fae5;
+  --vocs-color_successText: #065f46;
+  --vocs-color_error: #fee2e2;
+  --vocs-color_errorText: #991b1b;
+}
+
+/* 深色主题 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --vocs-color_background: #1f2937;
+    --vocs-color_backgroundDark: #111827;
+    --vocs-color_border: #374151;
+    --vocs-color_text: #f9fafb;
+    --vocs-color_textSecondary: #d1d5db;
+    --vocs-color_textTertiary: #9ca3af;
+    --vocs-color_codeBackground: #0f172a;
+    --vocs-color_codeText: #e2e8f0;
+    --vocs-color_success: #064e3b;
+    --vocs-color_successText: #d1fae5;
+    --vocs-color_error: #7f1d1d;
+    --vocs-color_errorText: #fecaca;
+  }
+}
+
+/* 强制深色模式类（可选） */
+[data-theme="dark"] {
+  --vocs-color_background: #1f2937;
+  --vocs-color_backgroundDark: #111827;
+  --vocs-color_border: #374151;
+  --vocs-color_text: #f9fafb;
+  --vocs-color_textSecondary: #d1d5db;
+  --vocs-color_textTertiary: #9ca3af;
+  --vocs-color_codeBackground: #0f172a;
+  --vocs-color_codeText: #e2e8f0;
+  --vocs-color_success: #064e3b;
+  --vocs-color_successText: #d1fae5;
+  --vocs-color_error: #7f1d1d;
+  --vocs-color_errorText: #fecaca;
+}
+
+/* 强制浅色模式类（可选） */
+[data-theme="light"] {
+  --vocs-color_background: #ffffff;
+  --vocs-color_backgroundDark: #f9fafb;
+  --vocs-color_border: #e5e7eb;
+  --vocs-color_text: #374151;
+  --vocs-color_textSecondary: #6b7280;
+  --vocs-color_textTertiary: #9ca3af;
+  --vocs-color_codeBackground: #f8f9fa;
+  --vocs-color_codeText: #1f2937;
+  --vocs-color_success: #d1fae5;
+  --vocs-color_successText: #065f46;
+  --vocs-color_error: #fee2e2;
+  --vocs-color_errorText: #991b1b;
+}

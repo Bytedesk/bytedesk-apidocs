@@ -6,6 +6,7 @@ import App from './pages/App'
 import { mdxComponents } from './mdx-components'
 import { I18nProvider } from './components/I18nProvider'
 import './styles.css'
+import './theme.css'
 import 'antd/dist/reset.css'
 
 createRoot(document.getElementById('root')!).render(
