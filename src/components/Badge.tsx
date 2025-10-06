@@ -12,11 +12,15 @@ export function Badge({ page }: BadgeProps) {
     list: 'get',
     profile: 'get',
     'query-org': 'get',
+    'list-calls': 'get',           // 呼叫中心 - 呼叫列表
+    'list-recordings': 'get',      // 呼叫中心 - 录音列表
+    'download-recording': 'get',   // 呼叫中心 - 下载录音
     create: 'post', 
     send: 'post',
     login: 'post',
     register: 'post',
-    'chat-completions': 'post',  // AI Chat Completions 接口
+    'chat-completions': 'post',    // AI Chat Completions 接口
+    'make-call': 'post',           // 呼叫中心 - 发起呼叫
     delete: 'del', 
     webhook: 'hook' 
   }

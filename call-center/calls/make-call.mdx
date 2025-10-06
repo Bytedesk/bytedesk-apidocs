@@ -1,0 +1,135 @@
+---
+title: '发起呼叫'
+openapi: 'post /api/v1/call/make'
+---
+
+# 发起呼叫
+
+发起一个呼叫中心通话请求。
+
+<RequestExample>
+
+```bash cURL
+curl --location --request POST 'https://api.weiyuai.cn/api/v1/call/make' \
+--header 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "phoneNumber": "+86-13800138000",
+  "callerId": "service_001",
+  "type": "outbound"
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/call/make"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+    "Content-Type": "application/json"
+}
+payload = {
+    "phoneNumber": "+86-13800138000",
+    "callerId": "service_001",
+    "type": "outbound"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+const axios = require('axios');
+
+const url = 'https://api.weiyuai.cn/api/v1/call/make';
+const headers = {
+  'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+  'Content-Type': 'application/json'
+};
+const data = {
+  phoneNumber: '+86-13800138000',
+  callerId: 'service_001',
+  type: 'outbound'
+};
+
+axios.post(url, data, { headers })
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "code": 200,
+  "message": "Call initiated successfully",
+  "data": {
+    "callId": "call_1234567890",
+    "phoneNumber": "+86-13800138000",
+    "status": "ringing",
+    "createdAt": "2025-10-06T10:30:00Z"
+  }
+}
+```
+
+```json 400 Bad Request
+{
+  "code": 400,
+  "message": "Invalid phone number format"
+}
+```
+
+```json 401 Unauthorized
+{
+  "code": 401,
+  "message": "Invalid or expired access token"
+}
+```
+
+</ResponseExample>
+
+## 请求参数
+
+<ParamField path="phoneNumber" type="string" required>
+  被叫号码，需要包含国家代码
+</ParamField>
+
+<ParamField path="callerId" type="string" required>
+  呼叫发起者的ID
+</ParamField>
+
+<ParamField path="type" type="string" required>
+  呼叫类型：`inbound`（呼入）或 `outbound`（呼出）
+</ParamField>
+
+<ParamField path="metadata" type="object">
+  附加元数据，可用于业务标识
+</ParamField>
+
+## 响应字段
+
+<ResponseField name="callId" type="string">
+  呼叫会话的唯一标识符
+</ResponseField>
+
+<ResponseField name="phoneNumber" type="string">
+  被叫号码
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  呼叫状态：`ringing`（振铃中）、`connected`（已接通）、`ended`（已结束）
+</ResponseField>
+
+<ResponseField name="createdAt" type="string">
+  呼叫创建时间（ISO 8601格式）
+</ResponseField>
+
+## 使用 ApiPlayground 测试
+
+<ApiPlayground
+  method="POST"
+  endpoint="/api/v1/call/make"
+  description="发起呼叫"
+/>

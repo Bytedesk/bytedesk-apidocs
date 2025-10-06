@@ -51,6 +51,14 @@
     {
       "name": "tickets",
       "description": "工单（Ticket）相关"
+    },
+    {
+      "name": "calls",
+      "description": "呼叫中心 - 通话管理"
+    },
+    {
+      "name": "recordings",
+      "description": "呼叫中心 - 录音管理"
     }
   ],
   "security": [
@@ -601,6 +609,277 @@
           }
         }
       }
+    },
+    "/api/v1/call/make": {
+      "post": {
+        "tags": ["calls"],
+        "summary": "发起呼叫",
+        "description": "发起一个呼叫中心通话请求",
+        "operationId": "makeCall",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CallRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "呼叫发起成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/call/list": {
+      "get": {
+        "tags": ["calls"],
+        "summary": "呼叫列表",
+        "description": "获取呼叫中心的呼叫记录列表",
+        "operationId": "listCalls",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["ringing", "connected", "completed", "failed"]
+            }
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CallListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/recording/list": {
+      "get": {
+        "tags": ["recordings"],
+        "summary": "录音列表",
+        "description": "获取呼叫录音列表",
+        "operationId": "listRecordings",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "callId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "录音列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordingListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/recording/download/{recordingId}": {
+      "get": {
+        "tags": ["recordings"],
+        "summary": "下载录音",
+        "description": "下载指定的呼叫录音文件",
+        "operationId": "downloadRecording",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "recordingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "录音文件的唯一标识符"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "二进制音频文件流",
+            "content": {
+              "audio/mpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "audio/wav": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "录音不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1066,6 +1345,206 @@
           }
         },
         "required": ["error", "message"]
+      },
+      "CallRequest": {
+        "type": "object",
+        "properties": {
+          "phoneNumber": {
+            "type": "string",
+            "description": "被叫号码，需要包含国家代码"
+          },
+          "callerId": {
+            "type": "string",
+            "description": "呼叫发起者的ID"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["inbound", "outbound"],
+            "description": "呼叫类型"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "附加元数据"
+          }
+        },
+        "required": ["phoneNumber", "callerId", "type"]
+      },
+      "CallResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "callId": {
+                "type": "string",
+                "description": "呼叫会话的唯一标识符"
+              },
+              "phoneNumber": {
+                "type": "string",
+                "description": "被叫号码"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["ringing", "connected", "ended"],
+                "description": "呼叫状态"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time",
+                "description": "呼叫创建时间"
+              }
+            }
+          }
+        }
+      },
+      "Call": {
+        "type": "object",
+        "properties": {
+          "callId": {
+            "type": "string",
+            "description": "呼叫ID"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "被叫号码"
+          },
+          "callerId": {
+            "type": "string",
+            "description": "呼叫发起者ID"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["inbound", "outbound"],
+            "description": "呼叫类型"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ringing", "connected", "completed", "failed"],
+            "description": "呼叫状态"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "通话时长（秒）"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "开始时间"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "结束时间"
+          }
+        }
+      },
+      "CallListResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "calls": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Call"
+                }
+              },
+              "pagination": {
+                "$ref": "#/components/schemas/Pagination"
+              }
+            }
+          }
+        }
+      },
+      "Recording": {
+        "type": "object",
+        "properties": {
+          "recordingId": {
+            "type": "string",
+            "description": "录音ID"
+          },
+          "callId": {
+            "type": "string",
+            "description": "关联的呼叫ID"
+          },
+          "url": {
+            "type": "string",
+            "description": "录音文件下载地址"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "录音时长（秒）"
+          },
+          "size": {
+            "type": "integer",
+            "description": "文件大小（字节）"
+          },
+          "format": {
+            "type": "string",
+            "enum": ["mp3", "wav"],
+            "description": "录音格式"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "创建时间"
+          }
+        }
+      },
+      "RecordingListResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "recordings": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Recording"
+                }
+              },
+              "pagination": {
+                "$ref": "#/components/schemas/Pagination"
+              }
+            }
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "description": "当前页码"
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "每页数量"
+          },
+          "total": {
+            "type": "integer",
+            "description": "总数"
+          }
+        }
       }
     }
   }

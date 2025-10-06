@@ -1,0 +1,156 @@
+---
+title: '录音列表'
+openapi: 'get /api/v1/recording/list'
+---
+
+# 录音列表
+
+获取呼叫录音列表。
+
+<RequestExample>
+
+```bash cURL
+curl --location --request GET 'https://api.weiyuai.cn/api/v1/recording/list?page=1&pageSize=20' \
+--header 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/recording/list"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+}
+params = {
+    "page": 1,
+    "pageSize": 20
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```javascript JavaScript
+const axios = require('axios');
+
+const url = 'https://api.weiyuai.cn/api/v1/recording/list';
+const headers = {
+  'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+};
+const params = {
+  page: 1,
+  pageSize: 20
+};
+
+axios.get(url, { headers, params })
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "recordings": [
+      {
+        "recordingId": "rec_1234567890",
+        "callId": "call_1234567890",
+        "url": "https://cdn.weiyuai.cn/recordings/rec_1234567890.mp3",
+        "duration": 180,
+        "size": 2048576,
+        "format": "mp3",
+        "createdAt": "2025-10-06T10:33:00Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 20,
+      "total": 50
+    }
+  }
+}
+```
+
+```json 401 Unauthorized
+{
+  "code": 401,
+  "message": "Invalid or expired access token"
+}
+```
+
+</ResponseExample>
+
+## 查询参数
+
+<ParamField query="page" type="number" default="1">
+  页码
+</ParamField>
+
+<ParamField query="pageSize" type="number" default="20">
+  每页数量
+</ParamField>
+
+<ParamField query="callId" type="string">
+  筛选指定呼叫的录音
+</ParamField>
+
+<ParamField query="startTime" type="string">
+  开始时间（ISO 8601格式）
+</ParamField>
+
+<ParamField query="endTime" type="string">
+  结束时间（ISO 8601格式）
+</ParamField>
+
+## 响应字段
+
+<ResponseField name="recordings" type="array">
+  录音记录数组
+  
+  <Expandable title="Recording Object">
+    <ResponseField name="recordingId" type="string">
+      录音ID
+    </ResponseField>
+    
+    <ResponseField name="callId" type="string">
+      关联的呼叫ID
+    </ResponseField>
+    
+    <ResponseField name="url" type="string">
+      录音文件下载地址
+    </ResponseField>
+    
+    <ResponseField name="duration" type="number">
+      录音时长（秒）
+    </ResponseField>
+    
+    <ResponseField name="size" type="number">
+      文件大小（字节）
+    </ResponseField>
+    
+    <ResponseField name="format" type="string">
+      录音格式（mp3/wav）
+    </ResponseField>
+    
+    <ResponseField name="createdAt" type="string">
+      创建时间
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="pagination" type="object">
+  分页信息
+</ResponseField>
+
+## 使用 ApiPlayground 测试
+
+<ApiPlayground
+  method="GET"
+  endpoint="/api/v1/recording/list"
+  description="获取录音列表"
+/>

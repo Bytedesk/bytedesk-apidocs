@@ -13,6 +13,7 @@
   --border-color: #e5e7eb;
   --topbar-bg: #ffffff;
   --sidebar-bg: #ffffff;
+  --hover-bg: #f3f4f6;
   --code-bg: #0f172a;
 }
 
@@ -26,6 +27,7 @@
   --border-color: #374151;
   --topbar-bg: #1f2937;
   --sidebar-bg: #111827;
+  --hover-bg: #374151;
   --code-bg: #0f172a;
 }
 * { box-sizing: border-box; }

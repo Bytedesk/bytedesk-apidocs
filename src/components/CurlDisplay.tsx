@@ -36,8 +36,11 @@ export const CurlDisplay: React.FC<CurlDisplayProps> = ({
         background: theme === 'dark' ? '#1a1b26' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         borderRadius: '16px',
         border: 'none',
-        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2), 0 6px 10px rgba(0, 0, 0, 0.15)',
-        overflow: 'hidden'
+        boxShadow: theme === 'dark' 
+          ? '0 10px 25px rgba(0, 0, 0, 0.2), 0 6px 10px rgba(0, 0, 0, 0.15)'
+          : '0 10px 30px rgba(102, 126, 234, 0.4), 0 0 60px rgba(118, 75, 162, 0.25), 0 4px 15px rgba(0, 0, 0, 0.1)',
+        overflow: 'hidden',
+        position: 'relative' as const
       }}
     >
       {/* Header */}

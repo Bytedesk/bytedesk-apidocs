@@ -1,0 +1,90 @@
+---
+title: '下载录音'
+openapi: 'get /api/v1/recording/download/{recordingId}'
+---
+
+# 下载录音
+
+下载指定的呼叫录音文件。
+
+<RequestExample>
+
+```bash cURL
+curl --location --request GET 'https://api.weiyuai.cn/api/v1/recording/download/rec_1234567890' \
+--header 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+--output recording.mp3
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/recording/download/rec_1234567890"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+}
+
+response = requests.get(url, headers=headers, stream=True)
+with open('recording.mp3', 'wb') as f:
+    for chunk in response.iter_content(chunk_size=8192):
+        f.write(chunk)
+```
+
+```javascript JavaScript
+const axios = require('axios');
+const fs = require('fs');
+
+const url = 'https://api.weiyuai.cn/api/v1/recording/download/rec_1234567890';
+const headers = {
+  'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+};
+
+axios.get(url, { headers, responseType: 'stream' })
+  .then(response => {
+    response.data.pipe(fs.createWriteStream('recording.mp3'));
+  })
+  .catch(error => console.error(error));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```text 200 Success
+Binary audio file content (MP3/WAV format)
+```
+
+```json 404 Not Found
+{
+  "code": 404,
+  "message": "Recording not found"
+}
+```
+
+```json 401 Unauthorized
+{
+  "code": 401,
+  "message": "Invalid or expired access token"
+}
+```
+
+</ResponseExample>
+
+## 路径参数
+
+<ParamField path="recordingId" type="string" required>
+  录音文件的唯一标识符
+</ParamField>
+
+## 响应说明
+
+成功时返回二进制音频文件流，文件格式由 Content-Type header 指定：
+- `audio/mpeg` - MP3 格式
+- `audio/wav` - WAV 格式
+
+## 使用 ApiPlayground 测试
+
+<ApiPlayground
+  method="GET"
+  endpoint="/api/v1/recording/download/rec_1234567890"
+  description="下载录音文件"
+/>

@@ -11,7 +11,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "API Documentation",
+        "tab": "在线客服",
         "groups": [
           {
             "group": "Introduction",
@@ -58,6 +58,25 @@
             "pages": [
               "api-reference/tickets/create",
               "api-reference/tickets/query-org"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "呼叫中心",
+        "groups": [
+          {
+            "group": "Calls",
+            "pages": [
+              "call-center/calls/make-call",
+              "call-center/calls/list-calls"
+            ]
+          },
+          {
+            "group": "Recordings",
+            "pages": [
+              "call-center/recordings/list-recordings",
+              "call-center/recordings/download-recording"
             ]
           }
         ]

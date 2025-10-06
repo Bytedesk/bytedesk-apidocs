@@ -9,6 +9,7 @@ const mdxModules = import.meta.glob([
   '../../essentials/**/*.mdx',
   '../../ai-tools/**/*.mdx',
   '../../api-reference/**/*.mdx',
+  '../../call-center/**/*.mdx',
   '../../snippets/**/*.mdx',
 ]) as Record<string, () => Promise<any>>
 
@@ -26,7 +27,7 @@ export function Page({ path, isMobile, examplesOpen, onCloseExamples }: PageProp
   const Mdx = React.useMemo(() => React.lazy(loader as any), [path])
   
   // Check if it's an API endpoint page
-  const isApiEndpoint = path.startsWith('api-reference/')
+  const isApiEndpoint = path.startsWith('api-reference/') || path.startsWith('call-center/')
   
   // Splitter size state to prevent drift
   const [sidebarSize, setSidebarSize] = React.useState(260)

@@ -1,0 +1,163 @@
+---
+title: '呼叫列表'
+openapi: 'get /api/v1/call/list'
+---
+
+# 呼叫列表
+
+获取呼叫中心的呼叫记录列表。
+
+<RequestExample>
+
+```bash cURL
+curl --location --request GET 'https://api.weiyuai.cn/api/v1/call/list?page=1&pageSize=20&status=completed' \
+--header 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/call/list"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+}
+params = {
+    "page": 1,
+    "pageSize": 20,
+    "status": "completed"
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```javascript JavaScript
+const axios = require('axios');
+
+const url = 'https://api.weiyuai.cn/api/v1/call/list';
+const headers = {
+  'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+};
+const params = {
+  page: 1,
+  pageSize: 20,
+  status: 'completed'
+};
+
+axios.get(url, { headers, params })
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "calls": [
+      {
+        "callId": "call_1234567890",
+        "phoneNumber": "+86-13800138000",
+        "callerId": "service_001",
+        "type": "outbound",
+        "status": "completed",
+        "duration": 180,
+        "startTime": "2025-10-06T10:30:00Z",
+        "endTime": "2025-10-06T10:33:00Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 20,
+      "total": 100
+    }
+  }
+}
+```
+
+```json 401 Unauthorized
+{
+  "code": 401,
+  "message": "Invalid or expired access token"
+}
+```
+
+</ResponseExample>
+
+## 查询参数
+
+<ParamField query="page" type="number" default="1">
+  页码
+</ParamField>
+
+<ParamField query="pageSize" type="number" default="20">
+  每页数量
+</ParamField>
+
+<ParamField query="status" type="string">
+  筛选呼叫状态：`ringing`、`connected`、`completed`、`failed`
+</ParamField>
+
+<ParamField query="startTime" type="string">
+  开始时间（ISO 8601格式）
+</ParamField>
+
+<ParamField query="endTime" type="string">
+  结束时间（ISO 8601格式）
+</ParamField>
+
+## 响应字段
+
+<ResponseField name="calls" type="array">
+  呼叫记录数组
+  
+  <Expandable title="Call Object">
+    <ResponseField name="callId" type="string">
+      呼叫ID
+    </ResponseField>
+    
+    <ResponseField name="phoneNumber" type="string">
+      被叫号码
+    </ResponseField>
+    
+    <ResponseField name="callerId" type="string">
+      呼叫发起者ID
+    </ResponseField>
+    
+    <ResponseField name="type" type="string">
+      呼叫类型
+    </ResponseField>
+    
+    <ResponseField name="status" type="string">
+      呼叫状态
+    </ResponseField>
+    
+    <ResponseField name="duration" type="number">
+      通话时长（秒）
+    </ResponseField>
+    
+    <ResponseField name="startTime" type="string">
+      开始时间
+    </ResponseField>
+    
+    <ResponseField name="endTime" type="string">
+      结束时间
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="pagination" type="object">
+  分页信息
+</ResponseField>
+
+## 使用 ApiPlayground 测试
+
+<ApiPlayground
+  method="GET"
+  endpoint="/api/v1/call/list"
+  description="获取呼叫列表"
+/>
