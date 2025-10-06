@@ -3,12 +3,15 @@ title: "POST 创建用户"
 openapi: "POST /users"
 ---
 
-<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-  <div>
-    <h1 style={{ margin: 0 }}>创建用户</h1>
-    <p style={{ margin: '8px 0 0 0', color: '#6B7280' }}>创建新用户账户，通常用于管理后台或批量用户导入场景</p>
-  </div>
-  <TryButton title="Try it" endpoint="https://api.weiyuai.cn/users" method="POST" apiTitle="创建用户" />
+## 概述
+
+创建新用户账户，通常用于管理后台或批量用户导入场景。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground 
+    method="POST"
+    endpoint="/users"
+  />
 </div>
 
 ## 接口说明

@@ -3,15 +3,16 @@ title: "GET 查询组织工单"
 openapi: "GET /ticket/query/org"
 ---
 
-<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-  <div>
-    <h1 style={{ margin: 0 }}>查询组织工单</h1>
-    <p style={{ margin: '8px 0 0 0', color: '#6B7280' }}>查询指定组织下的所有工单，用于组织管理员或客服人员查看和管理工单</p>
-  </div>
-  <TryButton title="Try it" endpoint="https://api.weiyuai.cn/tickets/v1/query/org" method="GET" apiTitle="查询组织工单" />
-      `;
-      modal.className = 'modal-overlay';
-      document.body.appendChild(modal);
+## 概述
+
+查询指定组织下的所有工单，用于组织管理员或客服人员查看和管理工单。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground 
+    method="GET"
+    endpoint="/tickets/v1/query/org"
+  />
+</div>
 
 
 </div>

@@ -3,12 +3,15 @@ title: "GET 用户个人信息"
 openapi: "GET /users/v1/profile"
 ---
 
-<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-  <div>
-    <h1 style={{ margin: 0 }}>用户个人信息</h1>
-    <p style={{ margin: '8px 0 0 0', color: '#6B7280' }}>获取当前登录用户的详细个人信息，包括基本资料和设置，需要身份验证</p>
-  </div>
-  <TryButton title="Try it" endpoint="https://api.weiyuai.cn/users/v1/profile" method="GET" apiTitle="用户个人信息" />
+## 概述
+
+获取当前登录用户的详细个人信息，包括基本资料和设置，需要身份验证。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground 
+    method="GET"
+    endpoint="/users/v1/profile"
+  />
 </div>
 
 ## 接口说明

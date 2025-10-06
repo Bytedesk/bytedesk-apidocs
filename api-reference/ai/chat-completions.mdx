@@ -1,5 +1,5 @@
 ---
-title: 'Chat Completions'
+title: 'POST Chat Completions'
 description: '创建 AI 聊天完成 - OpenAI 兼容接口'
 api: 'POST /api/v1/chat/completions'
 ---
@@ -7,6 +7,13 @@ api: 'POST /api/v1/chat/completions'
 ## 概述
 
 此接口完全兼容 OpenAI Chat Completions API 格式，支持流式和非流式响应。可以使用 OpenAI SDK 或任何兼容 OpenAI 格式的客户端直接调用。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground 
+    method="POST"
+    endpoint="/api/v1/chat/completions"
+  />
+</div>
 
 ## 认证
 
@@ -208,86 +215,9 @@ Authorization: Bearer YOUR_API_KEY
 
 ## 代码示例
 
-<CodeGroup>
+<RequestExample>
 
-```python Python
-import openai
-
-client = openai.OpenAI(
-    api_key="YOUR_API_KEY",
-    base_url="https://api.weiyuai.cn/api/v1"
-)
-
-# 非流式调用
-response = client.chat.completions.create(
-    model="bytedesk-ai",
-    messages=[
-        {"role": "system", "content": "你是一个有帮助的助手。"},
-        {"role": "user", "content": "解释一下什么是人工智能？"}
-    ],
-    temperature=0.7,
-    max_tokens=500
-)
-
-print(response.choices[0].message.content)
-
-# 流式调用
-stream = client.chat.completions.create(
-    model="bytedesk-ai",
-    messages=[
-        {"role": "system", "content": "你是一个有帮助的助手。"},
-        {"role": "user", "content": "写一首关于 AI 的短诗"}
-    ],
-    stream=True
-)
-
-for chunk in stream:
-    if chunk.choices[0].delta.content is not None:
-        print(chunk.choices[0].delta.content, end="")
-```
-
-```javascript JavaScript / TypeScript
-import OpenAI from 'openai';
-
-const openai = new OpenAI({
-  apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://api.weiyuai.cn/api/v1'
-});
-
-// 非流式调用
-async function chat() {
-  const completion = await openai.chat.completions.create({
-    model: 'bytedesk-ai',
-    messages: [
-      { role: 'system', content: '你是一个有帮助的助手。' },
-      { role: 'user', content: '解释一下什么是人工智能？' }
-    ],
-    temperature: 0.7,
-    max_tokens: 500
-  });
-
-  console.log(completion.choices[0].message.content);
-}
-
-// 流式调用
-async function streamChat() {
-  const stream = await openai.chat.completions.create({
-    model: 'bytedesk-ai',
-    messages: [
-      { role: 'system', content: '你是一个有帮助的助手。' },
-      { role: 'user', content: '写一首关于 AI 的短诗' }
-    ],
-    stream: true
-  });
-
-  for await (const chunk of stream) {
-    const content = chunk.choices[0]?.delta?.content || '';
-    process.stdout.write(content);
-  }
-}
-```
-
-```bash cURL - 非流式
+```bash cURL
 curl https://api.weiyuai.cn/api/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
@@ -308,40 +238,58 @@ curl https://api.weiyuai.cn/api/v1/chat/completions \
   }'
 ```
 
-```bash cURL - 流式
-curl https://api.weiyuai.cn/api/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -d '{
-    "model": "bytedesk-ai",
-    "messages": [
-      {
-        "role": "system",
-        "content": "你是一个有帮助的助手。"
-      },
-      {
-        "role": "user",
-        "content": "写一首关于 AI 的短诗"
-      }
+```python Python
+import openai
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.weiyuai.cn/api/v1"
+)
+
+response = client.chat.completions.create(
+    model="bytedesk-ai",
+    messages=[
+        {"role": "system", "content": "你是一个有帮助的助手。"},
+        {"role": "user", "content": "解释一下什么是人工智能？"}
     ],
-    "stream": true
-  }'
+    temperature=0.7,
+    max_tokens=500
+)
+
+print(response.choices[0].message.content)
+```
+
+```javascript JavaScript
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.weiyuai.cn/api/v1'
+});
+
+const completion = await openai.chat.completions.create({
+  model: 'bytedesk-ai',
+  messages: [
+    { role: 'system', content: '你是一个有帮助的助手。' },
+    { role: 'user', content: '解释一下什么是人工智能？' }
+  ],
+  temperature: 0.7,
+  max_tokens: 500
+});
+
+console.log(completion.choices[0].message.content);
 ```
 
 ```java Java
-import com.theokanning.openai.completion.chat.ChatCompletionRequest;
-import com.theokanning.openai.completion.chat.ChatMessage;
+import com.theokanning.openai.completion.chat.*;
 import com.theokanning.openai.service.OpenAiService;
-
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class ChatExample {
     public static void main(String[] args) {
         OpenAiService service = new OpenAiService("YOUR_API_KEY");
         service.setBaseUrl("https://api.weiyuai.cn/api/v1");
 
-        // 非流式调用
         List<ChatMessage> messages = Arrays.asList(
             new ChatMessage("system", "你是一个有帮助的助手。"),
             new ChatMessage("user", "解释一下什么是人工智能？")
@@ -374,7 +322,6 @@ func main() {
     config.BaseURL = "https://api.weiyuai.cn/api/v1"
     client := openai.NewClientWithConfig(config)
 
-    // 非流式调用
     resp, err := client.CreateChatCompletion(
         context.Background(),
         openai.ChatCompletionRequest{
@@ -403,13 +350,11 @@ func main() {
 }
 ```
 
-</CodeGroup>
+</RequestExample>
 
-## 响应示例
+<ResponseExample>
 
-### 非流式响应示例
-
-```json
+```json 200 成功响应
 {
   "id": "chatcmpl-abc123",
   "object": "chat.completion",
@@ -433,9 +378,43 @@ func main() {
 }
 ```
 
-### 流式响应示例
-
+```json 400 错误请求
+{
+  "error": {
+    "message": "Invalid request: missing required field 'messages'",
+    "type": "invalid_request_error",
+    "code": "missing_required_field"
+  }
+}
 ```
+
+```json 401 未授权
+{
+  "error": {
+    "message": "Invalid API key",
+    "type": "authentication_error",
+    "code": "invalid_api_key"
+  }
+}
+```
+
+```json 429 请求过多
+{
+  "error": {
+    "message": "Rate limit exceeded",
+    "type": "rate_limit_error",
+    "code": "rate_limit_exceeded"
+  }
+}
+```
+
+</ResponseExample>
+
+## 流式响应示例
+
+<ResponseExample>
+
+```json 流式数据块
 data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1677652288,"model":"bytedesk-ai","choices":[{"index":0,"delta":{"role":"assistant","content":""},"finish_reason":null}]}
 
 data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1677652288,"model":"bytedesk-ai","choices":[{"index":0,"delta":{"content":"人工"},"finish_reason":null}]}
@@ -444,16 +423,10 @@ data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1677652
 
 data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1677652288,"model":"bytedesk-ai","choices":[{"index":0,"delta":{"content":"（"},"finish_reason":null}]}
 
-...
-
 data: [DONE]
 ```
 
-## 错误响应
-
-### 错误示例
-
-```json
+```json 服务不可用
 {
   "error": {
     "message": "No chat model available",
@@ -463,6 +436,20 @@ data: [DONE]
   }
 }
 ```
+
+```json 内部错误
+{
+  "error": {
+    "message": "Internal server error",
+    "type": "internal_error",
+    "code": "internal_error"
+  }
+}
+```
+
+</ResponseExample>
+
+## 错误响应说明
 
 ### 常见错误类型
 

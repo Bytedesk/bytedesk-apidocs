@@ -3,12 +3,15 @@ title: "GET 查询用户列表"
 openapi: "GET /users"
 ---
 
-<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-  <div>
-    <h1 style={{ margin: 0 }}>查询用户列表</h1>
-    <p style={{ margin: '8px 0 0 0', color: '#6B7280' }}>分页查询用户列表，通常用于管理后台或用户管理功能</p>
-  </div>
-  <TryButton title="Try it" endpoint="https://api.weiyuai.cn/users" method="GET" apiTitle="查询用户列表" />
+## 概述
+
+分页查询用户列表，通常用于管理后台或用户管理功能。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground 
+    method="GET"
+    endpoint="/users"
+  />
 </div>
 
 ## 接口说明

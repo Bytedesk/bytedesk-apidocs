@@ -3,12 +3,15 @@ title: "POST 用户注册"
 openapi: "POST /auth/v1/register"
 ---
 
-<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-  <div>
-    <h1 style={{ margin: 0 }}>用户注册</h1>
-    <p style={{ margin: '8px 0 0 0', color: '#6B7280' }}>通过短信或邮箱验证码完成用户泣册，返回用户信息和访问令牌</p>
-  </div>
-  <TryButton title="Try it" endpoint="https://api.weiyuai.cn/auth/v1/register" method="POST" apiTitle="用户注册" />
+## 概述
+
+通过短信或邮箱验证码完成用户注册，返回用户信息和访问令牌。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground 
+    method="POST"
+    endpoint="/auth/v1/register"
+  />
 </div>
 
 ## 接口说明

@@ -3,12 +3,15 @@ title: "POST 发送消息"
 openapi: "POST /messages"
 ---
 
-<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-  <div>
-    <h1 style={{ margin: 0 }}>发送消息</h1>
-    <p style={{ margin: '8px 0 0 0', color: '#6B7280' }}>在指定会话中发送消息，支持文本、图片、文件等多种消息类型</p>
-  </div>
-  <TryButton title="Try it" endpoint="https://api.weiyuai.cn/api/v1/messages" method="POST" apiTitle="发送消息" />
+## 概述
+
+在指定会话中发送消息，支持文本、图片、文件等多种消息类型。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground 
+    method="POST"
+    endpoint="/api/v1/messages"
+  />
 </div>
 
 ## 接口说明

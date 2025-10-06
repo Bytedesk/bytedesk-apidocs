@@ -3,12 +3,15 @@ title: "POST 用户登录"
 openapi: "POST /auth/v1/login"
 ---
 
-<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-  <div>
-    <h1 style={{ margin: 0 }}>用户登录</h1>
-    <p style={{ margin: '8px 0 0 0', color: '#6B7280' }}>使用用户名和密码进行登录，返回访问令牌和用户信息</p>
-  </div>
-  <TryButton title="Try it" endpoint="https://api.weiyuai.cn/auth/v1/login" method="POST" />
+## 概述
+
+使用用户名和密码进行登录，返回访问令牌和用户信息。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground 
+    method="POST"
+    endpoint="/auth/v1/login"
+  />
 </div>
 
 ## 接口说明
