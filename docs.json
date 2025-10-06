@@ -52,13 +52,6 @@
             "pages": [
               "api/service/messages/send"
             ]
-          },
-          {
-            "group": "Tickets",
-            "pages": [
-              "api/service/tickets/create",
-              "api/service/tickets/query-org"
-            ]
           }
         ]
       },
@@ -87,6 +80,8 @@
           {
             "group": "Tickets",
             "pages": [
+              "api/ticket/create",
+              "api/ticket/query-org",
               "api/ticket/create-ticket",
               "api/ticket/list-tickets"
             ]
