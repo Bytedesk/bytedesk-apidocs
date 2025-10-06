@@ -8,11 +8,11 @@ const mdxModules = import.meta.glob([
   '../../*.mdx',
   '../../essentials/**/*.mdx',
   '../../ai-tools/**/*.mdx',
-  '../../api/online-service/**/*.mdx',
-  '../../api/call-center/**/*.mdx',
-  '../../api/ticket-system/**/*.mdx',
-  '../../api/knowledge-base/**/*.mdx',
-  '../../api/ai-qa/**/*.mdx',
+  '../../api/service/**/*.mdx',
+  '../../api/call/**/*.mdx',
+  '../../api/ticket/**/*.mdx',
+  '../../api/kbase/**/*.mdx',
+  '../../api/ai/**/*.mdx',
   '../../snippets/**/*.mdx',
 ]) as Record<string, () => Promise<any>>
 
@@ -31,7 +31,7 @@ export function Page({ path, isMobile, examplesOpen, onCloseExamples, activeTab 
   const Mdx = React.useMemo(() => React.lazy(loader as any), [path])
   
   // Check if it's an API endpoint page
-  const isApiEndpoint = path.startsWith('api/online-service/') || path.startsWith('api/call-center/') || path.startsWith('api/ticket-system/') || path.startsWith('api/knowledge-base/') || path.startsWith('api/ai-qa/')
+  const isApiEndpoint = path.startsWith('api/service/') || path.startsWith('api/call/') || path.startsWith('api/ticket/') || path.startsWith('api/kbase/') || path.startsWith('api/ai/')
   
   // Splitter size state to prevent drift
   const [sidebarSize, setSidebarSize] = React.useState(260)

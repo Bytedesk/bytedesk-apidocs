@@ -22,42 +22,42 @@
           {
             "group": "AI API",
             "pages": [
-              "api/online-service/ai/chat-completions"
+              "api/service/ai/chat-completions"
             ]
           },
           {
             "group": "Authentication",
             "pages": [
-              "api/online-service/auth/register",
-              "api/online-service/auth/login"
+              "api/service/auth/register",
+              "api/service/auth/login"
             ]
           },
           {
             "group": "Users",
             "pages": [
-              "api/online-service/users/profile",
-              "api/online-service/users/list",
-              "api/online-service/users/create"
+              "api/service/users/profile",
+              "api/service/users/list",
+              "api/service/users/create"
             ]
           },
           {
             "group": "Threads",
             "pages": [
-              "api/online-service/threads/list",
-              "api/online-service/threads/create"
+              "api/service/threads/list",
+              "api/service/threads/create"
             ]
           },
           {
             "group": "Messages",
             "pages": [
-              "api/online-service/messages/send"
+              "api/service/messages/send"
             ]
           },
           {
             "group": "Tickets",
             "pages": [
-              "api/online-service/tickets/create",
-              "api/online-service/tickets/query-org"
+              "api/service/tickets/create",
+              "api/service/tickets/query-org"
             ]
           }
         ]
@@ -68,15 +68,15 @@
           {
             "group": "Calls",
             "pages": [
-              "api/call-center/calls/make-call",
-              "api/call-center/calls/list-calls"
+              "api/call/calls/make-call",
+              "api/call/calls/list-calls"
             ]
           },
           {
             "group": "Recordings",
             "pages": [
-              "api/call-center/recordings/list-recordings",
-              "api/call-center/recordings/download-recording"
+              "api/call/recordings/list-recordings",
+              "api/call/recordings/download-recording"
             ]
           }
         ]
@@ -87,8 +87,8 @@
           {
             "group": "Tickets",
             "pages": [
-              "api/ticket-system/create-ticket",
-              "api/ticket-system/list-tickets"
+              "api/ticket/create-ticket",
+              "api/ticket/list-tickets"
             ]
           }
         ]
@@ -99,8 +99,8 @@
           {
             "group": "Articles",
             "pages": [
-              "api/knowledge-base/create-article",
-              "api/knowledge-base/search-articles"
+              "api/kbase/create-article",
+              "api/kbase/search-articles"
             ]
           }
         ]
@@ -111,8 +111,8 @@
           {
             "group": "Q&A",
             "pages": [
-              "api/ai-qa/ask-question",
-              "api/ai-qa/session-history"
+              "api/ai/ask-question",
+              "api/ai/session-history"
             ]
           }
         ]

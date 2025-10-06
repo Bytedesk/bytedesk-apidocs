@@ -25,9 +25,13 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({ style }) => 
         ...style 
       }}
       size="small"
-      bordered={false}
-      dropdownStyle={{
-        minWidth: 140
+      variant="borderless"
+      styles={{
+        popup: {
+          root: {
+            minWidth: 140
+          }
+        }
       }}
     >
       {locales.map((loc) => (

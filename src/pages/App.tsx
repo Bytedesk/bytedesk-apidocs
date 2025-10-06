@@ -14,16 +14,16 @@ export default function App() {
   // Determine active tab based on current path
   const getActiveTabIndex = () => {
     const current = location.pathname.replace(/^\/apidocs\//, '').replace(/^\//, '') || 'index'
-    if (current.startsWith('api/call-center/')) {
+    if (current.startsWith('api/call/')) {
       return 1 // 呼叫中心
     }
-    if (current.startsWith('api/ticket-system/')) {
+    if (current.startsWith('api/ticket/')) {
       return 2 // 工单系统
     }
-    if (current.startsWith('api/knowledge-base/')) {
+    if (current.startsWith('api/kbase/')) {
       return 3 // 知识库
     }
-    if (current.startsWith('api/ai-qa/')) {
+    if (current.startsWith('api/ai/')) {
       return 4 // AI问答
     }
     return 0 // 在线客服 (default)
@@ -41,7 +41,7 @@ export default function App() {
     setActiveTab(index)
     // Navigate to first page of the selected tab
     const firstPage = docs.navigation.tabs[index].groups[0].pages[0]
-    window.location.href = `/${firstPage}`
+    window.location.href = `/apidocs/${firstPage}`
   }
   
   // 检测移动端
