@@ -20,12 +20,6 @@
             ]
           },
           {
-            "group": "AI API",
-            "pages": [
-              "api/ai/chat-completions"
-            ]
-          },
-          {
             "group": "Authentication",
             "pages": [
               "api/core/auth/register",
@@ -103,6 +97,12 @@
       {
         "tab": "AI问答",
         "groups": [
+          {
+            "group": "AI API",
+            "pages": [
+              "api/ai/chat-completions"
+            ]
+          },
           {
             "group": "Q&A",
             "pages": [

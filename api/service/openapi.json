@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Bytedesk API",
-    "description": "Bytedesk（微语）系统 API 文档，基于 AccessToken 免登与 Bearer Token 鉴权。\n\n注意：以下接口按模块划分。免登接口多为网页重定向场景；REST 接口需在请求头携带 `Authorization: Bearer <token>`。",
+    "description": "Bytedesk（微语）系统 API 文档，基于 AccessToken 免登与 Bearer Token 鉴权。\n\n## 模块组织\n\n- **核心模块 (Core)**: 认证、用户管理等基础功能 \n- **业务服务 (Service)**: 会话、消息等业务逻辑\n- **AI 服务**: OpenAI 兼容的 AI 对话接口\n- **工单系统 (Ticket)**: 工单创建与管理\n- **呼叫中心 (Call)**: 通话与录音管理\n- **知识库 (KBase)**: 文章与搜索\n\n注意：免登接口多为网页重定向场景；REST 接口需在请求头携带 `Authorization: Bearer <token>`。",
     "termsOfService": "https://api.weiyuai.cn/terms.html",
     "contact": {
       "email": "270580156@qq.com"
@@ -20,45 +20,84 @@
   "servers": [
     {
       "url": "https://api.weiyuai.cn/api/v1",
-      "description": "API server (REST)"
+      "description": "生产环境 API 服务器 (REST)"
     },
     {
       "url": "https://api.weiyuai.cn",
-      "description": "Web app server (AccessToken 登录)"
+      "description": "生产环境 Web 应用服务器 (AccessToken 登录)"
+    }
+  ],
+  "x-tagGroups": [
+    {
+      "name": "AI 服务",
+      "tags": ["ai"]
+    },
+    {
+      "name": "核心模块",
+      "tags": ["auth", "users"]
+    },
+    {
+      "name": "业务服务",
+      "tags": ["threads", "messages"]
+    },
+    {
+      "name": "工单系统",
+      "tags": ["tickets"]
+    },
+    {
+      "name": "呼叫中心",
+      "tags": ["calls", "recordings"]
+    },
+    {
+      "name": "知识库",
+      "tags": ["kbase"]
     }
   ],
   "tags": [
     {
       "name": "ai",
-      "description": "AI 接口"
+      "description": "AI 接口",
+      "x-displayName": "AI API"
     },
     {
       "name": "auth",
-      "description": "认证与登录"
+      "description": "认证与登录（核心模块）",
+      "x-displayName": "Authentication"
     },
     {
       "name": "users",
-      "description": "用户相关"
+      "description": "用户管理（核心模块）",
+      "x-displayName": "Users"
     },
     {
       "name": "threads",
-      "description": "会话（Thread）相关"
+      "description": "会话管理（业务服务）",
+      "x-displayName": "Threads"
     },
     {
       "name": "messages",
-      "description": "消息相关"
+      "description": "消息服务（业务服务）",
+      "x-displayName": "Messages"
     },
     {
       "name": "tickets",
-      "description": "工单（Ticket）相关"
+      "description": "工单系统",
+      "x-displayName": "Tickets"
     },
     {
       "name": "calls",
-      "description": "呼叫中心 - 通话管理"
+      "description": "呼叫中心 - 通话管理",
+      "x-displayName": "Calls"
     },
     {
       "name": "recordings",
-      "description": "呼叫中心 - 录音管理"
+      "description": "呼叫中心 - 录音管理",
+      "x-displayName": "Recordings"
+    },
+    {
+      "name": "kbase",
+      "description": "知识库管理",
+      "x-displayName": "Knowledge Base"
     }
   ],
   "security": [
