@@ -15,7 +15,7 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
     const getContainer = () => {
       const elem = document.getElementById('api-examples-container')
       if (elem) {
-        console.log('RequestExample: Found container element')
+        // console.log('RequestExample: Found container element')
         setContainer(elem)
         return true
       } else {
@@ -318,7 +318,7 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
     const getContainer = () => {
       const elem = document.getElementById('api-examples-container')
       if (elem) {
-        console.log('ResponseExample: Found container element')
+        // console.log('ResponseExample: Found container element')
         setContainer(elem)
         return true
       } else {
