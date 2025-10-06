@@ -105,11 +105,11 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
   
   const content = (
     <div className="code-example-container" style={{ 
-      marginBottom: '16px',
-      background: 'var(--bg-primary)',
-      borderRadius: '12px',
-      border: '1px solid var(--border-color)',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+      marginBottom: '20px',
+      background: '#ffffff',
+      borderRadius: '16px',
+      border: '1px solid #e5e7eb',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
       overflow: 'hidden',
       width: '100%',
       minWidth: 0,
@@ -117,9 +117,9 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
       maxWidth: containerWidth ? `${containerWidth - 40}px` : '100%'
     }}>
       <div className="example-header" style={{ 
-        background: 'var(--bg-secondary)', 
-        padding: '10px 14px', 
-        borderBottom: '1px solid var(--border-color)',
+        background: '#f9fafb', 
+        padding: '14px 20px', 
+        borderBottom: '1px solid #e5e7eb',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between'
@@ -130,30 +130,30 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
             style={{ 
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
-              background: 'var(--bg-primary)', 
-              border: '1px solid var(--border-color)', 
-              padding: '8px 12px', 
+              gap: '10px',
+              background: '#ffffff', 
+              border: '1px solid #d1d5db', 
+              padding: '8px 16px', 
               borderRadius: '8px', 
-              fontSize: '13px',
+              fontSize: '14px',
               fontWeight: 500,
-              color: 'var(--text-primary)',
+              color: '#374151',
               cursor: 'pointer',
-              transition: 'all 0.2s',
+              transition: 'all 0.15s ease',
               boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--primary)'
-              e.currentTarget.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.1)'
+              e.currentTarget.style.borderColor = '#9ca3af'
+              e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-color)'
+              e.currentTarget.style.borderColor = '#d1d5db'
               e.currentTarget.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.05)'
             }}
           >
-            <span>{languages.find(l => l.name === selectedLang)?.icon}</span>
+            <span style={{ fontSize: '16px' }}>{languages.find(l => l.name === selectedLang)?.icon}</span>
             <span>{selectedLang}</span>
-            <span style={{ fontSize: '12px', marginLeft: '4px' }}>▼</span>
+            <span style={{ fontSize: '10px', marginLeft: '2px' }}>▼</span>
           </button>
           
           {showDropdown && (
@@ -161,12 +161,12 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
               position: 'absolute',
               top: '100%',
               left: 0,
-              right: 0,
-              background: 'var(--bg-primary)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '8px',
-              marginTop: '4px',
-              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+              minWidth: '180px',
+              background: '#ffffff',
+              border: '1px solid #e5e7eb',
+              borderRadius: '10px',
+              marginTop: '8px',
+              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1)',
               zIndex: 1000,
               overflow: 'hidden'
             }}>
@@ -232,22 +232,23 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            background: 'transparent', 
-            border: '1px solid #d1d5db', 
-            padding: '6px 10px', 
+            background: 'rgba(255, 255, 255, 0.2)', 
+            border: '1px solid rgba(255, 255, 255, 0.3)', 
+            padding: '6px 12px', 
             borderRadius: '6px', 
             fontSize: '12px',
-            color: '#6b7280',
+            color: '#ffffff',
             cursor: 'pointer',
-            transition: 'all 0.2s'
+            transition: 'all 0.2s',
+            fontWeight: 500
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#f3f4f6'
-            e.currentTarget.style.borderColor = '#9ca3af'
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'
+            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)'
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'transparent'
-            e.currentTarget.style.borderColor = '#d1d5db'
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)'
           }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -258,22 +259,24 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
       </div>
       
       <div className="code-content" style={{ 
-        padding: '20px', 
-        fontFamily: '"SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace', 
+        padding: '24px', 
+        fontFamily: '"JetBrains Mono", "Fira Code", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, monospace', 
         fontSize: '13px', 
-        background: selectedLang === 'cURL' ? '#0f172a' : '#1e293b', 
+        background: '#0a0e27', 
         color: '#e2e8f0', 
         overflowX: 'auto',
-        lineHeight: 1.7,
-        minHeight: '120px',
+        lineHeight: 1.8,
+        minHeight: '160px',
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
         width: '100%',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        borderRadius: '0 0 12px 12px'
       }}>
         <div style={{ 
-          color: selectedLang === 'cURL' ? '#94a3b8' : '#cbd5e1',
-          fontWeight: 400 
+          color: '#f1f5f9',
+          fontWeight: 400,
+          textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)' 
         }}>
           {children}
         </div>

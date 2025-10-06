@@ -29,6 +29,10 @@
   ],
   "tags": [
     {
+      "name": "ai",
+      "description": "AI 接口"
+    },
+    {
       "name": "auth",
       "description": "认证与登录"
     },
@@ -55,6 +59,71 @@
     }
   ],
   "paths": {
+    "/api/v1/chat/completions": {
+      "post": {
+        "tags": ["ai"],
+        "summary": "Chat Completions - OpenAI 兼容接口",
+        "description": "创建 AI 聊天完成，完全兼容 OpenAI Chat Completions API 格式，支持流式和非流式响应。",
+        "operationId": "createChatCompletion",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatCompletionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功响应",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatCompletionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "未授权",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "请求过多",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/login": {
       "get": {
         "tags": ["auth"],
@@ -818,6 +887,172 @@
           }
         },
         "required": ["id", "title", "status"]
+      },
+      "ChatCompletionRequest": {
+        "type": "object",
+        "properties": {
+          "model": {
+            "type": "string",
+            "description": "要使用的模型 ID",
+            "example": "bytedesk-ai"
+          },
+          "messages": {
+            "type": "array",
+            "description": "对话消息列表",
+            "items": {
+              "$ref": "#/components/schemas/ChatMessage"
+            }
+          },
+          "temperature": {
+            "type": "number",
+            "description": "控制输出的随机性，取值范围 0-2",
+            "default": 1,
+            "minimum": 0,
+            "maximum": 2
+          },
+          "top_p": {
+            "type": "number",
+            "description": "核采样参数",
+            "default": 1,
+            "minimum": 0,
+            "maximum": 1
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "生成的最大 token 数量"
+          },
+          "stream": {
+            "type": "boolean",
+            "description": "是否启用流式响应",
+            "default": false
+          },
+          "n": {
+            "type": "integer",
+            "description": "生成多少个聊天完成选项",
+            "default": 1
+          },
+          "stop": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 4
+              }
+            ],
+            "description": "停止序列"
+          },
+          "presence_penalty": {
+            "type": "number",
+            "description": "存在惩罚，范围 -2.0 到 2.0",
+            "default": 0,
+            "minimum": -2,
+            "maximum": 2
+          },
+          "frequency_penalty": {
+            "type": "number",
+            "description": "频率惩罚，范围 -2.0 到 2.0",
+            "default": 0,
+            "minimum": -2,
+            "maximum": 2
+          },
+          "user": {
+            "type": "string",
+            "description": "用户唯一标识符"
+          }
+        },
+        "required": ["model", "messages"]
+      },
+      "ChatMessage": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": ["system", "user", "assistant"],
+            "description": "消息角色"
+          },
+          "content": {
+            "type": "string",
+            "description": "消息内容"
+          },
+          "name": {
+            "type": "string",
+            "description": "消息发送者的名称"
+          }
+        },
+        "required": ["role", "content"]
+      },
+      "ChatCompletionResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "聊天完成的唯一标识符"
+          },
+          "object": {
+            "type": "string",
+            "description": "对象类型",
+            "enum": ["chat.completion"]
+          },
+          "created": {
+            "type": "integer",
+            "description": "创建时间戳"
+          },
+          "model": {
+            "type": "string",
+            "description": "使用的模型"
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChatCompletionChoice"
+            }
+          },
+          "usage": {
+            "$ref": "#/components/schemas/ChatCompletionUsage"
+          }
+        },
+        "required": ["id", "object", "created", "model", "choices"]
+      },
+      "ChatCompletionChoice": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "description": "选项的索引"
+          },
+          "message": {
+            "$ref": "#/components/schemas/ChatMessage"
+          },
+          "finish_reason": {
+            "type": "string",
+            "enum": ["stop", "length", "content_filter", null],
+            "description": "完成原因"
+          }
+        },
+        "required": ["index", "message"]
+      },
+      "ChatCompletionUsage": {
+        "type": "object",
+        "properties": {
+          "prompt_tokens": {
+            "type": "integer",
+            "description": "提示消息使用的 token 数"
+          },
+          "completion_tokens": {
+            "type": "integer",
+            "description": "生成完成使用的 token 数"
+          },
+          "total_tokens": {
+            "type": "integer",
+            "description": "总 token 数"
+          }
+        },
+        "required": ["prompt_tokens", "completion_tokens", "total_tokens"]
       },
       "ApiError": {
         "type": "object",

@@ -16,6 +16,7 @@ export function Badge({ page }: BadgeProps) {
     send: 'post',
     login: 'post',
     register: 'post',
+    'chat-completions': 'post',  // AI Chat Completions 接口
     delete: 'del', 
     webhook: 'hook' 
   }
