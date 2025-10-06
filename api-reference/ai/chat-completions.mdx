@@ -1,0 +1,510 @@
+---
+title: 'Chat Completions'
+description: '创建 AI 聊天完成 - OpenAI 兼容接口'
+api: 'POST /api/v1/chat/completions'
+---
+
+## 概述
+
+此接口完全兼容 OpenAI Chat Completions API 格式，支持流式和非流式响应。可以使用 OpenAI SDK 或任何兼容 OpenAI 格式的客户端直接调用。
+
+## 认证
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## 请求体
+
+<ParamField body="model" type="string" required>
+  要使用的模型 ID。可以使用 `bytedesk-ai` 或您配置的其他模型名称。
+</ParamField>
+
+<ParamField body="messages" type="array" required>
+  对话消息列表，每条消息包含 `role` 和 `content`。
+  
+  <Expandable title="消息对象结构">
+    <ParamField body="role" type="string" required>
+      消息角色：`system`、`user` 或 `assistant`
+    </ParamField>
+    
+    <ParamField body="content" type="string" required>
+      消息内容
+    </ParamField>
+    
+    <ParamField body="name" type="string">
+      消息发送者的名称（可选）
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="temperature" type="number">
+  控制输出的随机性，取值范围 0-2。较高的值（如 0.8）使输出更随机，较低的值（如 0.2）使输出更确定。
+  
+  默认值：1
+</ParamField>
+
+<ParamField body="top_p" type="number">
+  使用核采样的替代方法，模型会考虑 top_p 概率质量的标记结果。
+  
+  默认值：1
+</ParamField>
+
+<ParamField body="max_tokens" type="integer">
+  生成的最大 token 数量。
+</ParamField>
+
+<ParamField body="stream" type="boolean">
+  是否启用流式响应。设置为 `true` 时，将通过 Server-Sent Events (SSE) 返回部分消息增量。
+  
+  默认值：false
+</ParamField>
+
+<ParamField body="n" type="integer">
+  为每个输入消息生成多少个聊天完成选项。
+  
+  默认值：1
+</ParamField>
+
+<ParamField body="stop" type="string | array">
+  最多 4 个序列，API 将停止生成更多的 token。
+</ParamField>
+
+<ParamField body="presence_penalty" type="number">
+  -2.0 到 2.0 之间的数字。正值会根据新 token 是否出现在文本中来惩罚它们，增加模型谈论新主题的可能性。
+  
+  默认值：0
+</ParamField>
+
+<ParamField body="frequency_penalty" type="number">
+  -2.0 到 2.0 之间的数字。正值会根据新 token 在文本中的现有频率来惩罚它们，降低模型逐字重复相同行的可能性。
+  
+  默认值：0
+</ParamField>
+
+<ParamField body="logit_bias" type="object">
+  修改指定 token 出现在完成中的可能性。
+</ParamField>
+
+<ParamField body="user" type="string">
+  代表您的最终用户的唯一标识符，可以帮助 OpenAI 监控和检测滥用行为。
+</ParamField>
+
+## 响应
+
+### 非流式响应
+
+<ResponseField name="id" type="string">
+  聊天完成的唯一标识符
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `chat.completion`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  创建时间戳（Unix 时间）
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型
+</ResponseField>
+
+<ResponseField name="choices" type="array">
+  生成的聊天完成选项列表
+  
+  <Expandable title="Choice 对象">
+    <ResponseField name="index" type="integer">
+      选项的索引
+    </ResponseField>
+    
+    <ResponseField name="message" type="object">
+      生成的消息
+      
+      <Expandable title="Message 对象">
+        <ResponseField name="role" type="string">
+          消息角色，通常为 `assistant`
+        </ResponseField>
+        
+        <ResponseField name="content" type="string">
+          消息内容
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="finish_reason" type="string">
+      完成原因：`stop`、`length`、`content_filter` 或 `null`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="usage" type="object">
+  Token 使用情况统计
+  
+  <Expandable title="Usage 对象">
+    <ResponseField name="prompt_tokens" type="integer">
+      提示消息使用的 token 数
+    </ResponseField>
+    
+    <ResponseField name="completion_tokens" type="integer">
+      生成完成使用的 token 数
+    </ResponseField>
+    
+    <ResponseField name="total_tokens" type="integer">
+      总 token 数
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### 流式响应
+
+当 `stream=true` 时，响应将通过 Server-Sent Events (SSE) 格式返回。每个事件包含一个 JSON 对象：
+
+<ResponseField name="id" type="string">
+  聊天完成块的唯一标识符
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  对象类型，固定为 `chat.completion.chunk`
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  创建时间戳（Unix 时间）
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  使用的模型
+</ResponseField>
+
+<ResponseField name="choices" type="array">
+  流式选项列表
+  
+  <Expandable title="Stream Choice 对象">
+    <ResponseField name="index" type="integer">
+      选项的索引
+    </ResponseField>
+    
+    <ResponseField name="delta" type="object">
+      消息增量
+      
+      <Expandable title="Delta 对象">
+        <ResponseField name="role" type="string">
+          消息角色（仅在第一个块中出现）
+        </ResponseField>
+        
+        <ResponseField name="content" type="string">
+          内容增量
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="finish_reason" type="string">
+      完成原因，在最后一个块中出现
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+流结束时将发送 `data: [DONE]` 消息。
+
+## 代码示例
+
+<CodeGroup>
+
+```python Python
+import openai
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.weiyuai.cn/api/v1"
+)
+
+# 非流式调用
+response = client.chat.completions.create(
+    model="bytedesk-ai",
+    messages=[
+        {"role": "system", "content": "你是一个有帮助的助手。"},
+        {"role": "user", "content": "解释一下什么是人工智能？"}
+    ],
+    temperature=0.7,
+    max_tokens=500
+)
+
+print(response.choices[0].message.content)
+
+# 流式调用
+stream = client.chat.completions.create(
+    model="bytedesk-ai",
+    messages=[
+        {"role": "system", "content": "你是一个有帮助的助手。"},
+        {"role": "user", "content": "写一首关于 AI 的短诗"}
+    ],
+    stream=True
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content is not None:
+        print(chunk.choices[0].delta.content, end="")
+```
+
+```javascript JavaScript / TypeScript
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.weiyuai.cn/api/v1'
+});
+
+// 非流式调用
+async function chat() {
+  const completion = await openai.chat.completions.create({
+    model: 'bytedesk-ai',
+    messages: [
+      { role: 'system', content: '你是一个有帮助的助手。' },
+      { role: 'user', content: '解释一下什么是人工智能？' }
+    ],
+    temperature: 0.7,
+    max_tokens: 500
+  });
+
+  console.log(completion.choices[0].message.content);
+}
+
+// 流式调用
+async function streamChat() {
+  const stream = await openai.chat.completions.create({
+    model: 'bytedesk-ai',
+    messages: [
+      { role: 'system', content: '你是一个有帮助的助手。' },
+      { role: 'user', content: '写一首关于 AI 的短诗' }
+    ],
+    stream: true
+  });
+
+  for await (const chunk of stream) {
+    const content = chunk.choices[0]?.delta?.content || '';
+    process.stdout.write(content);
+  }
+}
+```
+
+```bash cURL - 非流式
+curl https://api.weiyuai.cn/api/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "bytedesk-ai",
+    "messages": [
+      {
+        "role": "system",
+        "content": "你是一个有帮助的助手。"
+      },
+      {
+        "role": "user",
+        "content": "解释一下什么是人工智能？"
+      }
+    ],
+    "temperature": 0.7,
+    "max_tokens": 500
+  }'
+```
+
+```bash cURL - 流式
+curl https://api.weiyuai.cn/api/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "bytedesk-ai",
+    "messages": [
+      {
+        "role": "system",
+        "content": "你是一个有帮助的助手。"
+      },
+      {
+        "role": "user",
+        "content": "写一首关于 AI 的短诗"
+      }
+    ],
+    "stream": true
+  }'
+```
+
+```java Java
+import com.theokanning.openai.completion.chat.ChatCompletionRequest;
+import com.theokanning.openai.completion.chat.ChatMessage;
+import com.theokanning.openai.service.OpenAiService;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class ChatExample {
+    public static void main(String[] args) {
+        OpenAiService service = new OpenAiService("YOUR_API_KEY");
+        service.setBaseUrl("https://api.weiyuai.cn/api/v1");
+
+        // 非流式调用
+        List<ChatMessage> messages = Arrays.asList(
+            new ChatMessage("system", "你是一个有帮助的助手。"),
+            new ChatMessage("user", "解释一下什么是人工智能？")
+        );
+
+        ChatCompletionRequest request = ChatCompletionRequest.builder()
+            .model("bytedesk-ai")
+            .messages(messages)
+            .temperature(0.7)
+            .maxTokens(500)
+            .build();
+
+        var response = service.createChatCompletion(request);
+        System.out.println(response.getChoices().get(0).getMessage().getContent());
+    }
+}
+```
+
+```go Go
+package main
+
+import (
+    "context"
+    "fmt"
+    "github.com/sashabaranov/go-openai"
+)
+
+func main() {
+    config := openai.DefaultConfig("YOUR_API_KEY")
+    config.BaseURL = "https://api.weiyuai.cn/api/v1"
+    client := openai.NewClientWithConfig(config)
+
+    // 非流式调用
+    resp, err := client.CreateChatCompletion(
+        context.Background(),
+        openai.ChatCompletionRequest{
+            Model: "bytedesk-ai",
+            Messages: []openai.ChatCompletionMessage{
+                {
+                    Role:    openai.ChatMessageRoleSystem,
+                    Content: "你是一个有帮助的助手。",
+                },
+                {
+                    Role:    openai.ChatMessageRoleUser,
+                    Content: "解释一下什么是人工智能？",
+                },
+            },
+            Temperature: 0.7,
+            MaxTokens:   500,
+        },
+    )
+
+    if err != nil {
+        fmt.Printf("ChatCompletion error: %v\n", err)
+        return
+    }
+
+    fmt.Println(resp.Choices[0].Message.Content)
+}
+```
+
+</CodeGroup>
+
+## 响应示例
+
+### 非流式响应示例
+
+```json
+{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion",
+  "created": 1677652288,
+  "model": "bytedesk-ai",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "人工智能（Artificial Intelligence，简称 AI）是计算机科学的一个分支，致力于创建能够执行通常需要人类智能的任务的系统。这些任务包括学习、推理、问题解决、感知和语言理解。\n\nAI 可以分为两大类：\n1. 弱人工智能（或狭义 AI）：专注于特定任务的 AI 系统\n2. 强人工智能（或通用 AI）：理论上能够执行任何人类智能任务的系统\n\n当前的 AI 技术主要是弱人工智能，应用于图像识别、自然语言处理、推荐系统等领域。"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 25,
+    "completion_tokens": 156,
+    "total_tokens": 181
+  }
+}
+```
+
+### 流式响应示例
+
+```
+data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1677652288,"model":"bytedesk-ai","choices":[{"index":0,"delta":{"role":"assistant","content":""},"finish_reason":null}]}
+
+data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1677652288,"model":"bytedesk-ai","choices":[{"index":0,"delta":{"content":"人工"},"finish_reason":null}]}
+
+data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1677652288,"model":"bytedesk-ai","choices":[{"index":0,"delta":{"content":"智能"},"finish_reason":null}]}
+
+data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1677652288,"model":"bytedesk-ai","choices":[{"index":0,"delta":{"content":"（"},"finish_reason":null}]}
+
+...
+
+data: [DONE]
+```
+
+## 错误响应
+
+### 错误示例
+
+```json
+{
+  "error": {
+    "message": "No chat model available",
+    "type": "service_unavailable",
+    "param": null,
+    "code": null
+  }
+}
+```
+
+### 常见错误类型
+
+<ResponseField name="service_unavailable" type="string">
+  服务不可用，没有配置聊天模型
+</ResponseField>
+
+<ResponseField name="internal_error" type="string">
+  内部服务器错误
+</ResponseField>
+
+<ResponseField name="stream_error" type="string">
+  流式响应过程中发生错误
+</ResponseField>
+
+<ResponseField name="invalid_request_error" type="string">
+  请求参数无效
+</ResponseField>
+
+<ResponseField name="authentication_error" type="string">
+  认证失败，API 密钥无效
+</ResponseField>
+
+## 注意事项
+
+<Warning>
+  1. 确保在请求头中包含有效的 Bearer Token 进行认证
+  2. 流式响应需要客户端支持 Server-Sent Events (SSE)
+  3. `max_tokens` 参数应根据实际需求设置，过大可能导致响应超时
+  4. 建议在生产环境中实现错误重试机制
+</Warning>
+
+## 与 OpenAI 的兼容性
+
+此接口完全兼容 OpenAI Chat Completions API v1 格式，您可以：
+
+- 使用官方 OpenAI SDK（Python, Node.js, Go 等）
+- 将现有的 OpenAI 应用迁移到本服务，只需修改 `base_url`
+- 使用任何支持 OpenAI 格式的第三方工具或库
+
+## 相关链接
+
+- [OpenAI Chat Completions API 文档](https://platform.openai.com/docs/api-reference/chat)
+- [Bytedesk AI 功能介绍](/ai-features)
+- [认证方式](/api-reference/auth/login)

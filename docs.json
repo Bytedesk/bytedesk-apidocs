@@ -26,6 +26,12 @@
             ]
           },
           {
+            "group": "AI API",
+            "pages": [
+              "api-reference/ai/chat-completions"
+            ]
+          },
+          {
             "group": "Authentication",
             "pages": [
               "api-reference/auth/register",

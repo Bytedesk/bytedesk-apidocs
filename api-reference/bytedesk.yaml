@@ -21,6 +21,8 @@ servers:
   - url: https://api.weiyuai.cn
     description: Web app server (AccessToken 登录)
 tags:
+  - name: ai
+    description: AI 相关接口（OpenAI 兼容）
   - name: auth
     description: 认证与登录
   - name: users
@@ -32,6 +34,8 @@ tags:
   - name: tickets
     description: 工单（Ticket）相关
 x-tagGroups:
+  - name: AI
+    tags: [ai]
   - name: Authentication
     tags: [auth]
   - name: Users
@@ -41,6 +45,101 @@ x-tagGroups:
   - name: Tickets
     tags: [tickets]
 paths:
+  /chat/completions:
+    post:
+      tags: [ai]
+      summary: 创建 AI 聊天完成（OpenAI 兼容）
+      description: |
+        完全兼容 OpenAI Chat Completions API 格式的接口。
+        支持流式和非流式响应，可直接使用 OpenAI SDK 或任何兼容客户端调用。
+      operationId: createChatCompletion
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatCompletionRequest'
+            examples:
+              basic:
+                summary: 基础对话示例
+                value:
+                  model: "bytedesk-ai"
+                  messages:
+                    - role: "system"
+                      content: "你是一个有帮助的助手。"
+                    - role: "user"
+                      content: "解释一下什么是人工智能？"
+                  temperature: 0.7
+                  max_tokens: 500
+              stream:
+                summary: 流式响应示例
+                value:
+                  model: "bytedesk-ai"
+                  messages:
+                    - role: "user"
+                      content: "写一首关于AI的短诗"
+                  stream: true
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ChatCompletionResponse'
+                  - $ref: '#/components/schemas/ChatCompletionError'
+              examples:
+                success:
+                  summary: 非流式成功响应
+                  value:
+                    id: "chatcmpl-abc123"
+                    object: "chat.completion"
+                    created: 1677652288
+                    model: "bytedesk-ai"
+                    choices:
+                      - index: 0
+                        message:
+                          role: "assistant"
+                          content: "人工智能（AI）是计算机科学的一个分支..."
+                        finish_reason: "stop"
+                    usage:
+                      prompt_tokens: 25
+                      completion_tokens: 156
+                      total_tokens: 181
+                error:
+                  summary: 错误响应
+                  value:
+                    error:
+                      message: "No chat model available"
+                      type: "service_unavailable"
+                      param: null
+                      code: null
+            text/event-stream:
+              schema:
+                type: string
+                description: 流式响应，通过 Server-Sent Events (SSE) 返回
+              example: |
+                data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1677652288,"model":"bytedesk-ai","choices":[{"index":0,"delta":{"role":"assistant","content":""},"finish_reason":null}]}
+                
+                data: {"id":"chatcmpl-abc123","object":"chat.completion.chunk","created":1677652288,"model":"bytedesk-ai","choices":[{"index":0,"delta":{"content":"人工"},"finish_reason":null}]}
+                
+                data: [DONE]
+        '400':
+          description: 请求参数无效
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatCompletionError'
+        '401':
+          description: 未授权或 Token 无效
+        '500':
+          description: 服务器内部错误
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatCompletionError'
   /auth/login:
     get:
       tags: [auth]
@@ -1888,6 +1987,274 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    # ========================= AI / Chat Completions Schemas =========================
+    ChatCompletionRequest:
+      type: object
+      required:
+        - model
+        - messages
+      properties:
+        model:
+          type: string
+          description: 要使用的模型 ID
+          example: "bytedesk-ai"
+        messages:
+          type: array
+          description: 对话消息列表
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          minItems: 1
+        temperature:
+          type: number
+          description: 控制输出的随机性，取值范围 0-2
+          minimum: 0
+          maximum: 2
+          default: 1
+          example: 0.7
+        top_p:
+          type: number
+          description: 使用核采样，模型考虑 top_p 概率质量的标记
+          minimum: 0
+          maximum: 1
+          default: 1
+        max_tokens:
+          type: integer
+          description: 生成的最大 token 数量
+          minimum: 1
+          example: 500
+        stream:
+          type: boolean
+          description: 是否启用流式响应（SSE）
+          default: false
+        n:
+          type: integer
+          description: 为每个输入生成多少个完成选项
+          minimum: 1
+          maximum: 128
+          default: 1
+        stop:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+              maxItems: 4
+          description: 最多 4 个停止序列
+        presence_penalty:
+          type: number
+          description: -2.0 到 2.0 之间，正值惩罚已出现的 token
+          minimum: -2
+          maximum: 2
+          default: 0
+        frequency_penalty:
+          type: number
+          description: -2.0 到 2.0 之间，正值根据频率惩罚 token
+          minimum: -2
+          maximum: 2
+          default: 0
+        logit_bias:
+          type: object
+          description: 修改指定 token 出现的可能性
+          additionalProperties:
+            type: number
+        user:
+          type: string
+          description: 代表最终用户的唯一标识符
+          example: "user-123"
+    
+    ChatMessage:
+      type: object
+      required:
+        - role
+        - content
+      properties:
+        role:
+          type: string
+          description: 消息角色
+          enum: [system, user, assistant]
+          example: "user"
+        content:
+          type: string
+          description: 消息内容
+          example: "解释一下什么是人工智能？"
+        name:
+          type: string
+          description: 消息发送者的名称（可选）
+    
+    ChatCompletionResponse:
+      type: object
+      required:
+        - id
+        - object
+        - created
+        - model
+        - choices
+      properties:
+        id:
+          type: string
+          description: 聊天完成的唯一标识符
+          example: "chatcmpl-abc123"
+        object:
+          type: string
+          description: 对象类型
+          enum: [chat.completion]
+          example: "chat.completion"
+        created:
+          type: integer
+          description: 创建时间戳（Unix 时间）
+          example: 1677652288
+        model:
+          type: string
+          description: 使用的模型
+          example: "bytedesk-ai"
+        choices:
+          type: array
+          description: 生成的聊天完成选项列表
+          items:
+            $ref: '#/components/schemas/ChatCompletionChoice'
+        usage:
+          $ref: '#/components/schemas/ChatCompletionUsage'
+        system_fingerprint:
+          type: string
+          description: 系统指纹
+    
+    ChatCompletionChoice:
+      type: object
+      required:
+        - index
+        - message
+        - finish_reason
+      properties:
+        index:
+          type: integer
+          description: 选项的索引
+          example: 0
+        message:
+          $ref: '#/components/schemas/ChatMessage'
+        finish_reason:
+          type: string
+          description: 完成原因
+          enum: [stop, length, content_filter, null]
+          example: "stop"
+    
+    ChatCompletionUsage:
+      type: object
+      required:
+        - prompt_tokens
+        - completion_tokens
+        - total_tokens
+      properties:
+        prompt_tokens:
+          type: integer
+          description: 提示消息使用的 token 数
+          example: 25
+        completion_tokens:
+          type: integer
+          description: 生成完成使用的 token 数
+          example: 156
+        total_tokens:
+          type: integer
+          description: 总 token 数
+          example: 181
+    
+    ChatCompletionChunk:
+      type: object
+      description: 流式响应块
+      required:
+        - id
+        - object
+        - created
+        - model
+        - choices
+      properties:
+        id:
+          type: string
+          description: 聊天完成块的唯一标识符
+          example: "chatcmpl-abc123"
+        object:
+          type: string
+          description: 对象类型
+          enum: [chat.completion.chunk]
+          example: "chat.completion.chunk"
+        created:
+          type: integer
+          description: 创建时间戳（Unix 时间）
+          example: 1677652288
+        model:
+          type: string
+          description: 使用的模型
+          example: "bytedesk-ai"
+        choices:
+          type: array
+          description: 流式选项列表
+          items:
+            $ref: '#/components/schemas/ChatCompletionStreamChoice'
+        system_fingerprint:
+          type: string
+          description: 系统指纹
+    
+    ChatCompletionStreamChoice:
+      type: object
+      required:
+        - index
+        - delta
+      properties:
+        index:
+          type: integer
+          description: 选项的索引
+          example: 0
+        delta:
+          $ref: '#/components/schemas/ChatCompletionDelta'
+        finish_reason:
+          type: string
+          description: 完成原因，在最后一个块中出现
+          enum: [stop, length, content_filter, null]
+          nullable: true
+    
+    ChatCompletionDelta:
+      type: object
+      description: 消息增量
+      properties:
+        role:
+          type: string
+          description: 消息角色（仅在第一个块中）
+          enum: [assistant]
+          example: "assistant"
+        content:
+          type: string
+          description: 内容增量
+          example: "人工"
+    
+    ChatCompletionError:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - message
+            - type
+          properties:
+            message:
+              type: string
+              description: 错误消息
+              example: "No chat model available"
+            type:
+              type: string
+              description: 错误类型
+              enum: [service_unavailable, internal_error, stream_error, invalid_request_error, authentication_error]
+              example: "service_unavailable"
+            param:
+              type: string
+              description: 导致错误的参数
+              nullable: true
+            code:
+              type: string
+              description: 错误代码
+              nullable: true
+    
+    # ========================= Auth Schemas =========================
     AuthRequest:
       type: object
       properties:
