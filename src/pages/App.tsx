@@ -14,16 +14,16 @@ export default function App() {
   // Determine active tab based on current path
   const getActiveTabIndex = () => {
     const current = location.pathname.replace(/^\/apidocs\//, '').replace(/^\//, '') || 'index'
-    if (current.startsWith('call-center/')) {
+    if (current.startsWith('api/call-center/')) {
       return 1 // 呼叫中心
     }
-    if (current.startsWith('ticket-system/')) {
+    if (current.startsWith('api/ticket-system/')) {
       return 2 // 工单系统
     }
-    if (current.startsWith('knowledge-base/')) {
+    if (current.startsWith('api/knowledge-base/')) {
       return 3 // 知识库
     }
-    if (current.startsWith('ai-qa/')) {
+    if (current.startsWith('api/ai-qa/')) {
       return 4 // AI问答
     }
     return 0 // 在线客服 (default)

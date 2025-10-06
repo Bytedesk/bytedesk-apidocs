@@ -23,7 +23,7 @@ export function Topbar({ isMobile, onSidebarToggle, onExamplesToggle, activeTab,
   })
   
   const location = useLocation()
-  const isApiPage = location.pathname.includes('/online-service/') || location.pathname.includes('/call-center/') || location.pathname.includes('/ticket-system/') || location.pathname.includes('/knowledge-base/') || location.pathname.includes('/ai-qa/')
+  const isApiPage = location.pathname.includes('/api/online-service/') || location.pathname.includes('/api/call-center/') || location.pathname.includes('/api/ticket-system/') || location.pathname.includes('/api/knowledge-base/') || location.pathname.includes('/api/ai-qa/')
 
   const toggleTheme = () => {
     const newTheme = !isDark
