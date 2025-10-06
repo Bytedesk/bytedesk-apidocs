@@ -18,20 +18,7 @@ openapi: "POST /auth/v1/register"
 
 用户可以通过手机号或邮箱进行注册，需要先获取验证码，然后完成注册流程。
 
-## 请求体
-
-```json
-{
-  "username": "string",
-  "password": "string", 
-  "mobile": "string",
-  "email": "string",
-  "code": "string",
-  "accessToken": "string"
-}
-```
-
-### 参数说明
+## 参数说明
 
 - `username`: 用户名（可选）
 - `password`: 密码（可选）

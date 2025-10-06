@@ -22,22 +22,22 @@
           {
             "group": "AI API",
             "pages": [
-              "api/service/ai/chat-completions"
+              "api/ai/chat-completions"
             ]
           },
           {
             "group": "Authentication",
             "pages": [
-              "api/service/auth/register",
-              "api/service/auth/login"
+              "api/core/auth/register",
+              "api/core/auth/login"
             ]
           },
           {
             "group": "Users",
             "pages": [
-              "api/service/users/profile",
-              "api/service/users/list",
-              "api/service/users/create"
+              "api/core/users/profile",
+              "api/core/users/list",
+              "api/core/users/create"
             ]
           },
           {
