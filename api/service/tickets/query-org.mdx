@@ -28,47 +28,7 @@ Authorization: Bearer <access_token>
 
 - `orgUid` (必需): 组织的唯一标识符
 
-## 响应示例
 
-### 成功响应 (200)
-
-```json
-[
-  {
-    "id": "ticket_567890",
-    "title": "登录问题咨询",
-    "description": "用户无法正常登录系统，提示密码错误",
-    "status": "OPEN",
-    "priority": "MEDIUM",
-    "createdAt": "2023-01-04T14:00:00Z"
-  },
-  {
-    "id": "ticket_567891",
-    "title": "功能建议",
-    "description": "希望能增加数据导出功能",
-    "status": "IN_PROGRESS",
-    "priority": "LOW",
-    "createdAt": "2023-01-03T10:30:00Z"
-  },
-  {
-    "id": "ticket_567892",
-    "title": "系统故障报告",
-    "description": "系统在高峰期响应缓慢",
-    "status": "RESOLVED",
-    "priority": "HIGH",
-    "createdAt": "2023-01-02T16:45:00Z"
-  }
-]
-```
-
-### 错误响应 (400)
-
-```json
-{
-  "error": 400,
-  "message": "Organization not found"
-}
-```
 
 ## 字段说明
 
@@ -106,6 +66,46 @@ Authorization: Bearer <access_token>
 - 如果组织下工单较多，建议前端实现分页显示
 - 工单信息可能包含敏感数据，需要权限控制
 - 建议配合筛选和排序功能使用
+
+<ResponseExample>
+
+```json 200 成功响应
+[
+  {
+    "id": "ticket_567890",
+    "title": "登录问题咨询",
+    "description": "用户无法正常登录系统，提示密码错误",
+    "status": "OPEN",
+    "priority": "MEDIUM",
+    "createdAt": "2023-01-04T14:00:00Z"
+  },
+  {
+    "id": "ticket_567891",
+    "title": "功能建议",
+    "description": "希望能增加数据导出功能",
+    "status": "IN_PROGRESS",
+    "priority": "LOW",
+    "createdAt": "2023-01-03T10:30:00Z"
+  },
+  {
+    "id": "ticket_567892",
+    "title": "系统故障报告",
+    "description": "系统在高峰期响应缓慢",
+    "status": "RESOLVED",
+    "priority": "HIGH",
+    "createdAt": "2023-01-02T16:45:00Z"
+  }
+]
+```
+
+```json 400 请求错误
+{
+  "error": 400,
+  "message": "Organization not found"
+}
+```
+
+</ResponseExample>
 
 <RequestExample>
 

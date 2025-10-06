@@ -43,29 +43,7 @@ Authorization: Bearer <access_token>
 - `title` (可选): 会话标题
 - `description` (可选): 会话描述
 
-## 响应示例
 
-### 成功响应 (200)
-
-```json
-{
-  "id": "thread_123459",
-  "type": "PERSONAL",
-  "status": "ACTIVE",
-  "title": "新建个人会话",
-  "description": "用户创建的个人会话",
-  "createdAt": "2023-01-04T12:00:00Z"
-}
-```
-
-### 错误响应 (400)
-
-```json
-{
-  "error": 400,
-  "message": "Invalid thread type"
-}
-```
 
 ## 创建规则
 
@@ -103,6 +81,28 @@ Authorization: Bearer <access_token>
 - 不同类型会话可能有不同的权限要求
 - 群组会话可能需要邀请其他成员
 - 客服会话可能会自动分配客服人员
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "id": "thread_123459",
+  "type": "PERSONAL",
+  "status": "ACTIVE",
+  "title": "新建个人会话",
+  "description": "用户创建的个人会话",
+  "createdAt": "2023-01-04T12:00:00Z"
+}
+```
+
+```json 400 请求错误
+{
+  "error": 400,
+  "message": "Invalid thread type"
+}
+```
+
+</ResponseExample>
 
 <RequestExample>
 

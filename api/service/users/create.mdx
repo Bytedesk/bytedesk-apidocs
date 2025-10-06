@@ -44,31 +44,7 @@ Authorization: Bearer <access_token>
 - `email` (可选): 邮箱地址，需要唯一
 - `mobile` (可选): 手机号码，需要唯一
 
-## 响应示例
 
-### 成功响应 (200)
-
-```json
-{
-  "id": "123456",
-  "username": "newuser",
-  "nickname": "新用户",
-  "email": "newuser@example.com",
-  "mobile": "13777777777",
-  "avatar": "https://api.weiyuai.cn/avatar/default.png",
-  "status": "ACTIVE",
-  "createdAt": "2023-01-03T12:00:00Z"
-}
-```
-
-### 错误响应 (400)
-
-```json
-{
-  "error": 400,
-  "message": "Username already exists"
-}
-```
 
 ## 创建规则
 
@@ -90,6 +66,30 @@ Authorization: Bearer <access_token>
 - 用户名、邮箱、手机号需要唯一性检查
 - 密码会被加密存储
 - 创建后用户可以正常登录使用
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "id": "123456",
+  "username": "newuser",
+  "nickname": "新用户",
+  "email": "newuser@example.com",
+  "mobile": "13777777777",
+  "avatar": "https://api.weiyuai.cn/avatar/default.png",
+  "status": "ACTIVE",
+  "createdAt": "2023-01-03T12:00:00Z"
+}
+```
+
+```json 400 请求错误
+{
+  "error": 400,
+  "message": "Username already exists"
+}
+```
+
+</ResponseExample>
 
 <RequestExample>
 

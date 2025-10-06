@@ -35,29 +35,7 @@ openapi: "POST /messages"
 | type | string | ✓ | 消息类型：TEXT/IMAGE/FILE |
 | content | string | ✓ | 消息内容 |
 
-## 响应示例
 
-### 成功响应 (200)
-
-```json
-{
-  "id": "msg_789012",
-  "threadId": "thread_123456",
-  "senderId": "user_123456",
-  "type": "TEXT",
-  "content": "你好，这是一条测试消息",
-  "createdAt": "2023-01-04T12:30:00Z"
-}
-```
-
-### 错误响应 (400)
-
-```json
-{
-  "error": 400,
-  "message": "Thread not found or access denied"
-}
-```
 
 ## 字段说明
 
@@ -110,6 +88,28 @@ openapi: "POST /messages"
 - 图片和文件需要先上传获得 URL
 - 消息发送后不可修改
 - 系统可能对消息内容进行审核
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "id": "msg_789012",
+  "threadId": "thread_123456",
+  "senderId": "user_123456",
+  "type": "TEXT",
+  "content": "你好，这是一条测试消息",
+  "createdAt": "2023-01-04T12:30:00Z"
+}
+```
+
+```json 400 请求错误
+{
+  "error": 400,
+  "message": "Thread not found or access denied"
+}
+```
+
+</ResponseExample>
 
 <RequestExample>
 

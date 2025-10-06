@@ -29,41 +29,7 @@ Authorization: Bearer <access_token>
 - `page` (可选): 页码，默认为 1
 - `size` (可选): 每页数量，默认为 10
 
-## 响应示例
 
-### 成功响应 (200)
-
-```json
-{
-  "threads": [
-    {
-      "id": "thread_123456",
-      "type": "PERSONAL",
-      "status": "ACTIVE",
-      "title": "与用户A的对话",
-      "description": "个人聊天会话",
-      "createdAt": "2023-01-01T12:00:00Z"
-    },
-    {
-      "id": "thread_123457",
-      "type": "GROUP",
-      "status": "ACTIVE",
-      "title": "项目讨论组",
-      "description": "项目相关讨论",
-      "createdAt": "2023-01-02T12:00:00Z"
-    },
-    {
-      "id": "thread_123458",
-      "type": "SUPPORT",
-      "status": "CLOSED",
-      "title": "技术支持",
-      "description": "用户咨询技术问题",
-      "createdAt": "2023-01-03T12:00:00Z"
-    }
-  ],
-  "total": 25
-}
-```
 
 ## 字段说明
 
@@ -97,6 +63,42 @@ Authorization: Bearer <access_token>
 - 只返回当前用户相关的会话
 - 支持分页以提高性能
 - 不同类型会话可能有不同的权限规则
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "threads": [
+    {
+      "id": "thread_123456",
+      "type": "PERSONAL",
+      "status": "ACTIVE",
+      "title": "与用户A的对话",
+      "description": "个人聊天会话",
+      "createdAt": "2023-01-01T12:00:00Z"
+    },
+    {
+      "id": "thread_123457",
+      "type": "GROUP",
+      "status": "ACTIVE",
+      "title": "项目讨论组",
+      "description": "项目相关讨论",
+      "createdAt": "2023-01-02T12:00:00Z"
+    },
+    {
+      "id": "thread_123458",
+      "type": "SUPPORT",
+      "status": "CLOSED",
+      "title": "技术支持",
+      "description": "用户咨询技术问题",
+      "createdAt": "2023-01-03T12:00:00Z"
+    }
+  ],
+  "total": 25
+}
+```
+
+</ResponseExample>
 
 <RequestExample>
 

@@ -46,29 +46,7 @@ Authorization: Bearer <access_token>
   - `URGENT`: 紧急
 - `category` (可选): 工单分类，如"技术支持"、"账务问题"等
 
-## 响应示例
 
-### 成功响应 (200)
-
-```json
-{
-  "id": "ticket_567890",
-  "title": "登录问题咨询",
-  "description": "用户无法正常登录系统，提示密码错误",
-  "status": "OPEN",
-  "priority": "MEDIUM",
-  "createdAt": "2023-01-04T14:00:00Z"
-}
-```
-
-### 错误响应 (400)
-
-```json
-{
-  "error": 400,
-  "message": "Title and description are required"
-}
-```
 
 ## 字段说明
 
@@ -107,6 +85,28 @@ Authorization: Bearer <access_token>
 - 系统会根据优先级安排处理顺序
 - 用户可以通过其他接口查询工单状态
 - 建议提供详细的问题描述以便快速解决
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "id": "ticket_567890",
+  "title": "登录问题咨询",
+  "description": "用户无法正常登录系统，提示密码错误",
+  "status": "OPEN",
+  "priority": "MEDIUM",
+  "createdAt": "2023-01-04T14:00:00Z"
+}
+```
+
+```json 400 请求错误
+{
+  "error": 400,
+  "message": "Title and description are required"
+}
+```
+
+</ResponseExample>
 
 <RequestExample>
 

@@ -24,31 +24,7 @@ openapi: "GET /users/v1/profile"
 Authorization: Bearer <access_token>
 ```
 
-## 响应示例
 
-### 成功响应 (200)
-
-```json
-{
-  "id": "123456",
-  "username": "testuser",
-  "nickname": "测试用户",
-  "email": "user@example.com",
-  "mobile": "13888888888",
-  "avatar": "https://api.weiyuai.cn/avatar/default.png",
-  "status": "ACTIVE",
-  "createdAt": "2023-01-01T12:00:00Z"
-}
-```
-
-### 错误响应 (401)
-
-```json
-{
-  "error": 401,
-  "message": "Unauthorized"
-}
-```
 
 ## 字段说明
 
@@ -73,6 +49,30 @@ Authorization: Bearer <access_token>
 - 需要有效的 Bearer Token
 - 只能获取当前登录用户的信息
 - 敏感信息可能会被过滤
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "id": "123456",
+  "username": "testuser",
+  "nickname": "测试用户",
+  "email": "user@example.com",
+  "mobile": "13888888888",
+  "avatar": "https://api.weiyuai.cn/avatar/default.png",
+  "status": "ACTIVE",
+  "createdAt": "2023-01-01T12:00:00Z"
+}
+```
+
+```json 401 未授权
+{
+  "error": 401,
+  "message": "Unauthorized"
+}
+```
+
+</ResponseExample>
 
 <RequestExample>
 

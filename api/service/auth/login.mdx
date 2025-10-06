@@ -40,34 +40,7 @@ openapi: "POST /auth/v1/login"
 - `code`: 验证码（某些场景下需要）
 - `accessToken`: 访问令牌（特殊场景）
 
-## 响应示例
 
-### 成功响应 (200)
-
-```json
-{
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
-    "id": "123456",
-    "username": "testuser",
-    "nickname": "测试用户",
-    "email": "user@example.com",
-    "mobile": "13888888888",
-    "avatar": "https://api.weiyuai.cn/avatar/default.png",
-    "status": "ACTIVE",
-    "createdAt": "2023-01-01T12:00:00Z"
-  }
-}
-```
-
-### 错误响应 (401)
-
-```json
-{
-  "error": 401,
-  "message": "Invalid username or password"
-}
-```
 
 ## 登录方式
 
@@ -88,6 +61,33 @@ openapi: "POST /auth/v1/login"
 - 访问令牌需要妥善保存
 - 令牌过期后需要重新登录或刷新
 - 支持多种登录凭据类型
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "123456",
+    "username": "testuser",
+    "nickname": "测试用户",
+    "email": "user@example.com",
+    "mobile": "13888888888",
+    "avatar": "https://api.weiyuai.cn/avatar/default.png",
+    "status": "ACTIVE",
+    "createdAt": "2023-01-01T12:00:00Z"
+  }
+}
+```
+
+```json 401 认证失败
+{
+  "error": 401,
+  "message": "Invalid username or password"
+}
+```
+
+</ResponseExample>
 
 <RequestExample>
 

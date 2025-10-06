@@ -29,37 +29,7 @@ Authorization: Bearer <access_token>
 - `page` (可选): 页码，默认为 1
 - `size` (可选): 每页数量，默认为 10
 
-## 响应示例
 
-### 成功响应 (200)
-
-```json
-{
-  "users": [
-    {
-      "id": "123456",
-      "username": "testuser1",
-      "nickname": "测试用户1",
-      "email": "user1@example.com",
-      "mobile": "13888888888",
-      "avatar": "https://api.weiyuai.cn/avatar/default.png",
-      "status": "ACTIVE",
-      "createdAt": "2023-01-01T12:00:00Z"
-    },
-    {
-      "id": "123457",
-      "username": "testuser2",
-      "nickname": "测试用户2",
-      "email": "user2@example.com",
-      "mobile": "13999999999",
-      "avatar": "https://api.weiyuai.cn/avatar/default.png",
-      "status": "ACTIVE",
-      "createdAt": "2023-01-02T12:00:00Z"
-    }
-  ],
-  "total": 150
-}
-```
 
 ## 字段说明
 
@@ -89,6 +59,38 @@ Authorization: Bearer <access_token>
 - 需要管理员权限
 - 支持分页查询以提高性能
 - 可能包含敏感信息，需要权限控制
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "users": [
+    {
+      "id": "123456",
+      "username": "testuser1",
+      "nickname": "测试用怷1",
+      "email": "user1@example.com",
+      "mobile": "13888888888",
+      "avatar": "https://api.weiyuai.cn/avatar/default.png",
+      "status": "ACTIVE",
+      "createdAt": "2023-01-01T12:00:00Z"
+    },
+    {
+      "id": "123457",
+      "username": "testuser2",
+      "nickname": "测试用怷2",
+      "email": "user2@example.com",
+      "mobile": "13999999999",
+      "avatar": "https://api.weiyuai.cn/avatar/default.png",
+      "status": "ACTIVE",
+      "createdAt": "2023-01-02T12:00:00Z"
+    }
+  ],
+  "total": 150
+}
+```
+
+</ResponseExample>
 
 <RequestExample>
 
