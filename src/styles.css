@@ -986,3 +986,27 @@ tr:hover {
     min-width: 100px !important;
   }
 }
+
+/* 代码示例区域 - 确保内容没有额外背景色 */
+.code-content pre,
+.code-content code,
+.response-content pre,
+.response-content code {
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
+  border: none !important;
+  margin: 0 !important;
+}
+
+/* 确保代码内容与容器背景对比清晰 */
+.code-content > div,
+.response-content > div {
+  background: transparent !important;
+}
+
+/* 确保所有嵌套元素都没有背景 */
+.code-content *,
+.response-content * {
+  background: transparent !important;
+}

@@ -282,7 +282,9 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
         boxSizing: 'border-box',
         borderRadius: '0 0 16px 16px'
       }}>
-        {children}
+        <div style={{ background: 'transparent', color: 'inherit' }}>
+          {children}
+        </div>
       </div>
     </div>
   )
@@ -511,7 +513,9 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
         boxSizing: 'border-box',
         borderRadius: '0 0 16px 16px'
       }}>
-        {children}
+        <div style={{ background: 'transparent', color: 'inherit' }}>
+          {children}
+        </div>
       </div>
     </div>
   )
