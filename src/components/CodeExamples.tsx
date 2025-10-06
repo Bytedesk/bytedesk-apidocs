@@ -293,7 +293,7 @@ export function RequestExample({ children, title }: WithChildren<{ title?: strin
   )
   
   // 检查是否在API页面并且容器可用
-  const isApiPage = window.location.pathname.includes('/api-reference/')
+  const isApiPage = window.location.pathname.includes('/api/')
   const desktopContainer = document.getElementById('api-examples-container')
   const mobileContainer = document.getElementById('mobile-api-examples-container')
   
@@ -527,7 +527,7 @@ export function ResponseExample({ children, title }: WithChildren<{ title?: stri
   )
   
   // 检查是否在API页面并且容器可用
-  const isApiPage = window.location.pathname.includes('/api-reference/')
+  const isApiPage = window.location.pathname.includes('/api/')
   const desktopContainer = document.getElementById('api-examples-container')
   const mobileContainer = document.getElementById('mobile-api-examples-container')
   
