@@ -47,6 +47,7 @@ import {
   AiProviders,
   KnowledgeBaseIntegration
 } from './components'
+import { ApiPlayground } from './components/ApiPlayground'
 
 // Export mapping for MDXProvider
 export const mdxComponents = {
@@ -74,6 +75,7 @@ export const mdxComponents = {
   RequestExample,
   ResponseExample,
   TryButton,
+  ApiPlayground,
   Update,
   SnippetIntro,
   Expandable,
@@ -127,6 +129,7 @@ export {
   RequestExample,
   ResponseExample,
   TryButton,
+  ApiPlayground,
   MDXContent,
   A,
   I18nTest,
