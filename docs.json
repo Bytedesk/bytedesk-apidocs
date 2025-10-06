@@ -20,12 +20,6 @@
             ]
           },
           {
-            "group": "AI Features",
-            "pages": [
-              "ai-features"
-            ]
-          },
-          {
             "group": "AI API",
             "pages": [
               "api-reference/ai/chat-completions"

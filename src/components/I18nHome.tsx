@@ -205,7 +205,7 @@ export const I18nHome: React.FC = () => {
                 <Card
                     title={intl.formatMessage({ id: 'home.modules.aiTitle' })}
                     icon="bot"
-                    href="/ai-features"
+                    href="/ai/chat-completions"
                 >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         {intl.formatMessage({ id: 'home.modules.aiDesc' })}
