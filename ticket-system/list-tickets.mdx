@@ -1,0 +1,139 @@
+---
+title: '工单列表'
+openapi: 'get /api/v1/ticket/list'
+---
+
+# 工单列表
+
+获取工单列表，支持分页和筛选。
+
+<RequestExample>
+
+```bash cURL
+curl --location --request GET 'https://api.weiyuai.cn/api/v1/ticket/list?page=1&pageSize=20&status=OPEN' \
+--header 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/ticket/list"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+}
+params = {
+    "page": 1,
+    "pageSize": 20,
+    "status": "OPEN"
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```javascript JavaScript
+const axios = require('axios');
+
+const url = 'https://api.weiyuai.cn/api/v1/ticket/list';
+const headers = {
+  'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+};
+const params = {
+  page: 1,
+  pageSize: 20,
+  status: 'OPEN'
+};
+
+axios.get(url, { headers, params })
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "tickets": [
+      {
+        "ticketId": "TK20251006001",
+        "title": "系统无法登录",
+        "status": "OPEN",
+        "priority": "HIGH",
+        "category": "technical",
+        "createdAt": "2025-10-06T15:30:00Z"
+      },
+      {
+        "ticketId": "TK20251006002",
+        "title": "账单查询",
+        "status": "OPEN",
+        "priority": "MEDIUM",
+        "category": "billing",
+        "createdAt": "2025-10-06T14:20:00Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 20,
+      "total": 45
+    }
+  }
+}
+```
+
+```json 401 Unauthorized
+{
+  "code": 401,
+  "message": "Invalid or expired access token"
+}
+```
+
+</ResponseExample>
+
+## 查询参数
+
+<ParamField query="page" type="number" default="1">
+  页码
+</ParamField>
+
+<ParamField query="pageSize" type="number" default="20">
+  每页数量
+</ParamField>
+
+<ParamField query="status" type="string">
+  筛选工单状态：`OPEN`、`IN_PROGRESS`、`RESOLVED`、`CLOSED`
+</ParamField>
+
+<ParamField query="priority" type="string">
+  筛选优先级：`LOW`、`MEDIUM`、`HIGH`、`URGENT`
+</ParamField>
+
+<ParamField query="category" type="string">
+  筛选分类
+</ParamField>
+
+<ParamField query="assigneeId" type="string">
+  筛选指派人
+</ParamField>
+
+## 响应字段
+
+<ResponseField name="tickets" type="array">
+  工单列表数组
+</ResponseField>
+
+<ResponseField name="pagination" type="object">
+  分页信息
+</ResponseField>
+
+## 使用 ApiPlayground 测试
+
+<ApiPlayground
+  method="GET"
+  endpoint="/api/v1/ticket/list"
+  description="获取工单列表"
+/>

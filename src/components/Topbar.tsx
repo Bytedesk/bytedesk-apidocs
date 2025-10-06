@@ -2,14 +2,17 @@ import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { LanguageSelector } from './LanguageSelector'
+import docs from '../../docs.json'
 
 interface TopbarProps {
   isMobile: boolean
   onSidebarToggle: () => void
   onExamplesToggle: () => void
+  activeTab: number
+  onTabChange: (index: number) => void
 }
 
-export function Topbar({ isMobile, onSidebarToggle, onExamplesToggle }: TopbarProps) {
+export function Topbar({ isMobile, onSidebarToggle, onExamplesToggle, activeTab, onTabChange }: TopbarProps) {
   const intl = useIntl()
   const [isDark, setIsDark] = React.useState(() => {
     if (typeof window !== 'undefined') {
@@ -20,7 +23,7 @@ export function Topbar({ isMobile, onSidebarToggle, onExamplesToggle }: TopbarPr
   })
   
   const location = useLocation()
-  const isApiPage = location.pathname.includes('/api-reference/')
+  const isApiPage = location.pathname.includes('/online-service/') || location.pathname.includes('/call-center/') || location.pathname.includes('/ticket-system/') || location.pathname.includes('/knowledge-base/') || location.pathname.includes('/ai-qa/')
 
   const toggleTheme = () => {
     const newTheme = !isDark
@@ -48,7 +51,52 @@ export function Topbar({ isMobile, onSidebarToggle, onExamplesToggle }: TopbarPr
         <Link className="site" to="/index">{intl.formatMessage({ id: 'app.title' })}</Link>
       </div>
       <div className="center">
-        {/* <input placeholder={intl.formatMessage({ id: 'common.search' })} /> */}
+        {/* Tab 切换 */}
+        {docs.navigation.tabs.length > 1 && (
+          <div style={{
+            display: 'flex',
+            gap: isMobile ? '4px' : '8px',
+            alignItems: 'center'
+          }}>
+            {docs.navigation.tabs.map((tab: any, index: number) => (
+              <button
+                key={tab.tab}
+                onClick={() => onTabChange(index)}
+                style={{
+                  padding: isMobile ? '6px 12px' : '8px 20px',
+                  borderRadius: '8px',
+                  background: activeTab === index 
+                    ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                    : 'transparent',
+                  color: activeTab === index ? '#ffffff' : 'var(--text-primary)',
+                  fontWeight: activeTab === index ? 600 : 400,
+                  fontSize: isMobile ? '13px' : '14px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  boxShadow: activeTab === index 
+                    ? '0 2px 8px rgba(102, 126, 234, 0.3)'
+                    : 'none',
+                  border: activeTab === index 
+                    ? 'none'
+                    : '1px solid var(--border-color)',
+                  whiteSpace: 'nowrap' as const
+                }}
+                onMouseEnter={(e) => {
+                  if (activeTab !== index) {
+                    e.currentTarget.style.background = 'var(--hover-bg)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activeTab !== index) {
+                    e.currentTarget.style.background = 'transparent'
+                  }
+                }}
+              >
+                {tab.tab}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
       <div className="right">
         {isMobile && isApiPage && (

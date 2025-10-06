@@ -22,42 +22,42 @@
           {
             "group": "AI API",
             "pages": [
-              "api-reference/ai/chat-completions"
+              "online-service/ai/chat-completions"
             ]
           },
           {
             "group": "Authentication",
             "pages": [
-              "api-reference/auth/register",
-              "api-reference/auth/login"
+              "online-service/auth/register",
+              "online-service/auth/login"
             ]
           },
           {
             "group": "Users",
             "pages": [
-              "api-reference/users/profile",
-              "api-reference/users/list",
-              "api-reference/users/create"
+              "online-service/users/profile",
+              "online-service/users/list",
+              "online-service/users/create"
             ]
           },
           {
             "group": "Threads",
             "pages": [
-              "api-reference/threads/list",
-              "api-reference/threads/create"
+              "online-service/threads/list",
+              "online-service/threads/create"
             ]
           },
           {
             "group": "Messages",
             "pages": [
-              "api-reference/messages/send"
+              "online-service/messages/send"
             ]
           },
           {
             "group": "Tickets",
             "pages": [
-              "api-reference/tickets/create",
-              "api-reference/tickets/query-org"
+              "online-service/tickets/create",
+              "online-service/tickets/query-org"
             ]
           }
         ]
@@ -77,6 +77,42 @@
             "pages": [
               "call-center/recordings/list-recordings",
               "call-center/recordings/download-recording"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "工单系统",
+        "groups": [
+          {
+            "group": "Tickets",
+            "pages": [
+              "ticket-system/create-ticket",
+              "ticket-system/list-tickets"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "知识库",
+        "groups": [
+          {
+            "group": "Articles",
+            "pages": [
+              "knowledge-base/create-article",
+              "knowledge-base/search-articles"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "AI问答",
+        "groups": [
+          {
+            "group": "Q&A",
+            "pages": [
+              "ai-qa/ask-question",
+              "ai-qa/session-history"
             ]
           }
         ]

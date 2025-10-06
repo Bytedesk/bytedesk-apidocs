@@ -1,0 +1,178 @@
+---
+title: '创建工单'
+openapi: 'post /api/v1/ticket/create'
+---
+
+# 创建工单
+
+创建一个新的工单记录。
+
+<RequestExample>
+
+```bash cURL
+curl --location --request POST 'https://api.weiyuai.cn/api/v1/ticket/create' \
+--header 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "title": "系统无法登录",
+  "description": "用户反馈无法登录系统，提示密码错误",
+  "priority": "HIGH",
+  "category": "technical",
+  "assigneeId": "agent_001"
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/ticket/create"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+    "Content-Type": "application/json"
+}
+payload = {
+    "title": "系统无法登录",
+    "description": "用户反馈无法登录系统，提示密码错误",
+    "priority": "HIGH",
+    "category": "technical",
+    "assigneeId": "agent_001"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+const axios = require('axios');
+
+const url = 'https://api.weiyuai.cn/api/v1/ticket/create';
+const headers = {
+  'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+  'Content-Type': 'application/json'
+};
+const data = {
+  title: '系统无法登录',
+  description: '用户反馈无法登录系统，提示密码错误',
+  priority: 'HIGH',
+  category: 'technical',
+  assigneeId: 'agent_001'
+};
+
+axios.post(url, data, { headers })
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "code": 200,
+  "message": "Ticket created successfully",
+  "data": {
+    "ticketId": "TK20251006001",
+    "title": "系统无法登录",
+    "description": "用户反馈无法登录系统，提示密码错误",
+    "status": "OPEN",
+    "priority": "HIGH",
+    "category": "technical",
+    "assigneeId": "agent_001",
+    "createdAt": "2025-10-06T15:30:00Z",
+    "updatedAt": "2025-10-06T15:30:00Z"
+  }
+}
+```
+
+```json 400 Bad Request
+{
+  "code": 400,
+  "message": "Invalid request parameters"
+}
+```
+
+```json 401 Unauthorized
+{
+  "code": 401,
+  "message": "Invalid or expired access token"
+}
+```
+
+</ResponseExample>
+
+## 请求参数
+
+<ParamField path="title" type="string" required>
+  工单标题
+</ParamField>
+
+<ParamField path="description" type="string" required>
+  工单详细描述
+</ParamField>
+
+<ParamField path="priority" type="string" required>
+  优先级：`LOW`（低）、`MEDIUM`（中）、`HIGH`（高）、`URGENT`（紧急）
+</ParamField>
+
+<ParamField path="category" type="string" required>
+  工单分类：`technical`（技术）、`billing`（账单）、`general`（一般咨询）
+</ParamField>
+
+<ParamField path="assigneeId" type="string">
+  指派的客服人员ID
+</ParamField>
+
+<ParamField path="tags" type="array">
+  工单标签数组
+</ParamField>
+
+<ParamField path="customFields" type="object">
+  自定义字段对象
+</ParamField>
+
+## 响应字段
+
+<ResponseField name="ticketId" type="string">
+  工单的唯一标识符
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  工单标题
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  工单描述
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  工单状态：`OPEN`（待处理）、`IN_PROGRESS`（处理中）、`RESOLVED`（已解决）、`CLOSED`（已关闭）
+</ResponseField>
+
+<ResponseField name="priority" type="string">
+  优先级
+</ResponseField>
+
+<ResponseField name="category" type="string">
+  工单分类
+</ResponseField>
+
+<ResponseField name="assigneeId" type="string">
+  指派的客服人员ID
+</ResponseField>
+
+<ResponseField name="createdAt" type="string">
+  创建时间（ISO 8601格式）
+</ResponseField>
+
+<ResponseField name="updatedAt" type="string">
+  更新时间（ISO 8601格式）
+</ResponseField>
+
+## 使用 ApiPlayground 测试
+
+<ApiPlayground
+  method="POST"
+  endpoint="/api/v1/ticket/create"
+  description="创建工单"
+/>

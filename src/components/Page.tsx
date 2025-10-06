@@ -8,8 +8,11 @@ const mdxModules = import.meta.glob([
   '../../*.mdx',
   '../../essentials/**/*.mdx',
   '../../ai-tools/**/*.mdx',
-  '../../api-reference/**/*.mdx',
+  '../../online-service/**/*.mdx',
   '../../call-center/**/*.mdx',
+  '../../ticket-system/**/*.mdx',
+  '../../knowledge-base/**/*.mdx',
+  '../../ai-qa/**/*.mdx',
   '../../snippets/**/*.mdx',
 ]) as Record<string, () => Promise<any>>
 
@@ -18,16 +21,17 @@ interface PageProps {
   isMobile?: boolean
   examplesOpen?: boolean
   onCloseExamples?: () => void
+  activeTab?: number
 }
 
-export function Page({ path, isMobile, examplesOpen, onCloseExamples }: PageProps) {
+export function Page({ path, isMobile, examplesOpen, onCloseExamples, activeTab = 0 }: PageProps) {
   // keys in mdxModules start with ../../
   const key = `../../${path}.mdx`
   const loader = mdxModules[key]
   const Mdx = React.useMemo(() => React.lazy(loader as any), [path])
   
   // Check if it's an API endpoint page
-  const isApiEndpoint = path.startsWith('api-reference/') || path.startsWith('call-center/')
+  const isApiEndpoint = path.startsWith('online-service/') || path.startsWith('call-center/') || path.startsWith('ticket-system/') || path.startsWith('knowledge-base/') || path.startsWith('ai-qa/')
   
   // Splitter size state to prevent drift
   const [sidebarSize, setSidebarSize] = React.useState(260)
@@ -88,7 +92,7 @@ export function Page({ path, isMobile, examplesOpen, onCloseExamples }: PageProp
               height: '100%'
             }}
           >
-            <Sidebar />
+            <Sidebar activeTab={activeTab} />
           </Splitter.Panel>
 
           {/* 中间和右侧 */}

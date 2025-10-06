@@ -1,0 +1,163 @@
+---
+title: '搜索知识库'
+openapi: 'get /api/v1/knowledge/search'
+---
+
+# 搜索知识库
+
+在知识库中搜索相关文章。
+
+<RequestExample>
+
+```bash cURL
+curl --location --request GET 'https://api.weiyuai.cn/api/v1/knowledge/search?q=密码&page=1&pageSize=10' \
+--header 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/knowledge/search"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+}
+params = {
+    "q": "密码",
+    "page": 1,
+    "pageSize": 10
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```javascript JavaScript
+const axios = require('axios');
+
+const url = 'https://api.weiyuai.cn/api/v1/knowledge/search';
+const headers = {
+  'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+};
+const params = {
+  q: '密码',
+  page: 1,
+  pageSize: 10
+};
+
+axios.get(url, { headers, params })
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "articles": [
+      {
+        "articleId": "KB20251006001",
+        "title": "如何重置密码",
+        "summary": "详细介绍密码重置的步骤和注意事项",
+        "category": "account",
+        "tags": ["密码", "账号安全"],
+        "views": 1523,
+        "likes": 89,
+        "relevance": 0.95,
+        "createdAt": "2025-10-06T16:00:00Z"
+      },
+      {
+        "articleId": "KB20251005002",
+        "title": "密码安全最佳实践",
+        "summary": "如何设置强密码以保护账号安全",
+        "category": "security",
+        "tags": ["密码", "安全"],
+        "views": 2341,
+        "likes": 156,
+        "relevance": 0.87,
+        "createdAt": "2025-10-05T10:30:00Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 10,
+      "total": 25
+    }
+  }
+}
+```
+
+```json 400 Bad Request
+{
+  "code": 400,
+  "message": "Search query is required"
+}
+```
+
+</ResponseExample>
+
+## 查询参数
+
+<ParamField query="q" type="string" required>
+  搜索关键词
+</ParamField>
+
+<ParamField query="page" type="number" default="1">
+  页码
+</ParamField>
+
+<ParamField query="pageSize" type="number" default="10">
+  每页数量
+</ParamField>
+
+<ParamField query="category" type="string">
+  筛选分类
+</ParamField>
+
+<ParamField query="tags" type="string">
+  筛选标签（多个标签用逗号分隔）
+</ParamField>
+
+<ParamField query="sortBy" type="string" default="relevance">
+  排序方式：`relevance`（相关度）、`views`（浏览量）、`likes`（点赞数）、`date`（时间）
+</ParamField>
+
+## 响应字段
+
+<ResponseField name="articles" type="array">
+  文章列表数组
+  
+  <Expandable title="Article Object">
+    <ResponseField name="articleId" type="string">
+      文章ID
+    </ResponseField>
+    
+    <ResponseField name="title" type="string">
+      文章标题
+    </ResponseField>
+    
+    <ResponseField name="summary" type="string">
+      文章摘要
+    </ResponseField>
+    
+    <ResponseField name="relevance" type="number">
+      搜索相关度（0-1）
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="pagination" type="object">
+  分页信息
+</ResponseField>
+
+## 使用 ApiPlayground 测试
+
+<ApiPlayground
+  method="GET"
+  endpoint="/api/v1/knowledge/search"
+  description="搜索知识库"
+/>

@@ -1,0 +1,183 @@
+---
+title: '创建知识库文章'
+openapi: 'post /api/v1/knowledge/article/create'
+---
+
+# 创建知识库文章
+
+创建一篇新的知识库文章。
+
+<RequestExample>
+
+```bash cURL
+curl --location --request POST 'https://api.weiyuai.cn/api/v1/knowledge/article/create' \
+--header 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "title": "如何重置密码",
+  "content": "详细的密码重置步骤...",
+  "category": "account",
+  "tags": ["密码", "账号安全"],
+  "status": "published"
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/knowledge/article/create"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+    "Content-Type": "application/json"
+}
+payload = {
+    "title": "如何重置密码",
+    "content": "详细的密码重置步骤...",
+    "category": "account",
+    "tags": ["密码", "账号安全"],
+    "status": "published"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+const axios = require('axios');
+
+const url = 'https://api.weiyuai.cn/api/v1/knowledge/article/create';
+const headers = {
+  'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+  'Content-Type': 'application/json'
+};
+const data = {
+  title: '如何重置密码',
+  content: '详细的密码重置步骤...',
+  category: 'account',
+  tags: ['密码', '账号安全'],
+  status: 'published'
+};
+
+axios.post(url, data, { headers })
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "code": 200,
+  "message": "Article created successfully",
+  "data": {
+    "articleId": "KB20251006001",
+    "title": "如何重置密码",
+    "content": "详细的密码重置步骤...",
+    "category": "account",
+    "tags": ["密码", "账号安全"],
+    "status": "published",
+    "views": 0,
+    "likes": 0,
+    "createdAt": "2025-10-06T16:00:00Z",
+    "updatedAt": "2025-10-06T16:00:00Z"
+  }
+}
+```
+
+```json 400 Bad Request
+{
+  "code": 400,
+  "message": "Invalid request parameters"
+}
+```
+
+```json 401 Unauthorized
+{
+  "code": 401,
+  "message": "Invalid or expired access token"
+}
+```
+
+</ResponseExample>
+
+## 请求参数
+
+<ParamField path="title" type="string" required>
+  文章标题
+</ParamField>
+
+<ParamField path="content" type="string" required>
+  文章内容（支持 Markdown 格式）
+</ParamField>
+
+<ParamField path="category" type="string" required>
+  文章分类
+</ParamField>
+
+<ParamField path="tags" type="array">
+  标签数组
+</ParamField>
+
+<ParamField path="status" type="string" default="draft">
+  文章状态：`draft`（草稿）、`published`（已发布）、`archived`（已归档）
+</ParamField>
+
+<ParamField path="summary" type="string">
+  文章摘要
+</ParamField>
+
+<ParamField path="coverImage" type="string">
+  封面图片 URL
+</ParamField>
+
+## 响应字段
+
+<ResponseField name="articleId" type="string">
+  文章的唯一标识符
+</ResponseField>
+
+<ResponseField name="title" type="string">
+  文章标题
+</ResponseField>
+
+<ResponseField name="content" type="string">
+  文章内容
+</ResponseField>
+
+<ResponseField name="category" type="string">
+  文章分类
+</ResponseField>
+
+<ResponseField name="tags" type="array">
+  标签数组
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  文章状态
+</ResponseField>
+
+<ResponseField name="views" type="number">
+  浏览次数
+</ResponseField>
+
+<ResponseField name="likes" type="number">
+  点赞数
+</ResponseField>
+
+<ResponseField name="createdAt" type="string">
+  创建时间（ISO 8601格式）
+</ResponseField>
+
+<ResponseField name="updatedAt" type="string">
+  更新时间（ISO 8601格式）
+</ResponseField>
+
+## 使用 ApiPlayground 测试
+
+<ApiPlayground
+  method="POST"
+  endpoint="/api/v1/knowledge/article/create"
+  description="创建知识库文章"
+/>

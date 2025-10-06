@@ -1,0 +1,164 @@
+---
+title: '会话历史'
+openapi: 'get /api/v1/ai/qa/history/{sessionId}'
+---
+
+# 获取会话历史
+
+获取指定会话的问答历史记录。
+
+<RequestExample>
+
+```bash cURL
+curl --location --request GET 'https://api.weiyuai.cn/api/v1/ai/qa/history/session_123?page=1&pageSize=20' \
+--header 'Authorization: Bearer YOUR_ACCESS_TOKEN'
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/ai/qa/history/session_123"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+}
+params = {
+    "page": 1,
+    "pageSize": 20
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```javascript JavaScript
+const axios = require('axios');
+
+const url = 'https://api.weiyuai.cn/api/v1/ai/qa/history/session_123';
+const headers = {
+  'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+};
+const params = {
+  page: 1,
+  pageSize: 20
+};
+
+axios.get(url, { headers, params })
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "sessionId": "session_123",
+    "messages": [
+      {
+        "messageId": "msg_001",
+        "role": "user",
+        "content": "如何重置密码？",
+        "timestamp": "2025-10-06T16:30:00Z"
+      },
+      {
+        "messageId": "msg_002",
+        "role": "assistant",
+        "content": "您可以通过以下步骤重置密码...",
+        "confidence": 0.95,
+        "timestamp": "2025-10-06T16:30:05Z"
+      },
+      {
+        "messageId": "msg_003",
+        "role": "user",
+        "content": "重置后需要重新登录吗？",
+        "timestamp": "2025-10-06T16:31:00Z"
+      },
+      {
+        "messageId": "msg_004",
+        "role": "assistant",
+        "content": "是的，密码重置后需要使用新密码重新登录。",
+        "confidence": 0.98,
+        "timestamp": "2025-10-06T16:31:03Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 20,
+      "total": 4
+    }
+  }
+}
+```
+
+```json 404 Not Found
+{
+  "code": 404,
+  "message": "Session not found"
+}
+```
+
+</ResponseExample>
+
+## 路径参数
+
+<ParamField path="sessionId" type="string" required>
+  会话的唯一标识符
+</ParamField>
+
+## 查询参数
+
+<ParamField query="page" type="number" default="1">
+  页码
+</ParamField>
+
+<ParamField query="pageSize" type="number" default="20">
+  每页数量
+</ParamField>
+
+## 响应字段
+
+<ResponseField name="sessionId" type="string">
+  会话ID
+</ResponseField>
+
+<ResponseField name="messages" type="array">
+  消息历史数组
+  
+  <Expandable title="Message Object">
+    <ResponseField name="messageId" type="string">
+      消息ID
+    </ResponseField>
+    
+    <ResponseField name="role" type="string">
+      角色：`user`（用户）、`assistant`（AI助手）
+    </ResponseField>
+    
+    <ResponseField name="content" type="string">
+      消息内容
+    </ResponseField>
+    
+    <ResponseField name="confidence" type="number">
+      置信度（仅助手消息）
+    </ResponseField>
+    
+    <ResponseField name="timestamp" type="string">
+      消息时间戳
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="pagination" type="object">
+  分页信息
+</ResponseField>
+
+## 使用 ApiPlayground 测试
+
+<ApiPlayground
+  method="GET"
+  endpoint="/api/v1/ai/qa/history/session_123"
+  description="获取会话历史"
+/>

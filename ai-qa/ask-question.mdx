@@ -1,0 +1,210 @@
+---
+title: 'AI智能问答'
+openapi: 'post /api/v1/ai/qa/ask'
+---
+
+# AI智能问答
+
+使用 AI 进行智能问答，支持多轮对话和上下文理解。
+
+<RequestExample>
+
+```bash cURL
+curl --location --request POST 'https://api.weiyuai.cn/api/v1/ai/qa/ask' \
+--header 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "question": "如何重置密码？",
+  "sessionId": "session_123",
+  "context": {
+    "userId": "user_001",
+    "language": "zh-CN"
+  }
+}'
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/ai/qa/ask"
+headers = {
+    "Authorization": "Bearer YOUR_ACCESS_TOKEN",
+    "Content-Type": "application/json"
+}
+payload = {
+    "question": "如何重置密码？",
+    "sessionId": "session_123",
+    "context": {
+        "userId": "user_001",
+        "language": "zh-CN"
+    }
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+const axios = require('axios');
+
+const url = 'https://api.weiyuai.cn/api/v1/ai/qa/ask';
+const headers = {
+  'Authorization': 'Bearer YOUR_ACCESS_TOKEN',
+  'Content-Type': 'application/json'
+};
+const data = {
+  question: '如何重置密码？',
+  sessionId: 'session_123',
+  context: {
+    userId: 'user_001',
+    language: 'zh-CN'
+  }
+};
+
+axios.post(url, data, { headers })
+  .then(response => console.log(response.data))
+  .catch(error => console.error(error));
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Success
+{
+  "code": 200,
+  "message": "Success",
+  "data": {
+    "answer": "您可以通过以下步骤重置密码：\n1. 点击登录页面的"忘记密码"\n2. 输入您的注册邮箱或手机号\n3. 接收验证码并验证\n4. 设置新密码\n5. 完成重置",
+    "confidence": 0.95,
+    "sources": [
+      {
+        "type": "knowledge_base",
+        "id": "KB20251006001",
+        "title": "如何重置密码",
+        "relevance": 0.98
+      }
+    ],
+    "suggestions": [
+      "密码安全最佳实践",
+      "账号安全设置"
+    ],
+    "sessionId": "session_123",
+    "timestamp": "2025-10-06T16:30:00Z"
+  }
+}
+```
+
+```json 400 Bad Request
+{
+  "code": 400,
+  "message": "Question is required"
+}
+```
+
+```json 429 Too Many Requests
+{
+  "code": 429,
+  "message": "Rate limit exceeded"
+}
+```
+
+</ResponseExample>
+
+## 请求参数
+
+<ParamField path="question" type="string" required>
+  用户提出的问题
+</ParamField>
+
+<ParamField path="sessionId" type="string">
+  会话ID，用于维持多轮对话上下文
+</ParamField>
+
+<ParamField path="context" type="object">
+  上下文信息
+  
+  <Expandable title="Context Properties">
+    <ParamField path="userId" type="string">
+      用户ID
+    </ParamField>
+    
+    <ParamField path="language" type="string" default="zh-CN">
+      语言代码
+    </ParamField>
+    
+    <ParamField path="department" type="string">
+      部门/业务线
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="options" type="object">
+  配置选项
+  
+  <Expandable title="Options Properties">
+    <ParamField path="temperature" type="number" default="0.7">
+      生成温度（0-1）
+    </ParamField>
+    
+    <ParamField path="maxTokens" type="number" default="500">
+      最大生成长度
+    </ParamField>
+    
+    <ParamField path="includeSource" type="boolean" default="true">
+      是否返回知识来源
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## 响应字段
+
+<ResponseField name="answer" type="string">
+  AI 生成的回答
+</ResponseField>
+
+<ResponseField name="confidence" type="number">
+  回答的置信度（0-1）
+</ResponseField>
+
+<ResponseField name="sources" type="array">
+  回答来源数组
+  
+  <Expandable title="Source Object">
+    <ResponseField name="type" type="string">
+      来源类型：`knowledge_base`、`faq`、`manual`
+    </ResponseField>
+    
+    <ResponseField name="id" type="string">
+      来源文档ID
+    </ResponseField>
+    
+    <ResponseField name="title" type="string">
+      来源文档标题
+    </ResponseField>
+    
+    <ResponseField name="relevance" type="number">
+      相关度（0-1）
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="suggestions" type="array">
+  相关问题建议
+</ResponseField>
+
+<ResponseField name="sessionId" type="string">
+  会话ID
+</ResponseField>
+
+<ResponseField name="timestamp" type="string">
+  回答时间戳
+</ResponseField>
+
+## 使用 ApiPlayground 测试
+
+<ApiPlayground
+  method="POST"
+  endpoint="/api/v1/ai/qa/ask"
+  description="AI智能问答"
+/>

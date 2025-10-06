@@ -15,12 +15,18 @@ export function Badge({ page }: BadgeProps) {
     'list-calls': 'get',           // 呼叫中心 - 呼叫列表
     'list-recordings': 'get',      // 呼叫中心 - 录音列表
     'download-recording': 'get',   // 呼叫中心 - 下载录音
+    'list-tickets': 'get',         // 工单系统 - 工单列表
+    'search-articles': 'get',      // 知识库 - 搜索文章
+    'session-history': 'get',      // AI问答 - 会话历史
     create: 'post', 
     send: 'post',
     login: 'post',
     register: 'post',
     'chat-completions': 'post',    // AI Chat Completions 接口
     'make-call': 'post',           // 呼叫中心 - 发起呼叫
+    'create-ticket': 'post',       // 工单系统 - 创建工单
+    'create-article': 'post',      // 知识库 - 创建文章
+    'ask-question': 'post',        // AI问答 - 提问
     delete: 'del', 
     webhook: 'hook' 
   }
