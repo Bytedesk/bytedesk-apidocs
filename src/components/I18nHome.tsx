@@ -1,178 +1,179 @@
 import React from 'react'
 import { useIntl } from 'react-intl'
+import { Card as AntCard, Space, Tag, Row, Col, Alert, Typography } from 'antd'
+import { RobotOutlined, ThunderboltOutlined, GlobalOutlined, BookOutlined } from '@ant-design/icons'
 import { Badge, Card, CardGroup } from '../components'
+import './I18nHome.module.css'
+
+const { Title, Paragraph, Text } = Typography
 
 export const I18nHome: React.FC = () => {
     const intl = useIntl()
 
     return (
         <div>
-            <div style={{
-                background: '#f8fafc',
-                border: '1px solid #e2e8f0',
-                borderRadius: '8px',
-                padding: '20px',
-                marginBottom: '32px'
-            }}>
-                <h3 style={{ margin: '0 0 16px 0', color: '#374151', fontSize: '16px' }}>
+            {/* 快速导航 */}
+            <AntCard
+                size="small"
+                style={{ marginBottom: 32 }}
+                styles={{
+                    body: { padding: '20px' }
+                }}
+            >
+                <Title level={4} style={{ marginTop: 0, marginBottom: 16 }}>
                     {intl.formatMessage({ id: 'common.quickNavigation' })}
-                </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
-                    <a href="api/core/auth/login" style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '8px 12px',
-                        background: 'white',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '6px',
-                        textDecoration: 'none',
-                        color: '#374151',
-                        transition: 'all 0.2s'
-                    }}>
-                        <Badge variant="warning">POST</Badge>
-                        <span>{intl.formatMessage({ id: 'auth.userLogin' })}</span>
-                    </a>
-                    <a href="api/core/users/profile" style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '8px 12px',
-                        background: 'white',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '6px',
-                        textDecoration: 'none',
-                        color: '#374151',
-                        transition: 'all 0.2s'
-                    }}>
-                        <Badge variant="success">GET</Badge>
-                        <span>{intl.formatMessage({ id: 'user.profile' })}</span>
-                    </a>
-                    <a href="api/service/messages/send" style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '8px 12px',
-                        background: 'white',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '6px',
-                        textDecoration: 'none',
-                        color: '#374151',
-                        transition: 'all 0.2s'
-                    }}>
-                        <Badge variant="warning">POST</Badge>
-                        <span>{intl.formatMessage({ id: 'message.send' })}</span>
-                    </a>
-                    <a href="api/ticket/create" style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        padding: '8px 12px',
-                        background: 'white',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '6px',
-                        textDecoration: 'none',
-                        color: '#374151',
-                        transition: 'all 0.2s'
-                    }}>
-                        <Badge variant="warning">POST</Badge>
-                        <span>{intl.formatMessage({ id: 'ticket.create' })}</span>
-                    </a>
-                </div>
-            </div>
+                </Title>
+                <Row gutter={[12, 12]}>
+                    <Col xs={24} sm={12} md={6}>
+                        <a href="api/core/auth/login" style={{ textDecoration: 'none' }}>
+                            <AntCard
+                                size="small"
+                                hoverable
+                                styles={{
+                                    body: { padding: '8px 12px' }
+                                }}
+                            >
+                                <Space>
+                                    <Badge variant="warning">POST</Badge>
+                                    <Text>{intl.formatMessage({ id: 'auth.userLogin' })}</Text>
+                                </Space>
+                            </AntCard>
+                        </a>
+                    </Col>
+                    <Col xs={24} sm={12} md={6}>
+                        <a href="api/core/users/profile" style={{ textDecoration: 'none' }}>
+                            <AntCard
+                                size="small"
+                                hoverable
+                                styles={{
+                                    body: { padding: '8px 12px' }
+                                }}
+                            >
+                                <Space>
+                                    <Badge variant="success">GET</Badge>
+                                    <Text>{intl.formatMessage({ id: 'user.profile' })}</Text>
+                                </Space>
+                            </AntCard>
+                        </a>
+                    </Col>
+                    <Col xs={24} sm={12} md={6}>
+                        <a href="api/service/messages/send" style={{ textDecoration: 'none' }}>
+                            <AntCard
+                                size="small"
+                                hoverable
+                                styles={{
+                                    body: { padding: '8px 12px' }
+                                }}
+                            >
+                                <Space>
+                                    <Badge variant="warning">POST</Badge>
+                                    <Text>{intl.formatMessage({ id: 'message.send' })}</Text>
+                                </Space>
+                            </AntCard>
+                        </a>
+                    </Col>
+                    <Col xs={24} sm={12} md={6}>
+                        <a href="api/ticket/create" style={{ textDecoration: 'none' }}>
+                            <AntCard
+                                size="small"
+                                hoverable
+                                styles={{
+                                    body: { padding: '8px 12px' }
+                                }}
+                            >
+                                <Space>
+                                    <Badge variant="warning">POST</Badge>
+                                    <Text>{intl.formatMessage({ id: 'ticket.create' })}</Text>
+                                </Space>
+                            </AntCard>
+                        </a>
+                    </Col>
+                </Row>
+            </AntCard>
 
-            <h2>{intl.formatMessage({ id: 'common.overview' })}</h2>
-            <p>{intl.formatMessage({ id: 'home.apiOverview' })}</p>
+            <Title level={2}>{intl.formatMessage({ id: 'common.overview' })}</Title>
+            <Paragraph>{intl.formatMessage({ id: 'home.apiOverview' })}</Paragraph>
 
             {/* AI对话功能突出展示 */}
-            <div style={{
-                background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f8fafc 100%)',
-                border: '2px solid #0ea5e9',
-                borderRadius: '16px',
-                padding: '32px',
-                margin: '32px 0',
-                color: '#0f172a',
-                boxShadow: '0 10px 40px rgba(14, 165, 233, 0.1)'
-            }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
-                    <span style={{ fontSize: '40px' }}>🤖</span>
-                    <h2 style={{ margin: 0, color: '#0f172a', fontSize: '28px', fontWeight: 'bold' }}>
-                        {intl.formatMessage({ id: 'ai.title' })}
-                    </h2>
-                    <span style={{
-                        background: 'linear-gradient(135deg, #0ea5e9, #3b82f6)',
-                        color: 'white',
-                        padding: '6px 16px',
-                        borderRadius: '20px',
-                        fontSize: '13px',
-                        fontWeight: 'bold',
-                        boxShadow: '0 2px 8px rgba(14, 165, 233, 0.3)'
-                    }}>
-                        ✨ 重点功能
-                    </span>
-                </div>
-                <p style={{ margin: '0 0 24px 0', fontSize: '18px', lineHeight: '1.7', color: '#475569' }}>
-                    {intl.formatMessage({ id: 'ai.description' })}
-                </p>
+            <Alert
+                message={
+                    <Space align="center" size="middle">
+                        <RobotOutlined style={{ fontSize: 32 }} />
+                        <Title level={2} style={{ margin: 0 }}>
+                            {intl.formatMessage({ id: 'ai.title' })}
+                        </Title>
+                        <Tag
+                            color="blue"
+                            style={{
+                                fontSize: 13,
+                                fontWeight: 'bold',
+                                padding: '6px 16px',
+                                borderRadius: 20
+                            }}
+                        >
+                            ✨ 重点功能
+                        </Tag>
+                    </Space>
+                }
+                description={
+                    <>
+                        <Paragraph style={{ fontSize: 18, marginBottom: 24 }}>
+                            {intl.formatMessage({ id: 'ai.description' })}
+                        </Paragraph>
+                        <Row gutter={[20, 20]}>
+                            <Col xs={24} md={8}>
+                                <AntCard size="small">
+                                    <Space direction="vertical" size="small">
+                                        <Space>
+                                            <ThunderboltOutlined style={{ fontSize: 24 }} />
+                                            <Text strong style={{ fontSize: 16 }}>
+                                                {intl.formatMessage({ id: 'ai.multimodal.title' })}
+                                            </Text>
+                                        </Space>
+                                        <Paragraph style={{ margin: 0, fontSize: 15 }}>
+                                            支持文本、图片、视频、文件等多模态智能对话交互
+                                        </Paragraph>
+                                    </Space>
+                                </AntCard>
+                            </Col>
+                            <Col xs={24} md={8}>
+                                <AntCard size="small">
+                                    <Space direction="vertical" size="small">
+                                        <Space>
+                                            <GlobalOutlined style={{ fontSize: 24 }} />
+                                            <Text strong style={{ fontSize: 16 }}>
+                                                {intl.formatMessage({ id: 'ai.providers.title' })}
+                                            </Text>
+                                        </Space>
+                                        <Paragraph style={{ margin: 0, fontSize: 15 }}>
+                                            支持DeepSeek、智谱AI、通义千问、OpenAI、火山引擎、阿里百炼等
+                                        </Paragraph>
+                                    </Space>
+                                </AntCard>
+                            </Col>
+                            <Col xs={24} md={8}>
+                                <AntCard size="small">
+                                    <Space direction="vertical" size="small">
+                                        <Space>
+                                            <BookOutlined style={{ fontSize: 24 }} />
+                                            <Text strong style={{ fontSize: 16 }}>
+                                                {intl.formatMessage({ id: 'ai.knowledge.title' })}
+                                            </Text>
+                                        </Space>
+                                        <Paragraph style={{ margin: 0, fontSize: 15 }}>
+                                            对接Dify、Coze、RAGFlow等知识库平台
+                                        </Paragraph>
+                                    </Space>
+                                </AntCard>
+                            </Col>
+                        </Row>
+                    </>
+                }
+                type="info"
+                style={{ marginBottom: 32, marginTop: 32 }}
+            />
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginTop: '24px' }}>
-                    <div style={{
-                        background: 'linear-gradient(135deg, #ffffff, #f8fafc)',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '12px',
-                        padding: '20px',
-                        boxShadow: '0 2px 12px rgba(0,0,0,0.04)'
-                    }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                            <span style={{ fontSize: '24px' }}>🎯</span>
-                            <strong style={{ color: '#1e293b', fontSize: '16px' }}>
-                                {intl.formatMessage({ id: 'ai.multimodal.title' })}
-                            </strong>
-                        </div>
-                        <p style={{ margin: 0, fontSize: '15px', color: '#64748b', lineHeight: '1.6' }}>
-                            支持文本、图片、视频、文件等多模态智能对话交互
-                        </p>
-                    </div>
-
-                    <div style={{
-                        background: 'linear-gradient(135deg, #ffffff, #f8fafc)',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '12px',
-                        padding: '20px',
-                        boxShadow: '0 2px 12px rgba(0,0,0,0.04)'
-                    }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                            <span style={{ fontSize: '24px' }}>🌐</span>
-                            <strong style={{ color: '#1e293b', fontSize: '16px' }}>
-                                {intl.formatMessage({ id: 'ai.providers.title' })}
-                            </strong>
-                        </div>
-                        <p style={{ margin: 0, fontSize: '15px', color: '#64748b', lineHeight: '1.6' }}>
-                            支持DeepSeek、智谱AI、通义千问、OpenAI、火山引擎、阿里百炼等
-                        </p>
-                    </div>
-
-                    <div style={{
-                        background: 'linear-gradient(135deg, #ffffff, #f8fafc)',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '12px',
-                        padding: '20px',
-                        boxShadow: '0 2px 12px rgba(0,0,0,0.04)'
-                    }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                            <span style={{ fontSize: '24px' }}>📚</span>
-                            <strong style={{ color: '#1e293b', fontSize: '16px' }}>
-                                {intl.formatMessage({ id: 'ai.knowledge.title' })}
-                            </strong>
-                        </div>
-                        <p style={{ margin: 0, fontSize: '15px', color: '#64748b', lineHeight: '1.6' }}>
-                            对接Dify、Coze、RAGFlow等知识库平台
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <h2>{intl.formatMessage({ id: 'common.quickStart' })}</h2>
+            <Title level={2}>{intl.formatMessage({ id: 'common.quickStart' })}</Title>
             <Card
                 title={intl.formatMessage({ id: 'auth.userLogin' })}
                 icon="user"
@@ -181,25 +182,25 @@ export const I18nHome: React.FC = () => {
                 {intl.formatMessage({ id: 'auth.loginDescription' })}
             </Card>
 
-            <h2>{intl.formatMessage({ id: 'common.authentication' })}</h2>
+            <Title level={2}>{intl.formatMessage({ id: 'common.authentication' })}</Title>
 
-            <h3>{intl.formatMessage({ id: 'auth.bearerTokenAuth' })}</h3>
-            <p>{intl.formatMessage({ id: 'auth.bearerTokenDescription' })}</p>
+            <Title level={3}>{intl.formatMessage({ id: 'auth.bearerTokenAuth' })}</Title>
+            <Paragraph>{intl.formatMessage({ id: 'auth.bearerTokenDescription' })}</Paragraph>
             <pre><code>Authorization: Bearer &lt;access_token&gt;</code></pre>
 
-            <h3>{intl.formatMessage({ id: 'auth.accessTokenLogin' })}</h3>
-            <p>{intl.formatMessage({ id: 'auth.accessTokenDescription' })}</p>
+            <Title level={3}>{intl.formatMessage({ id: 'auth.accessTokenLogin' })}</Title>
+            <Paragraph>{intl.formatMessage({ id: 'auth.accessTokenDescription' })}</Paragraph>
             <pre><code>GET /auth/login?accessToken=&lt;access_token&gt;</code></pre>
 
-            <h2>{intl.formatMessage({ id: 'common.baseUrl' })}</h2>
+            <Title level={2}>{intl.formatMessage({ id: 'common.baseUrl' })}</Title>
 
-            <h3>REST API</h3>
+            <Title level={3}>REST API</Title>
             <pre><code>https://api.weiyuai.cn/api/v1</code></pre>
 
-            <h3>Web App (AccessToken {intl.formatMessage({ id: 'auth.userLogin' })})</h3>
+            <Title level={3}>Web App (AccessToken {intl.formatMessage({ id: 'auth.userLogin' })})</Title>
             <pre><code>https://api.weiyuai.cn</code></pre>
 
-            <h2>{intl.formatMessage({ id: 'common.apiModules' })}</h2>
+            <Title level={2}>{intl.formatMessage({ id: 'common.apiModules' })}</Title>
 
             <CardGroup cols={2}>
                 <Card
@@ -207,20 +208,12 @@ export const I18nHome: React.FC = () => {
                     icon="bot"
                     href="/api/ai/chat-completions"
                 >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        {intl.formatMessage({ id: 'home.modules.aiDesc' })}
-                        <span style={{
-                            background: '#f5222d',
-                            color: 'white',
-                            padding: '2px 8px',
-                            borderRadius: '12px',
-                            fontSize: '11px',
-                            fontWeight: 'bold',
-                            marginLeft: '4px'
-                        }}>
+                    <Space>
+                        <Text>{intl.formatMessage({ id: 'home.modules.aiDesc' })}</Text>
+                        <Tag color="red" style={{ fontWeight: 'bold' }}>
                             🔥 HOT
-                        </span>
-                    </div>
+                        </Tag>
+                    </Space>
                 </Card>
                 <Card
                     title={intl.formatMessage({ id: 'home.modules.authTitle' })}
@@ -259,16 +252,16 @@ export const I18nHome: React.FC = () => {
                 </Card>
             </CardGroup>
 
-            <h2>{intl.formatMessage({ id: 'common.responseFormat' })}</h2>
-            <p>All API responses follow a consistent JSON format:</p>
+            <Title level={2}>{intl.formatMessage({ id: 'common.responseFormat' })}</Title>
+            <Paragraph>All API responses follow a consistent JSON format:</Paragraph>
             <pre><code>{`{
   "success": true,
   "data": {},
   "message": "Operation completed successfully"
 }`}</code></pre>
 
-            <h2>{intl.formatMessage({ id: 'common.errorHandling' })}</h2>
-            <p>When an error occurs, the API returns an appropriate HTTP status code along with an error response:</p>
+            <Title level={2}>{intl.formatMessage({ id: 'common.errorHandling' })}</Title>
+            <Paragraph>When an error occurs, the API returns an appropriate HTTP status code along with an error response:</Paragraph>
             <pre><code>{`{
   "error": 400,
   "message": "${intl.formatMessage({ id: 'error.badRequest' })}"

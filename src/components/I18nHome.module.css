@@ -1,0 +1,57 @@
+/* I18nHome 组件样式 - 深色主题适配 */
+
+/* Alert 组件深色主题 */
+:global([data-theme="dark"]) :global(.ant-alert-info) {
+  background-color: rgba(14, 165, 233, 0.1);
+  border-color: #0ea5e9;
+}
+
+:global([data-theme="dark"]) :global(.ant-alert-info .ant-alert-icon) {
+  color: #0ea5e9;
+}
+
+/* Card 组件深色主题 */
+:global([data-theme="dark"]) :global(.ant-card) {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+:global([data-theme="dark"]) :global(.ant-card-head) {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+:global([data-theme="dark"]) :global(.ant-card-head-title) {
+  color: var(--text-primary);
+}
+
+:global([data-theme="dark"]) :global(.ant-card-body) {
+  color: var(--text-secondary);
+}
+
+/* Typography 深色主题 */
+:global([data-theme="dark"]) :global(.ant-typography) {
+  color: var(--text-primary);
+}
+
+/* Space 和 Row 深色主题 */
+:global([data-theme="dark"]) :global(.ant-space-item),
+:global([data-theme="dark"]) :global(.ant-col) {
+  color: var(--text-primary);
+}
+
+/* Tag 深色主题保持鲜艳色彩 */
+:global([data-theme="dark"]) :global(.ant-tag) {
+  border-color: transparent;
+}
+
+/* 确保 pre code 在深色主题下可读 */
+:global([data-theme="dark"]) pre {
+  background: var(--code-bg);
+  border-color: var(--border-color);
+}
+
+:global([data-theme="dark"]) pre code {
+  color: #e2e8f0;
+}

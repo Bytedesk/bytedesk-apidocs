@@ -1,0 +1,31 @@
+/* Card 组件样式 - 深色主题适配 */
+
+/* 深色主题下的 Card 组件 */
+[data-theme="dark"] .ant-card {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .ant-card-head {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .ant-card-head-title {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .ant-card-body {
+  color: var(--text-secondary);
+}
+
+/* 确保 Card 中的 Typography.Text 适配主题 */
+[data-theme="dark"] .ant-card .ant-typography {
+  color: var(--text-primary);
+}
+
+/* Card hover 效果 */
+[data-theme="dark"] .ant-card-hoverable:hover {
+  border-color: var(--primary);
+}

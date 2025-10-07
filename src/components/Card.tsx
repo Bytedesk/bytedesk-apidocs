@@ -1,6 +1,9 @@
 import React from 'react'
-import { Card as AntCard } from 'antd'
+import { Card as AntCard, Typography } from 'antd'
 import { Link } from 'react-router-dom'
+import './Card.css'
+
+const { Text } = Typography
 
 type WithChildren<T = {}> = T & { children?: React.ReactNode }
 
@@ -12,7 +15,7 @@ export function Card(props: WithChildren<{ title?: string; href?: string; icon?:
       title={
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {props.icon && <span aria-hidden>{props.icon}</span>}
-          <span>{props.title}</span>
+          <Text strong style={{ fontSize: 16 }}>{props.title}</Text>
         </div>
       }
     >
