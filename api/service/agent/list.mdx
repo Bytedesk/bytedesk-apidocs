@@ -1,0 +1,166 @@
+---
+title: "GET 查询客服列表"
+openapi: "GET /api/v1/agent"
+---
+
+## 概述
+
+查询组织下的客服列表，支持分页查询和状态筛选。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground
+    method="GET"
+    endpoint="/api/v1/agent"
+  />
+</div>
+
+## 接口说明
+
+此接口用于获取当前组织下的所有客服信息，包括客服状态、技能组、接待数量等。支持按组织、用户等维度查询。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+```
+
+## 查询参数
+
+- `orgUid` (可选): 组织唯一标识符
+- `userUid` (可选): 用户唯一标识符
+- `status` (可选): 客服状态（ONLINE, OFFLINE, BUSY, AWAY）
+- `page` (可选): 页码，默认为 0
+- `size` (可选): 每页数量，默认为 10
+
+## 字段说明
+
+### 客服对象字段
+
+- `uid`: 客服唯一标识符
+- `userUid`: 用户唯一标识符
+- `nickname`: 客服昵称
+- `avatar`: 客服头像 URL
+- `status`: 客服状态
+  - `ONLINE`: 在线
+  - `OFFLINE`: 离线
+  - `BUSY`: 忙碌
+  - `AWAY`: 离开
+- `workgroupUid`: 所属技能组 UID
+- `autoReply`: 自动回复内容
+- `maxThreads`: 最大接待数
+- `currentThreads`: 当前接待数
+- `isAvailable`: 是否可用（接待未满且在线）
+- `createdAt`: 创建时间
+
+## 使用场景
+
+- 查看客服列表
+- 客服状态监控
+- 客服分配
+- 工作量统计
+
+## 注意事项
+
+- 需要相应的权限才能查看客服列表
+- 只能查看当前组织及子组织的客服
+- 客服状态会实时更新
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "content": [
+      {
+        "uid": "agent_123456",
+        "userUid": "user_123456",
+        "nickname": "客服小王",
+        "avatar": "https://api.weiyuai.cn/avatar/agent1.png",
+        "status": "ONLINE",
+        "workgroupUid": "wg_123456",
+        "autoReply": "您好，我是客服小王，请问有什么可以帮您？",
+        "maxThreads": 10,
+        "currentThreads": 3,
+        "isAvailable": true,
+        "createdAt": "2025-01-07T09:00:00Z"
+      },
+      {
+        "uid": "agent_123457",
+        "userUid": "user_123457",
+        "nickname": "客服小李",
+        "avatar": "https://api.weiyuai.cn/avatar/agent2.png",
+        "status": "BUSY",
+        "workgroupUid": "wg_123456",
+        "autoReply": "您好，我是客服小李，请稍等片刻",
+        "maxThreads": 10,
+        "currentThreads": 10,
+        "isAvailable": false,
+        "createdAt": "2025-01-07T09:00:00Z"
+      }
+    ],
+    "pageable": {
+      "pageNumber": 0,
+      "pageSize": 10
+    },
+    "totalPages": 1,
+    "totalElements": 2,
+    "last": true,
+    "first": true
+  }
+}
+```
+
+</ResponseExample>
+
+<RequestExample>
+
+```bash cURL
+# 查询所有在线客服
+curl -X GET "https://api.weiyuai.cn/api/v1/agent?status=ONLINE&page=0&size=10" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Accept: application/json"
+
+# 查询指定技能组的客服
+curl -X GET "https://api.weiyuai.cn/api/v1/agent?workgroupUid=wg_123456&page=0&size=10" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Accept: application/json"
+```
+
+```javascript JavaScript
+// 查询在线客服
+const response = await fetch('https://api.weiyuai.cn/api/v1/agent?status=ONLINE&page=0&size=10', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer your_access_token_here',
+    'Accept': 'application/json'
+  }
+});
+
+const result = await response.json();
+const agents = result.data.content;
+const availableAgents = agents.filter(agent => agent.isAvailable);
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/agent"
+headers = {
+  "Authorization": "Bearer your_access_token_here",
+  "Accept": "application/json"
+}
+params = {
+  "status": "ONLINE",
+  "page": 0,
+  "size": 10
+}
+
+response = requests.get(url, headers=headers, params=params)
+result = response.json()
+agents = result["data"]["content"]
+available_agents = [a for a in agents if a["isAvailable"]]
+```
+
+</RequestExample>

@@ -1,0 +1,96 @@
+---
+title: "POST 退出登录"
+openapi: "POST /api/v1/user/logout"
+---
+
+## 概述
+
+用户退出登录，使当前 access_token 失效。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground
+    method="POST"
+    endpoint="/api/v1/user/logout"
+  />
+</div>
+
+## 接口说明
+
+用户通过此接口退出登录，服务端会将当前的 access_token 加入黑名单，使其失效。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+## 使用场景
+
+- 用户主动退出登录
+- 切换账号
+- 安全退出
+
+## 注意事项
+
+- 退出登录后，当前的 access_token 将无法使用
+- 客户端应清除本地存储的 token
+- 建议在退出时清除本地缓存数据
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "code": 200,
+  "message": "success",
+  "data": true
+}
+```
+
+```json 400 Token无效
+{
+  "code": 400,
+  "message": "accessToken is empty",
+  "data": false
+}
+```
+
+</ResponseExample>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.weiyuai.cn/api/v1/user/logout" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Content-Type: application/json"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.weiyuai.cn/api/v1/user/logout', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer your_access_token_here',
+    'Content-Type': 'application/json'
+  }
+});
+
+const result = await response.json();
+
+// 清除本地存储的 token
+localStorage.removeItem('access_token');
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/user/logout"
+headers = {
+  "Authorization": "Bearer your_access_token_here",
+  "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers)
+result = response.json()
+```
+
+</RequestExample>

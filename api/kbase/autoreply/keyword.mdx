@@ -1,0 +1,171 @@
+---
+title: "POST 创建关键词自动回复"
+openapi: "POST /api/v1/autoreply/keyword"
+---
+
+## 概述
+
+创建关键词自动回复规则，当用户消息包含指定关键词时自动回复。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground
+    method="POST"
+    endpoint="/api/v1/autoreply/keyword"
+  />
+</div>
+
+## 接口说明
+
+此接口用于创建基于关键词的自动回复规则。可以设置多个关键词，当用户消息中包含任一关键词时触发自动回复。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+## 请求体
+
+```json
+{
+  "name": "价格咨询自动回复",
+  "keywords": ["价格", "多少钱", "费用"],
+  "replyType": "text",
+  "content": "我们的产品价格请参考官网价格页面，或咨询客服了解详情",
+  "isEnabled": true,
+  "priority": 1
+}
+```
+
+## 字段说明
+
+### 请求字段
+
+- `name` (必需): 规则名称
+- `keywords` (必需): 关键词数组，支持多个关键词
+- `replyType` (必需): 回复类型
+  - `text`: 文本回复
+  - `image`: 图片回复
+  - `article`: 文章回复
+  - `card`: 卡片回复
+- `content` (必需): 回复内容
+- `isEnabled` (可选): 是否启用，默认 true
+- `priority` (可选): 优先级，数字越大优先级越高
+
+### 自动回复对象字段
+
+- `uid`: 规则唯一标识符
+- `name`: 规则名称
+- `keywords`: 关键词数组
+- `replyType`: 回复类型
+- `content`: 回复内容
+- `isEnabled`: 是否启用
+- `priority`: 优先级
+- `hitCount`: 命中次数
+- `createdAt`: 创建时间
+- `updatedAt`: 更新时间
+
+## 使用场景
+
+- 常见问题自动回复
+- 关键词触发回复
+- 减轻客服工作量
+- 提升响应速度
+
+## 注意事项
+
+- 关键词匹配支持模糊匹配
+- 如果多条规则同时匹配，按优先级和创建时间排序
+- 建议合理设置优先级避免冲突
+- 支持正则表达式匹配
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "uid": "autoreply_123456",
+    "name": "价格咨询自动回复",
+    "keywords": ["价格", "多少钱", "费用"],
+    "replyType": "text",
+    "content": "我们的产品价格请参考官网价格页面，或咨询客服了解详情",
+    "isEnabled": true,
+    "priority": 1,
+    "hitCount": 0,
+    "createdAt": "2025-01-07T10:30:00Z",
+    "updatedAt": "2025-01-07T10:30:00Z"
+  }
+}
+```
+
+```json 400 参数错误
+{
+  "code": 400,
+  "message": "Keywords cannot be empty",
+  "data": null
+}
+```
+
+</ResponseExample>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.weiyuai.cn/api/v1/autoreply/keyword" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "价格咨询自动回复",
+    "keywords": ["价格", "多少钱", "费用"],
+    "replyType": "text",
+    "content": "我们的产品价格请参考官网价格页面",
+    "isEnabled": true,
+    "priority": 1
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.weiyuai.cn/api/v1/autoreply/keyword', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer your_access_token_here',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: '价格咨询自动回复',
+    keywords: ['价格', '多少钱', '费用'],
+    replyType: 'text',
+    content: '我们的产品价格请参考官网价格页面',
+    isEnabled: true,
+    priority: 1
+  })
+});
+
+const result = await response.json();
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/autoreply/keyword"
+headers = {
+  "Authorization": "Bearer your_access_token_here",
+  "Content-Type": "application/json"
+}
+data = {
+  "name": "价格咨询自动回复",
+  "keywords": ["价格", "多少钱", "费用"],
+  "replyType": "text",
+  "content": "我们的产品价格请参考官网价格页面",
+  "isEnabled": True,
+  "priority": 1
+}
+
+response = requests.post(url, headers=headers, json=data)
+result = response.json()
+```
+
+</RequestExample>

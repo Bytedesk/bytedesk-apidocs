@@ -23,7 +23,9 @@
             "group": "Authentication",
             "pages": [
               "api/core/auth/register",
-              "api/core/auth/login"
+              "api/core/auth/login",
+              "api/core/auth/change-password",
+              "api/core/auth/logout"
             ]
           },
           {
@@ -35,6 +37,25 @@
             ]
           },
           {
+            "group": "Connections",
+            "pages": [
+              "api/core/connection/list",
+              "api/core/connection/presence"
+            ]
+          },
+          {
+            "group": "Messages",
+            "pages": [
+              "api/core/message/send"
+            ]
+          },
+          {
+            "group": "Groups",
+            "pages": [
+              "api/core/group/create"
+            ]
+          },
+          {
             "group": "Threads",
             "pages": [
               "api/service/threads/list",
@@ -42,9 +63,17 @@
             ]
           },
           {
-            "group": "Messages",
+            "group": "Agents",
             "pages": [
-              "api/service/messages/send"
+              "api/service/agent/list",
+              "api/service/agent/accept-thread",
+              "api/service/agent/update-status"
+            ]
+          },
+          {
+            "group": "Visitors",
+            "pages": [
+              "api/service/visitor/create-thread"
             ]
           }
         ]
@@ -77,7 +106,9 @@
               "api/ticket/create",
               "api/ticket/query-org",
               "api/ticket/create-ticket",
-              "api/ticket/list-tickets"
+              "api/ticket/list-tickets",
+              "api/ticket/list",
+              "api/ticket/update-status"
             ]
           }
         ]
@@ -89,7 +120,20 @@
             "group": "Articles",
             "pages": [
               "api/kbase/create-article",
-              "api/kbase/search-articles"
+              "api/kbase/search-articles",
+              "api/kbase/article/list"
+            ]
+          },
+          {
+            "group": "FAQ",
+            "pages": [
+              "api/kbase/faq/create"
+            ]
+          },
+          {
+            "group": "Auto Reply",
+            "pages": [
+              "api/kbase/autoreply/keyword"
             ]
           }
         ]
@@ -101,6 +145,19 @@
             "group": "AI API",
             "pages": [
               "api/ai/chat-completions"
+            ]
+          },
+          {
+            "group": "Robots",
+            "pages": [
+              "api/ai/robot/create",
+              "api/ai/robot/chat"
+            ]
+          },
+          {
+            "group": "LLM Providers",
+            "pages": [
+              "api/ai/llm/provider"
             ]
           },
           {

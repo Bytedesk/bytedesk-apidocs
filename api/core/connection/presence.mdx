@@ -1,0 +1,115 @@
+---
+title: "GET 获取用户在线状态"
+openapi: "GET /api/v1/connection/presence/{userUid}"
+---
+
+## 概述
+
+获取指定用户的在线状态和活跃连接数。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground
+    method="GET"
+    endpoint="/api/v1/connection/presence/{userUid}"
+  />
+</div>
+
+## 接口说明
+
+此接口用于查询指定用户的在线状态，返回用户的在线/离线状态以及活跃的连接数量。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+```
+
+## 路径参数
+
+- `userUid` (必需): 用户唯一标识符
+
+## 字段说明
+
+- `userUid`: 用户唯一标识符
+- `isOnline`: 是否在线
+- `activeConnections`: 活跃连接数量
+- `lastSeenAt`: 最后活跃时间
+
+## 使用场景
+
+- 显示用户在线状态
+- 判断用户是否可联系
+- 实时通讯状态显示
+- 用户活跃度统计
+
+## 注意事项
+
+- 需要有效的访问权限才能查询其他用户的状态
+- 在线状态实时更新
+- 活跃连接数表示同一用户在不同设备上的登录数量
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "userUid": "user_123456",
+    "isOnline": true,
+    "activeConnections": 2,
+    "lastSeenAt": "2025-01-07T10:30:00Z"
+  }
+}
+```
+
+```json 404 用户不存在
+{
+  "code": 404,
+  "message": "User not found",
+  "data": null
+}
+```
+
+</ResponseExample>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.weiyuai.cn/api/v1/connection/presence/user_123456" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Accept: application/json"
+```
+
+```javascript JavaScript
+const userUid = 'user_123456';
+const response = await fetch(`https://api.weiyuai.cn/api/v1/connection/presence/${userUid}`, {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer your_access_token_here',
+    'Accept': 'application/json'
+  }
+});
+
+const result = await response.json();
+const presence = result.data;
+console.log(`User is ${presence.isOnline ? 'online' : 'offline'}`);
+```
+
+```python Python
+import requests
+
+user_uid = "user_123456"
+url = f"https://api.weiyuai.cn/api/v1/connection/presence/{user_uid}"
+headers = {
+  "Authorization": "Bearer your_access_token_here",
+  "Accept": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+result = response.json()
+presence = result["data"]
+print(f"User is {'online' if presence['isOnline'] else 'offline'}")
+```
+
+</RequestExample>

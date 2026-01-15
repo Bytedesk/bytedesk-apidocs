@@ -1,0 +1,154 @@
+---
+title: "POST 客服接受会话"
+openapi: "POST /api/v1/agent/accept"
+---
+
+## 概述
+
+客服接受访客的会话请求，开始对话。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground
+    method="POST"
+    endpoint="/api/v1/agent/accept"
+  />
+</div>
+
+## 接口说明
+
+此接口用于客服主动接受待分配的会话。当有新访客进入时，会话会先进入队列，客服可以调用此接口接取会话。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+## 请求体
+
+```json
+{
+  "threadUid": "thread_123456"
+}
+```
+
+## 字段说明
+
+### 请求字段
+
+- `threadUid` (必需): 会话唯一标识符
+
+### 会话对象字段
+
+- `uid`: 会话唯一标识符
+- `visitorUid`: 访客唯一标识符
+- `agentUid`: 客服唯一标识符
+- `workgroupUid`: 技能组唯一标识符
+- `status`: 会话状态（QUEUING, ASSIGNED, CLOSED）
+- `createdAt`: 创建时间
+
+## 使用场景
+
+- 客服主动接取排队中的会话
+- 会话分配
+- 转接会话
+
+## 注意事项
+
+- 客服必须在线才能接受会话
+- 当前接待数未达到上限
+- 会话已被其他客服接受时会失败
+- 接受后会通过 WebSocket 通知访客
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "uid": "thread_123456",
+    "visitorUid": "visitor_123456",
+    "agentUid": "agent_123456",
+    "workgroupUid": "wg_123456",
+    "status": "ASSIGNED",
+    "createdAt": "2025-01-07T10:30:00Z"
+  }
+}
+```
+
+```json 400 会话不存在
+{
+  "code": 400,
+  "message": "Thread not found",
+  "data": null
+}
+```
+
+```json 400 已被其他客服接受
+{
+  "code": 400,
+  "message": "Thread already assigned to another agent",
+  "data": null
+}
+```
+
+```json 403 接待数已满
+{
+  "code": 403,
+  "message": "Agent has reached maximum threads limit",
+  "data": null
+}
+```
+
+</ResponseExample>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.weiyuai.cn/api/v1/agent/accept" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "threadUid": "thread_123456"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.weiyuai.cn/api/v1/agent/accept', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer your_access_token_here',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    threadUid: 'thread_123456'
+  })
+});
+
+const result = await response.json();
+if (result.code === 200) {
+  console.log('成功接受会话', result.data);
+}
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/agent/accept"
+headers = {
+  "Authorization": "Bearer your_access_token_here",
+  "Content-Type": "application/json"
+}
+data = {
+  "threadUid": "thread_123456"
+}
+
+response = requests.post(url, headers=headers, json=data)
+result = response.json()
+if result["code"] == 200:
+  print("成功接受会话", result["data"])
+```
+
+</RequestExample>

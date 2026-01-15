@@ -1,0 +1,166 @@
+---
+title: "POST 创建群组"
+openapi: "POST /api/v1/group"
+---
+
+## 概述
+
+创建一个新的群组，支持设置群组名称、描述、头像等信息。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground
+    method="POST"
+    endpoint="/api/v1/group"
+  />
+</div>
+
+## 接口说明
+
+此接口用于创建新的群组。创建者自动成为群组管理员。创建后可以邀请其他成员加入。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+## 请求体
+
+```json
+{
+  "name": "群组名称",
+  "description": "群组描述",
+  "avatar": "https://example.com/avatar.png",
+  "type": "PUBLIC",
+  "maxMembers": 500,
+  "needApproval": false
+}
+```
+
+## 字段说明
+
+### 请求字段
+
+- `name` (必需): 群组名称，长度 1-50 字符
+- `description` (可选): 群组描述，长度 0-200 字符
+- `avatar` (可选): 群组头像 URL
+- `type` (可选): 群组类型
+  - `PUBLIC`: 公开群组
+  - `PRIVATE`: 私有群组
+  - `ORG`: 组织群组
+- `maxMembers` (可选): 最大成员数，默认 500
+- `needApproval` (可选): 是否需要审批加入，默认 false
+
+### 群组对象字段
+
+- `uid`: 群组唯一标识符
+- `name`: 群组名称
+- `description`: 群组描述
+- `avatar`: 群组头像 URL
+- `type`: 群组类型
+- `maxMembers`: 最大成员数
+- `needApproval`: 是否需要审批
+- `memberCount`: 当前成员数
+- `ownerUid`: 群主用户 UID
+- `createdAt`: 创建时间
+
+## 使用场景
+
+- 创建项目讨论组
+- 创建部门群组
+- 创建兴趣群组
+- 创建临时讨论组
+
+## 注意事项
+
+- 群组名称不能为空
+- 群组类型创建后不能修改
+- 创建者自动成为群主
+- 群组创建后自动生成对应的会话
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "uid": "group_123456",
+    "name": "项目讨论组",
+    "description": "讨论项目相关事宜",
+    "avatar": "https://api.weiyuai.cn/avatar/default.png",
+    "type": "PRIVATE",
+    "maxMembers": 500,
+    "needApproval": true,
+    "memberCount": 1,
+    "ownerUid": "user_123456",
+    "createdAt": "2025-01-07T10:30:00Z"
+  }
+}
+```
+
+```json 400 参数错误
+{
+  "code": 400,
+  "message": "Group name cannot be empty",
+  "data": null
+}
+```
+
+</ResponseExample>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.weiyuai.cn/api/v1/group" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "项目讨论组",
+    "description": "讨论项目相关事宜",
+    "type": "PRIVATE",
+    "needApproval": true
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.weiyuai.cn/api/v1/group', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer your_access_token_here',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: '项目讨论组',
+    description: '讨论项目相关事宜',
+    type: 'PRIVATE',
+    needApproval: true
+  })
+});
+
+const result = await response.json();
+const group = result.data;
+```
+
+```python Python
+import requests
+
+url = "https://api.weiyuai.cn/api/v1/group"
+headers = {
+  "Authorization": "Bearer your_access_token_here",
+  "Content-Type": "application/json"
+}
+data = {
+  "name": "项目讨论组",
+  "description": "讨论项目相关事宜",
+  "type": "PRIVATE",
+  "needApproval": True
+}
+
+response = requests.post(url, headers=headers, json=data)
+result = response.json()
+group = result["data"]
+```
+
+</RequestExample>

@@ -1,0 +1,181 @@
+---
+title: "GET 查询文章列表"
+openapi: "GET /api/v1/article"
+---
+
+## 概述
+
+分页查询知识库文章列表，支持按分类、标签、关键词等筛选。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground
+    method="GET"
+    endpoint="/api/v1/article"
+  />
+</div>
+
+## 接口说明
+
+此接口用于获取知识库中的文章列表。支持按组织、分类、标签等多维度查询，以及关键词搜索。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+```
+
+## 查询参数
+
+- `orgUid` (可选): 组织唯一标识符
+- `categoryUid` (可选): 分类唯一标识符
+- `tag` (可选): 标签
+- `keyword` (可选): 关键词搜索
+- `status` (可选): 文章状态（PUBLISHED, DRAFT, ARCHIVED）
+- `page` (可选): 页码，默认为 0
+- `size` (可选): 每页数量，默认为 10
+
+## 字段说明
+
+### 文章对象字段
+
+- `uid`: 文章唯一标识符
+- `title`: 文章标题
+- `summary`: 文章摘要
+- `content`: 文章内容
+- `categoryUid`: 所属分类 UID
+- `categoryName`: 分类名称
+- `tags`: 标签数组
+- `status`: 文章状态
+- `viewCount`: 浏览次数
+- `helpfulCount`: 有用次数
+- `commentCount`: 评论数
+- `authorUid`: 作者用户 UID
+- `authorName`: 作者名称
+- `isTop`: 是否置顶
+- `createdAt`: 创建时间
+- `updatedAt`: 更新时间
+- `publishedAt`: 发布时间
+
+## 使用场景
+
+- 知识库文章列表展示
+- 文章搜索
+- 按分类浏览
+- 相关文章推荐
+
+## 注意事项
+
+- 默认只返回已发布的文章（PUBLISHED）
+- 草稿文章需要作者或管理员权限
+- 支持模糊搜索标题和内容
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "content": [
+      {
+        "uid": "article_123456",
+        "title": "如何使用 Bytedesk 客服系统",
+        "summary": "本文介绍如何快速上手使用 Bytedesk 客服系统...",
+        "content": "详细内容...",
+        "categoryUid": "category_123456",
+        "categoryName": "使用指南",
+        "tags": ["客服系统", "入门指南"],
+        "status": "PUBLISHED",
+        "viewCount": 1523,
+        "helpfulCount": 89,
+        "commentCount": 12,
+        "authorUid": "user_123456",
+        "authorName": "张三",
+        "isTop": true,
+        "createdAt": "2025-01-01T09:00:00Z",
+        "updatedAt": "2025-01-05T15:30:00Z",
+        "publishedAt": "2025-01-01T10:00:00Z"
+      }
+    ],
+    "pageable": {
+      "pageNumber": 0,
+      "pageSize": 10
+    },
+    "totalPages": 5,
+    "totalElements": 48,
+    "last": false,
+    "first": true
+  }
+}
+```
+
+</ResponseExample>
+
+<RequestExample>
+
+```bash cURL
+# 查询所有已发布文章
+curl -X GET "https://api.weiyuai.cn/api/v1/article?status=PUBLISHED&page=0&size=10" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Accept: application/json"
+
+# 搜索文章
+curl -X GET "https://api.weiyuai.cn/api/v1/article?keyword=客服系统&page=0&size=10" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Accept: application/json"
+
+# 按分类查询
+curl -X GET "https://api.weiyuai.cn/api/v1/article?categoryUid=category_123456&page=0&size=10" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Accept: application/json"
+```
+
+```javascript JavaScript
+// 搜索文章
+async function searchArticles(keyword, page = 0) {
+  const response = await fetch(
+    `https://api.weiyuai.cn/api/v1/article?keyword=${encodeURIComponent(keyword)}&page=${page}&size=10`,
+    {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer your_access_token_here',
+        'Accept': 'application/json'
+      }
+    }
+  );
+
+  const result = await response.json();
+  return result.data;
+}
+
+// 使用示例
+const articles = await searchArticles('客服系统');
+console.log(`找到 ${articles.totalElements} 篇文章`);
+```
+
+```python Python
+import requests
+
+def search_articles(keyword=None, category_uid=None, page=0):
+    url = "https://api.weiyuai.cn/api/v1/article"
+    headers = {
+      "Authorization": "Bearer your_access_token_here",
+      "Accept": "application/json"
+    }
+
+    params = {"page": page, "size": 10}
+    if keyword:
+        params["keyword"] = keyword
+    if category_uid:
+        params["categoryUid"] = category_uid
+
+    response = requests.get(url, headers=headers, params=params)
+    result = response.json()
+    return result["data"]
+
+# 使用示例
+articles = search_articles(keyword="客服系统")
+print(f"找到 {articles['totalElements']} 篇文章")
+```
+
+</RequestExample>

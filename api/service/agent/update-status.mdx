@@ -1,0 +1,147 @@
+---
+title: "POST 更新客服状态"
+openapi: "POST /api/v1/agent/update/status"
+---
+
+## 概述
+
+客服更新自己的在线状态，如在线、忙碌、离开等。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground
+    method="POST"
+    endpoint="/api/v1/agent/update/status"
+  />
+</div>
+
+## 接口说明
+
+此接口用于客服修改自己的工作状态。状态变化会实时同步给访客，影响会话分配。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+## 请求体
+
+```json
+{
+  "status": "ONLINE"
+}
+```
+
+## 字段说明
+
+### 请求字段
+
+- `status` (必需): 客服状态
+  - `ONLINE`: 在线（可接受新会话）
+  - `OFFLINE`: 离线（不可接受新会话）
+  - `BUSY`: 忙碌（暂时不可接受新会话）
+  - `AWAY`: 离开（暂时离开）
+
+### 响应字段
+
+- `uid`: 客服唯一标识符
+- `status`: 更新后的状态
+- `updatedAt`: 更新时间
+
+## 使用场景
+
+- 客服上线/下线
+- 设置忙碌状态
+- 临时离开
+- 休息状态
+
+## 注意事项
+
+- 设置为 OFFLINE 后不会接受新的会话分配
+- 已有会话不会受状态变化影响
+- 状态变化会通过 WebSocket 推送给在线访客
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "uid": "agent_123456",
+    "status": "ONLINE",
+    "updatedAt": "2025-01-07T10:30:00Z"
+  }
+}
+```
+
+```json 400 参数错误
+{
+  "code": 400,
+  "message": "Invalid status value",
+  "data": null
+}
+```
+
+</ResponseExample>
+
+<RequestExample>
+
+```bash cURL
+# 设置为在线
+curl -X POST "https://api.weiyuai.cn/api/v1/agent/update/status" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "ONLINE"
+  }'
+
+# 设置为忙碌
+curl -X POST "https://api.weiyuai.cn/api/v1/agent/update/status" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "BUSY"
+  }'
+```
+
+```javascript JavaScript
+// 设置客服状态
+async function setAgentStatus(status) {
+  const response = await fetch('https://api.weiyuai.cn/api/v1/agent/update/status', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer your_access_token_here',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ status })
+  });
+
+  const result = await response.json();
+  return result;
+}
+
+// 使用示例
+setAgentStatus('ONLINE');
+```
+
+```python Python
+import requests
+
+def set_agent_status(status):
+    url = "https://api.weiyuai.cn/api/v1/agent/update/status"
+    headers = {
+      "Authorization": "Bearer your_access_token_here",
+      "Content-Type": "application/json"
+    }
+    data = {"status": status}
+
+    response = requests.post(url, headers=headers, json=data)
+    return response.json()
+
+# 使用示例
+result = set_agent_status("ONLINE")
+```
+
+</RequestExample>

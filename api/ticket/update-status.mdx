@@ -1,0 +1,200 @@
+---
+title: "POST 更新工单状态"
+openapi: "POST /api/v1/ticket/update/status"
+---
+
+## 概述
+
+更新工单的处理状态。
+
+<div style={{ marginTop: 24, marginBottom: 24 }}>
+  <ApiPlayground
+    method="POST"
+    endpoint="/api/v1/ticket/update/status"
+  />
+</div>
+
+## 接口说明
+
+此接口用于更新工单的状态，如将工单从待处理改为处理中，或标记为已解决、已关闭等。
+
+## 请求头
+
+```
+Authorization: Bearer <access_token>
+Content-Type: application/json
+```
+
+## 请求体
+
+```json
+{
+  "uid": "ticket_123456",
+  "status": "IN_PROGRESS",
+  "comment": "正在处理中，预计今天完成"
+}
+```
+
+## 字段说明
+
+### 请求字段
+
+- `uid` (必需): 工单唯一标识符
+- `status` (必需): 目标状态
+  - `OPEN`: 待处理
+  - `IN_PROGRESS`: 处理中
+  - `RESOLVED`: 已解决
+  - `CLOSED`: 已关闭
+- `comment` (可选): 状态变更备注
+
+### 响应字段
+
+- `uid`: 工单唯一标识符
+- `status`: 更新后的状态
+- `comment`: 备注内容
+- `updatedBy`: 更新人名称
+- `updatedAt`: 更新时间
+
+## 使用场景
+
+- 开始处理工单
+- 标记工单为已解决
+- 关闭已完成的工单
+- 重新打开已关闭的工单
+
+## 注意事项
+
+- 只有工单处理人或管理员可以更新状态
+- 关闭工单通常需要先标记为已解决
+- 状态变更会记录在工单历史中
+- 系统会通知相关人员状态变更
+
+<ResponseExample>
+
+```json 200 成功响应
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "uid": "ticket_123456",
+    "status": "IN_PROGRESS",
+    "comment": "正在处理中，预计今天完成",
+    "updatedBy": "客服小王",
+    "updatedAt": "2025-01-07T10:30:00Z"
+  }
+}
+```
+
+```json 400 工单不存在
+{
+  "code": 400,
+  "message": "Ticket not found",
+  "data": null
+}
+```
+
+```json 403 无权限
+{
+  "code": 403,
+  "message": "No permission to update this ticket",
+  "data": null
+}
+```
+
+```json 400 无效的状态转换
+{
+  "code": 400,
+  "message": "Invalid status transition",
+  "data": null
+}
+```
+
+</ResponseExample>
+
+<RequestExample>
+
+```bash cURL
+# 开始处理工单
+curl -X POST "https://api.weiyuai.cn/api/v1/ticket/update/status" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "uid": "ticket_123456",
+    "status": "IN_PROGRESS",
+    "comment": "正在处理中，预计今天完成"
+  }'
+
+# 标记为已解决
+curl -X POST "https://api.weiyuai.cn/api/v1/ticket/update/status" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "uid": "ticket_123456",
+    "status": "RESOLVED",
+    "comment": "问题已解决，请用户确认"
+  }'
+
+# 关闭工单
+curl -X POST "https://api.weiyuai.cn/api/v1/ticket/update/status" \
+  -H "Authorization: Bearer your_access_token_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "uid": "ticket_123456",
+    "status": "CLOSED",
+    "comment": "工单已关闭"
+  }'
+```
+
+```javascript JavaScript
+// 更新工单状态
+async function updateTicketStatus(ticketUid, status, comment = '') {
+  const response = await fetch('https://api.weiyuai.cn/api/v1/ticket/update/status', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer your_access_token_here',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      uid: ticketUid,
+      status,
+      comment
+    })
+  });
+
+  const result = await response.json();
+  return result.data;
+}
+
+// 使用示例
+await updateTicketStatus('ticket_123456', 'IN_PROGRESS', '正在处理中');
+await updateTicketStatus('ticket_123456', 'RESOLVED', '问题已解决');
+await updateTicketStatus('ticket_123456', 'CLOSED', '工单已关闭');
+```
+
+```python Python
+import requests
+
+def update_ticket_status(ticket_uid, status, comment=""):
+    url = "https://api.weiyuai.cn/api/v1/ticket/update/status"
+    headers = {
+      "Authorization": "Bearer your_access_token_here",
+      "Content-Type": "application/json"
+    }
+
+    data = {
+      "uid": ticket_uid,
+      "status": status,
+      "comment": comment
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+    result = response.json()
+    return result["data"]
+
+# 使用示例
+update_ticket_status("ticket_123456", "IN_PROGRESS", "正在处理中")
+update_ticket_status("ticket_123456", "RESOLVED", "问题已解决")
+update_ticket_status("ticket_123456", "CLOSED", "工单已关闭")
+```
+
+</RequestExample>
