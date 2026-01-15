@@ -1,5 +1,7 @@
 # 微语 API 文档
 
+**语言 / Language:** [中文](README.zh.md) | [English](README.md)
+
 ```bash
 # 安装依赖
 pnpm install
